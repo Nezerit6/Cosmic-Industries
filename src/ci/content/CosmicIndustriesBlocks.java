@@ -460,27 +460,27 @@ public class CosmicIndustriesBlocks {
                     CosmicIndustriesItems.magnesium,  new MissileBulletType(6f, 55){{
                         height = 80f;
                         width = 38f;
-                        lifetime = 40;
+                        lifetime = 40f;
                         frontColor = Color.valueOf("a488eb");
                         trailColor = Color.valueOf("a488eb");
                         trailLength = 50;
                         hitShake: = 10f;
                         despawnHit = true;
                         splashDamageRadius = 35f;
-                        splashDamage = 35;
+                        splashDamage = 35f;
                     }});
 
-            reload = 40;
+            reload = 40f;
             shootCone = 5;
             rotateSpeed = 1.5f;
             targetGround = true;
             targetAir = true;
-            range = 250;
+            range = 250f;
             recoil = 1.5f;
             size = 3;
             health = 55;
             AmmoPerShot = 5;
-            shoot.shootY = 0f;
+            shootY = 0f;
             heatColor = Color.valueOf("a488eb");
             outlineColor = Color.black;
             shake = 5f;
