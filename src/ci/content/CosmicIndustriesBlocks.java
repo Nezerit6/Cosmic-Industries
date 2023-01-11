@@ -480,7 +480,7 @@ public class CosmicIndustriesBlocks {
             size = 3;
             health = 55;
             AmmoPerShot = 5;
-            shootY = 0f;
+            shoot.shootY = 0f;
             heatColor = Color.valueOf("a488eb");
             outlineColor = Color.black;
             shake = 5f;
