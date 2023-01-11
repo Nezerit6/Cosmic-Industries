@@ -456,6 +456,21 @@ public class CosmicIndustriesBlocks {
         }};
 
         dissecter = new ItemTurret("dissecter"){{
+            ammo(
+                    CosmicIndustriesItems.magnesium,  new MissileBulletType(6f, 55){{
+                        height = 80f;
+                        width = 38f;
+                        lifetime = 40;
+                        inaccuracy = 5;
+                        frontColor = Color.purple;
+                        trailColor = Color.purple;
+                        trailLength = 50;
+                        hitShake: =10;
+                        despawnHit = true;
+                        splashDamageRadius = 35;
+                        splashDamage = 35;
+                    }});
+
             reload = 40;
             shootCone = 5;
             rotateSpeed = 1.5f;
@@ -464,6 +479,13 @@ public class CosmicIndustriesBlocks {
             range = 250;
             recoil = 1.5f;
             size = 3;
+            health = 55;
+            AmmoPerShot = 5;
+            shootY = 0;
+            heatColor = Color.purple;
+            outlineColor = Color.black;
+            shake = 5f;
+            hasPower = true;
         }};
 
 
