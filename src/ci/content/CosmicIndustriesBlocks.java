@@ -461,11 +461,10 @@ public class CosmicIndustriesBlocks {
                         height = 80f;
                         width = 38f;
                         lifetime = 40;
-                        inaccuracy = 5;
-                        frontColor = Color.purple;
-                        trailColor = Color.purple;
+                        frontColor = Color.valueOf("a488eb");
+                        trailColor = Color.valueOf("a488eb");
                         trailLength = 50;
-                        hitShake: =10;
+                        hitShake: = 10f;
                         despawnHit = true;
                         splashDamageRadius = 35;
                         splashDamage = 35;
@@ -482,7 +481,7 @@ public class CosmicIndustriesBlocks {
             health = 55;
             AmmoPerShot = 5;
             shootY = 0;
-            heatColor = Color.purple;
+            heatColor = Color.valueOf("a488eb");
             outlineColor = Color.black;
             shake = 5f;
             hasPower = true;
