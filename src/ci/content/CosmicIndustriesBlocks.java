@@ -466,7 +466,7 @@ public class CosmicIndustriesBlocks {
                         trailLength = 50;
                         hitShake: = 10f;
                         despawnHit = true;
-                        splashDamageRadius = 35;
+                        splashDamageRadius = 35f;
                         splashDamage = 35;
                     }});
 
@@ -480,11 +480,10 @@ public class CosmicIndustriesBlocks {
             size = 3;
             health = 55;
             AmmoPerShot = 5;
-            shootY = 0;
+            shootY = 0f;
             heatColor = Color.valueOf("a488eb");
             outlineColor = Color.black;
             shake = 5f;
-            hasPower = true;
         }};
 
 
