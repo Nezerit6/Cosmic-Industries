@@ -26,7 +26,8 @@ public class CosmicIndustriesItems {
 
         magnesium = new Item("magnesium") {{
             hardness = 1;
-            explosiveness = 1;
+            explosiveness = 0.01f;
+            charge = 0.05;
 
         }};
 
