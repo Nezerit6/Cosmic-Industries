@@ -464,7 +464,7 @@ public class CosmicIndustriesBlocks {
                         frontColor = Color.valueOf("a488eb");
                         trailColor = Color.valueOf("a488eb");
                         trailLength = 50;
-                        hitShake: = 10f;
+                        hitShake = 10f;
                         despawnHit = true;
                         splashDamageRadius = 35f;
                         splashDamage = 35f;
