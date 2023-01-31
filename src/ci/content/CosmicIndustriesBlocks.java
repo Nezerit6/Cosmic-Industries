@@ -552,6 +552,7 @@ public class CosmicIndustriesBlocks {
             alwaysUnlocked = true;
 
             isFirstTier = true;
+            squareSprite = false;
             unitType = CosmicIndustriesUnits.hawk;
             health = 250;
             itemCapacity = 500;
