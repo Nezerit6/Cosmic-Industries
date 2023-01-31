@@ -43,7 +43,7 @@ public class CosmicIndustriesBlocks {
     magnesiumDuct, magnesiumJunction, magnesiumRouter,
 
     //environment
-    hematiteOre, ironOre, duneSand, rozewaPowerhnia,
+    hematiteOre, ironOre, duneSand,
     chugalitra, chugalitraBoulder, chugalitraWall, chugalitraWater, echugalite, echugaliteWall, echugaliteWater, lechugate, lechugateBoulder, lechugateWall, lechugateWater, magnesiumOre,
 
     //liquid
@@ -96,10 +96,6 @@ public class CosmicIndustriesBlocks {
         }};
 
         //environment
-
-        rozewaPowerhnia = new Floor("rozewaPowerhnia"){{
-            variants = 4;
-        }};
 
         ironOre = new OreBlock(CosmicIndustriesItems.iron) {{
             oreDefault = true;
@@ -341,7 +337,7 @@ public class CosmicIndustriesBlocks {
             range = 140;
             reload = 125f;
             ammo(
-                    CosmicIndustriesItems.iron, new LifeBullet(3.5f, 50) {{
+                    CosmicIndustriesItems.iron, new BasicBulletType(3.5f, 50) {{
                         lifetime = 48f;
                         fragBullets = 16;
                         fragVelocityMin = 0.9f;
@@ -349,7 +345,6 @@ public class CosmicIndustriesBlocks {
                         fragLifeMin = 1.1f;
                         width = 11;
                         height = 11;
-                        healAmount = 5;
                         fragBullet = new BasicBulletType(4,10) {{
                             lifetime = 26f;
                             pierceBuilding = true;
