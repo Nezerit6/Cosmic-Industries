@@ -11,8 +11,8 @@ public class CosmicIndustries extends Mod {
         /**Log.info("Loading some ci content.");*/
 
         CosmicIndustriesItems.load();
-        /**CosmicIndustriesLiquids.load();*/
-        CosmicIndustriesBullets.load();
+        /**CosmicIndustriesLiquids.load();
+        CosmicIndustriesBullets.load();*/
         CosmicIndustriesUnits.load();
         CosmicIndustriesBlocks.load();
         CosmicIndustriesPlanets.load();

@@ -2,8 +2,6 @@ package ci.content;
 
 import arc.graphics.Color;
 import arc.math.Interp;
-import ci.world.bullets.LifeBullet;
-import ci.world.draw.SteamParticles;
 import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
@@ -270,7 +268,7 @@ public class CosmicIndustriesBlocks {
             size = 2;
             hasPower = true;
 
-            drawer = new DrawMulti(new DrawDefault());
+            drawer = new DrawMulti(new DrawDefault(), new DrawFade());
 
                     /**new SteamParticles(){{
                         color = Color.valueOf("ffffff");
