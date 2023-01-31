@@ -14,8 +14,8 @@ import mindustry.type.weapons.RepairBeamWeapon;
 
 public class CosmicIndustriesUnits {
     public static UnitType
-            //core units
-            falcon, hawk;
+    //core units
+    falcon, hawk;
 
     public static void load() {
 
@@ -57,7 +57,7 @@ public class CosmicIndustriesUnits {
                     height = 8f;
 
                     homingPower = 0.1f;
-                    homingRange = 90;
+                    homingRange = 20;
 
                     lifetime = 50f;
 

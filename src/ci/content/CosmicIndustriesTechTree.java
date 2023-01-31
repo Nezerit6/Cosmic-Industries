@@ -14,14 +14,10 @@ public class CosmicIndustriesTechTree {
             node(CosmicIndustriesBlocks.ironDrill, () -> {
             });
             node(CosmicIndustriesBlocks.shoker, () -> {
-                node(CosmicIndustriesBlocks.test, () -> {
-                    node(CosmicIndustriesBlocks.plasma, () -> {
-                        node(CosmicIndustriesBlocks.ironWall, () -> {
-                            node(CosmicIndustriesBlocks.ironWallLarge, () -> {
-                            });
-                        });
-                    });
-                });
+                 node(CosmicIndustriesBlocks.ironWall, () -> {
+                      node(CosmicIndustriesBlocks.ironWallLarge, () -> {
+                      });
+                 });
             });
         });
     }

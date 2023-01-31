@@ -25,16 +25,20 @@ public class OctaviaPlanetGenerator extends PlanetGenerator {
     public static int widthSeed = 1, heightSeed = 2, roomSeed = 3, strokeSeed = 4;
 
     public Block[] arr = {
+            CosmicIndustriesBlocks.lechugateWater,
             CosmicIndustriesBlocks.chugalitra,
             CosmicIndustriesBlocks.chugalitra,
+            CosmicIndustriesBlocks.lechugateWater,
             CosmicIndustriesBlocks.chugalitra,
             CosmicIndustriesBlocks.chugalitra,
             CosmicIndustriesBlocks.lechugate,
+            CosmicIndustriesBlocks.lechugateWater,
             CosmicIndustriesBlocks.lechugate,
+            CosmicIndustriesBlocks.lechugateWater,
             CosmicIndustriesBlocks.lechugateWater,
             CosmicIndustriesBlocks.lechugateWater,
             CosmicIndustriesBlocks.echugalite,
-
+            CosmicIndustriesBlocks.echugalite,
     };
     ObjectMap<Block, Block> dec = ObjectMap.of(
 
