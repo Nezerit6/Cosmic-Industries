@@ -479,6 +479,7 @@ public class CosmicIndustriesBlocks {
                     }});
 
             reload = 30;
+            squareSprite = false;
             shootCone = 5;
             rotateSpeed = 1.5f;
             targetGround = true;
