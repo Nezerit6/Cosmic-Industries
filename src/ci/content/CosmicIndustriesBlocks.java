@@ -1,7 +1,9 @@
 package ci.content;
 
 import arc.graphics.Color;
+import arc.graphics.Colors;
 import arc.math.Interp;
+import ci.world.draw.DrawTemp;
 import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
@@ -10,6 +12,7 @@ import mindustry.entities.bullet.*;
 import mindustry.entities.part.RegionPart;
 import mindustry.gen.Sounds;
 import mindustry.graphics.CacheLayer;
+import mindustry.graphics.Pal;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
@@ -51,7 +54,7 @@ public class CosmicIndustriesBlocks {
     magnesiumNode, magneticEnergySeparator,
 
     //production
-    ironDrill,
+    rustyDrill,
 
     miniDrill, miniMiller,
 
@@ -59,7 +62,7 @@ public class CosmicIndustriesBlocks {
     misuneseSmelter, mechanicalPress,
 
     //turrets
-    shoker, cidel,
+    shoker, splitter,
     dissecter, salvx,
 
     //defense
@@ -261,14 +264,16 @@ public class CosmicIndustriesBlocks {
         }};
 
         mechanicalPress = new GenericCrafter("mechanicalPress"){{
-            requirements(Category.crafting, with(CosmicIndustriesItems.iron, 45));
+            requirements(Category.crafting, with(CosmicIndustriesItems.iron, 40));
             craftEffect = CosmicIndustriesFx.CISteam;
+            squareSprite = false;
             outputItem = new ItemStack(Items.graphite, 2);
             craftTime = 230;
             size = 2;
             hasPower = true;
+            researchCostMultiplier = 0.3f;
 
-            drawer = new DrawMulti(new DrawDefault(), new DrawFade());
+            drawer = new DrawMulti(new DrawDefault(), new DrawTemp());
 
                     /**new SteamParticles(){{
                         color = Color.valueOf("ffffff");
@@ -326,28 +331,44 @@ public class CosmicIndustriesBlocks {
             drawer = new DrawTurret("novia-");
         }};
 
-        cidel = new ItemTurret("cidel") {{
-            requirements(Category.turret, with(CosmicIndustriesItems.iron, 60));
-            health = 120;
-            rotateSpeed = 2.6f;
-            recoil = 0.6f;
+        splitter = new ItemTurret("splitter") {{
+            requirements(Category.turret, with(CosmicIndustriesItems.iron, 50, Items.graphite, 10));
+            health = 90;
+            rotateSpeed = 1.4f;
+            recoil = 0.5f;
             size = 2;
-            range = 140;
-            reload = 125f;
+            range = 210;
+            reload = 120f;
+
+            squareSprite = false;
+
             ammo(
-                    CosmicIndustriesItems.iron, new BasicBulletType(3.5f, 50) {{
-                        lifetime = 48f;
-                        fragBullets = 16;
+                    CosmicIndustriesItems.iron, new BasicBulletType(4.6f, 36) {{
+                        lifetime = 44f;
+                        width = 12;
+                        height = 10;
+
+                        trailLength = 12;
+                        trailWidth = 2f;
+                        hitColor = backColor = trailColor = Color.darkGray;
+                        trailSinScl = 2.5f;
+                        trailSinMag = 0.5f;
+                        trailEffect = Fx.none;
+                        despawnShake = 0.4f;
+
+                        fragBullets = 5;
                         fragVelocityMin = 0.9f;
                         fragRandomSpread = 360;
-                        fragLifeMin = 1.1f;
-                        width = 11;
-                        height = 11;
-                        fragBullet = new BasicBulletType(4,10) {{
-                            lifetime = 26f;
+                        fragLifeMin = 0.9f;
+
+                        splashDamageRadius = 20f * 0.75f;
+                        splashDamage = 16f;
+                        fragBullet = new BasicBulletType(4.6f,12) {{
+                            lifetime = 8f;
                             pierceBuilding = true;
                             width = 6f;
-                            height = 6f;
+                            height = 4f;
+                            pierceCap = 2;
                         }};
                     }});
             drawer = new DrawTurret("novia-") {
@@ -355,7 +376,7 @@ public class CosmicIndustriesBlocks {
                     parts.addAll(
                             new RegionPart("-barrel") {{
                                 progress = PartProgress.recoil.curve(Interp.pow2In);
-                                moveY = -5f * 4f / 4f;
+                                moveY = -1f * 4f / 4f;
                                 heatColor = Color.valueOf("f03b0e");
                                 mirror = false;
                             }},
@@ -363,9 +384,9 @@ public class CosmicIndustriesBlocks {
                                 heatProgress = PartProgress.warmup;
                                 progress = PartProgress.warmup;
                                 mirror = true;
-                                moveX = 2f * 4f / 3f;
-                                moveY = -0.5f;
-                                moveRot = -40f;
+                                moveX = -0.5f * 4f / 3f;
+                                moveY = 0f;
+                                moveRot = 0f;
                                 under = true;
                             }});
                 }
@@ -431,7 +452,7 @@ public class CosmicIndustriesBlocks {
 
         //drills
 
-        ironDrill = new Drill("ironDrill") {{
+        rustyDrill = new Drill("rustyDrill") {{
             requirements(Category.production, with(CosmicIndustriesItems.iron, 24));
             tier = 2;
             drillTime = 350;

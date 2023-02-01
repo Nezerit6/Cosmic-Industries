@@ -11,7 +11,7 @@ public class CosmicIndustriesFx {
     public static final Effect none = new Effect(0, 0f, e -> {
     }),
 
-        CISteam = new Effect(65f, e -> {
+        CISteam = new Effect(35f, e -> {
             alpha(0.9f);
             color(Color.lightGray);
 

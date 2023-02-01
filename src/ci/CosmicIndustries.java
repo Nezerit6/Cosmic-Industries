@@ -16,6 +16,7 @@ public class CosmicIndustries extends Mod {
         CosmicIndustriesUnits.load();
         CosmicIndustriesBlocks.load();
         CosmicIndustriesPlanets.load();
+        CosmicIndustriesSectors.load();
         CosmicIndustriesTechTree.load();
     }
 }

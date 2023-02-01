@@ -16,6 +16,7 @@ public class CosmicIndustriesItems {
         }};
         iron = new Item("iron", Color.valueOf("5b5b5bff")) {{
             hardness = 1;
+            alwaysUnlocked = true;
         }};
         lithium = new Item("lithium") {{
             explosiveness = 2;

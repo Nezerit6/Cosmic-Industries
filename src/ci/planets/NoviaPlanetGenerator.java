@@ -25,7 +25,9 @@ public class NoviaPlanetGenerator extends PlanetGenerator {
     public static int widthSeed = 1, heightSeed = 2, roomSeed = 3, strokeSeed = 4;
 
     public Block[] arr = {
-            Blocks.grass,
+            Blocks.snow,
+            Blocks.snow,
+            Blocks.water,
             Blocks.grass,
             Blocks.water,
             CosmicIndustriesBlocks.duneSand,
@@ -250,11 +252,11 @@ public class NoviaPlanetGenerator extends PlanetGenerator {
         tiles.getn(r.get(1).x, r.get(1).y).setOverlay(Blocks.spawn);
 
         /**if (sector.hasEnemyBase()){
-            basegen.generate(tiles, enemies.map(room -> tiles.getn(room.x, room.y)), tiles.get(spawnX, spawnY), state.rules.waveTeam, sector, sector.threat);
-            state.rules.attackMode = sector.info.attack = true;
-        }else{
-            state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 10, 1);
-        }*/
+         basegen.generate(tiles, enemies.map(room -> tiles.getn(room.x, room.y)), tiles.get(spawnX, spawnY), state.rules.waveTeam, sector, sector.threat);
+         state.rules.attackMode = sector.info.attack = true;
+         }else{
+         state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 10, 1);
+         }*/
 
         state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 1f, Math.max(sector.threat - 0.4f, 0f));
         state.rules.spawns = NoviaWaves.generate(sector.threat, new Rand(), state.rules.attackMode);
@@ -302,4 +304,3 @@ public class NoviaPlanetGenerator extends PlanetGenerator {
         }
     }
 }
-
