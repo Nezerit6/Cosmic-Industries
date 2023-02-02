@@ -58,7 +58,7 @@ public class CosmicIndustriesBlocks {
     miniDrill, miniMiller,
 
     //crafting
-    misuneseSmelter, mechanicalPress, SiliconeThermalSmelter,
+    misuneseSmelter, mechanicalPress, siliconeThermalSmelter,
 
     //turrets
     shoker, splitter,
@@ -281,9 +281,8 @@ public class CosmicIndustriesBlocks {
             consumeItems(with(CosmicIndustriesItems.hematite, 1));
         }};
 
-        SiliconeThermalSmelter = new GenericCrafter("SiliconeThermalSmelter"){{
+        siliconeThermalSmelter = new GenericCrafter("siliconeThermalSmelter"){{
                 requirements(Category.crafting, with(CosmicIndustriesItems.iron, 40, Items.graphite, 30));
-                craftEffect = CosmicIndustriesFx.CISteam;
                 squareSprite = false;
                 outputItem = new ItemStack(Items.silicon, 2);
                 craftTime = 85;
@@ -293,12 +292,12 @@ public class CosmicIndustriesBlocks {
 
                 drawer = new DrawMulti(new DrawDefault(),
                 new SteamParticles() {{
-                    color = Color.valueOf("42434F");
+                    color = Color.lightGray;
                     alpha = 0.7f;
-                    particleSize = 2.8f;
-                    particles = 18;
-                    particleRad = 5.4f;
-                    particleLife = 140f;
+                    particleSize = 2.4f;
+                    particles = 17;
+                    particleRad = 3.8f;
+                    particleLife = 115f;
                     reverse = true;
                     rotateScl = 10f;
                 }});
@@ -357,8 +356,6 @@ public class CosmicIndustriesBlocks {
                 size = 2;
                 range = 210;
                 reload = 120f;
-
-                squareSprite = false;
 
                 ammo(
                         CosmicIndustriesItems.iron, new ArtilleryBulletType(4.6f, 38) {{

@@ -34,13 +34,13 @@ public class CosmicIndustriesUnits {
             buildSpeed = 0.90f;
             itemCapacity = 40;
             health = 360;
-            engineOffset = 6f;
+            engineOffset = 7f;
             hitSize = 9f;
             alwaysUnlocked = true;
             outlineColor = Color.darkGray;
             outlineRadius = 3;
 
-            weapons.add(new Weapon("ci-falcon-weapon"){{
+            weapons.add(new Weapon(){{
                 top = false;
                 reload = 45f;
                 mirror = false;
@@ -55,11 +55,19 @@ public class CosmicIndustriesUnits {
                 bullet = new MissileBulletType(3.6f, 24){{
                     width = 5f;
                     height = 8f;
-
-                    homingPower = 0.1f;
-                    homingRange = 20;
-
                     lifetime = 50f;
+                    recoil = 0.35f;
+
+                    homingPower = 0.09f;
+                    weaveMag = 2.5f;
+                    weaveScale = 2;
+                    trailLength = 4;
+                    trailWidth = 1f;
+                    hitColor = backColor = trailColor = Color.valueOf("ffd37f");
+                    trailSinScl = 2.5f;
+                    trailSinMag = 0.5f;
+                    trailEffect = Fx.none;
+                    despawnShake = 0f;
 
                     shootSound = Sounds.missile;
                     shootEffect = Fx.shootSmall;
