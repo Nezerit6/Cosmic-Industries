@@ -12,8 +12,8 @@ public class SteamParticles extends DrawBlock {
     public Color color = Color.valueOf("ffffff");
 
     public float alpha = 0.5f;
-    public int particles = 30;
-    public float particleLife = 70f, particleRad = 7f, particleSize = 3f, fadeMargin = 0.4f, rotateScl = 0.5f;
+    public int particles = 10;
+    public float particleLife = 70f, particleRad = 7f, particleSize = 3f, fadeMargin = 0.4f, rotateScl = 10f;
     public boolean reverse = true;
     public Interp particleInterp = new PowIn(1.5f);
     public Interp particleSizeInterp = Interp.slope;

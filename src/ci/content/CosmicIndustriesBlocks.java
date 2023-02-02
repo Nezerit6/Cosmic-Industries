@@ -1,9 +1,9 @@
 package ci.content;
 
 import arc.graphics.Color;
-import arc.graphics.Colors;
 import arc.math.Interp;
 import ci.world.draw.DrawTemp;
+import ci.world.draw.SteamParticles;
 import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
@@ -12,7 +12,6 @@ import mindustry.entities.bullet.*;
 import mindustry.entities.part.RegionPart;
 import mindustry.gen.Sounds;
 import mindustry.graphics.CacheLayer;
-import mindustry.graphics.Pal;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
@@ -59,7 +58,7 @@ public class CosmicIndustriesBlocks {
     miniDrill, miniMiller,
 
     //crafting
-    misuneseSmelter, mechanicalPress,
+    misuneseSmelter, mechanicalPress, SiliconeThermalSmelter,
 
     //turrets
     shoker, splitter,
@@ -268,23 +267,12 @@ public class CosmicIndustriesBlocks {
             craftEffect = CosmicIndustriesFx.CISteam;
             squareSprite = false;
             outputItem = new ItemStack(Items.graphite, 2);
-            craftTime = 230;
+            craftTime = 160;
             size = 2;
             hasPower = true;
             researchCostMultiplier = 0.3f;
 
             drawer = new DrawMulti(new DrawDefault(), new DrawTemp());
-
-                    /**new SteamParticles(){{
-                        color = Color.valueOf("ffffff");
-                        alpha = 0.5f;
-                        particleSize = 2f;
-                        particles = 35;
-                        particleRad = 24f;
-                        particleLife = 400f;
-                        reverse = true;
-                        rotateScl = 5;
-                    }});*/
 
             ambientSound = Sounds.smelter;
             ambientSoundVolume = 0.15f;
@@ -293,6 +281,35 @@ public class CosmicIndustriesBlocks {
             consumeItems(with(CosmicIndustriesItems.hematite, 1));
         }};
 
+        SiliconeThermalSmelter = new GenericCrafter("SiliconeThermalSmelter"){{
+                requirements(Category.crafting, with(CosmicIndustriesItems.iron, 40, Items.graphite, 30));
+                craftEffect = CosmicIndustriesFx.CISteam;
+                squareSprite = false;
+                outputItem = new ItemStack(Items.silicon, 2);
+                craftTime = 85;
+                size = 2;
+                hasPower = true;
+                researchCostMultiplier = 1f;
+
+                drawer = new DrawMulti(new DrawDefault(),
+                new SteamParticles() {{
+                    color = Color.valueOf("42434F");
+                    alpha = 0.7f;
+                    particleSize = 2.8f;
+                    particles = 18;
+                    particleRad = 5.4f;
+                    particleLife = 140f;
+                    reverse = true;
+                    rotateScl = 10f;
+                }});
+
+                ambientSound = Sounds.smelter;
+                ambientSoundVolume = 0.15f;
+
+                consumePower(0.8f);
+                consumeItems(with(Items.graphite, 1, Items.sand, 2));
+
+            }};
         //turrets
 
         shoker = new PowerTurret("shoker"){{
@@ -331,48 +348,78 @@ public class CosmicIndustriesBlocks {
             drawer = new DrawTurret("novia-");
         }};
 
-        splitter = new ItemTurret("splitter") {{
-            requirements(Category.turret, with(CosmicIndustriesItems.iron, 50, Items.graphite, 10));
-            health = 90;
-            rotateSpeed = 1.4f;
-            recoil = 0.5f;
-            size = 2;
-            range = 210;
-            reload = 120f;
+        splitter = new ItemTurret("splitter") {
+            {
+                requirements(Category.turret, with(CosmicIndustriesItems.iron, 50, Items.graphite, 10));
+                health = 90;
+                rotateSpeed = 1.4f;
+                recoil = 0.5f;
+                size = 2;
+                range = 210;
+                reload = 120f;
 
-            squareSprite = false;
+                squareSprite = false;
 
-            ammo(
-                    CosmicIndustriesItems.iron, new BasicBulletType(4.6f, 36) {{
-                        lifetime = 44f;
-                        width = 12;
-                        height = 10;
+                ammo(
+                        CosmicIndustriesItems.iron, new ArtilleryBulletType(4.6f, 38) {{
+                            lifetime = 44f;
+                            width = 12;
+                            height = 12;
 
-                        trailLength = 12;
-                        trailWidth = 2f;
-                        hitColor = backColor = trailColor = Color.darkGray;
-                        trailSinScl = 2.5f;
-                        trailSinMag = 0.5f;
-                        trailEffect = Fx.none;
-                        despawnShake = 0.4f;
+                            trailLength = 12;
+                            trailWidth = 2f;
+                            hitColor = backColor = trailColor = Color.valueOf("F6BB64");
+                            trailSinScl = 2.5f;
+                            trailSinMag = 0.5f;
+                            trailEffect = Fx.none;
+                            despawnShake = 0.4f;
 
-                        fragBullets = 5;
-                        fragVelocityMin = 0.9f;
-                        fragRandomSpread = 360;
-                        fragLifeMin = 0.9f;
+                            fragBullets = 5;
+                            fragVelocityMin = 0.9f;
+                            fragRandomSpread = 360;
+                            fragLifeMin = 0.9f;
 
-                        splashDamageRadius = 20f * 0.75f;
-                        splashDamage = 16f;
-                        fragBullet = new BasicBulletType(4.6f,12) {{
-                            lifetime = 8f;
-                            pierceBuilding = true;
-                            width = 6f;
-                            height = 4f;
-                            pierceCap = 2;
-                        }};
-                    }});
-            drawer = new DrawTurret("novia-") {
-                {
+                            splashDamageRadius = 20f * 0.75f;
+                            splashDamage = 16f;
+                            fragBullet = new BasicBulletType(3.5f, 12) {{
+                                lifetime = 14f;
+                                pierceBuilding = true;
+                                width = 7f;
+                                height = 5f;
+                                pierceCap = 3;
+                            }};
+                        }},
+
+                        Items.graphite, new ArtilleryBulletType(5f, 34) {{
+                            lifetime = 46f;
+                            width = 12;
+                            height = 12;
+
+                            trailLength = 8;
+                            trailWidth = 2f;
+                            hitColor = backColor = trailColor = Color.valueOf("F6BB64");
+                            trailSinScl = 2.5f;
+                            trailSinMag = 0.5f;
+                            trailEffect = Fx.none;
+                            despawnShake = 0.4f;
+
+                            fragBullets = 12;
+                            fragVelocityMin = 0.9f;
+                            fragRandomSpread = 360;
+                            fragLifeMin = 0.9f;
+
+                            splashDamageRadius = 16f * 0.75f;
+                            splashDamage = 16f;
+                            fragBullet = new BasicBulletType(5f, 8) {{
+                                lifetime = 12f;
+                                pierceBuilding = true;
+                                width = 6f;
+                                height = 4f;
+                                pierceCap = 2;
+                            }};
+                        }}
+                );
+                drawer = new DrawTurret("novia-") {{
                     parts.addAll(
                             new RegionPart("-barrel") {{
                                 progress = PartProgress.recoil.curve(Interp.pow2In);
@@ -389,9 +436,8 @@ public class CosmicIndustriesBlocks {
                                 moveRot = 0f;
                                 under = true;
                             }});
-                }
-            };
-        }};
+                }};
+            }};
 
         dissecter = new ItemTurret("dissecter") {{
             requirements(Category.turret, with(CosmicIndustriesItems.magnesium, 45));
