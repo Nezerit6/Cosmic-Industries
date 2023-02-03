@@ -3,6 +3,6 @@ name: "ci"
 author: "CI-team"
 main: "ci.CosmicIndustries"
 description: "New planets."
-version: 0.1
-minGameVersion: 139
+version: 0.2
+minGameVersion: 141.4
 java: true
