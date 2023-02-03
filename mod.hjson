@@ -4,5 +4,5 @@ author: "CI-team"
 main: "ci.CosmicIndustries"
 description: "New planets."
 version: 0.2
-minGameVersion: 141.4
+minGameVersion: 140.4
 java: true
