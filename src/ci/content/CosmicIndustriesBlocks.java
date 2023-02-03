@@ -515,6 +515,7 @@ public class CosmicIndustriesBlocks {
             itemCapacity = 3000;
             size = 4;
             unitCapModifier = 8;
+            squareSprite = false;
         }};
 
         corePixel = new CoreBlock("corePixel") {{
@@ -527,6 +528,7 @@ public class CosmicIndustriesBlocks {
             itemCapacity = 500;
             size = 2;
             unitCapModifier = 4;
+            squareSprite = false;
         }};
     }
 }
