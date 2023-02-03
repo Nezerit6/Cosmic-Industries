@@ -3,8 +3,11 @@ package ci.content;
 import arc.graphics.Color;
 import mindustry.ai.types.BuilderAI;
 import mindustry.content.Fx;
+import mindustry.entities.bullet.ArtilleryBulletType;
+import mindustry.entities.bullet.BasicBulletType;
 import mindustry.entities.bullet.BulletType;
 import mindustry.entities.bullet.MissileBulletType;
+import mindustry.gen.MechUnit;
 import mindustry.gen.Sounds;
 import mindustry.gen.UnitEntity;
 import mindustry.graphics.Pal;
@@ -15,7 +18,10 @@ import mindustry.type.weapons.RepairBeamWeapon;
 public class CosmicIndustriesUnits {
     public static UnitType
     //core units
-    falcon, hawk;
+    falcon, hawk,
+
+    //mech
+    arrow /**needle its T2*/;
 
     public static void load() {
 
@@ -121,6 +127,39 @@ public class CosmicIndustriesUnits {
 
                 bullet = new BulletType(){{
                     maxRange = 60f;
+                }};
+            }});
+        }};
+
+        //mech
+        arrow = new UnitType("needle"){{
+            constructor = MechUnit::create;
+            canBoost = true;
+            boostMultiplier = 1.5f;
+            speed = 0.40f;
+            hitSize = 7f;
+            health = 230f;
+            buildSpeed = 0.5f;
+            armor = 2f;
+            outlineColor = Color.darkGray;
+
+            weapons.add(new Weapon("ci-needle-weapon"){{
+                reload = 5f;
+                x = -4.6f;
+                top = false;
+                ejectEffect = Fx.casing1;
+
+                bullet = new BasicBulletType(3.4f, 8){{
+                    height = 6;
+                    width = 3;
+                    lifetime = 26f;
+
+                    hitColor = backColor = trailColor = Color.valueOf("ffd37f");
+                    trailLength = 6;
+                    trailWidth = 1f;
+
+                    shootEffect = Fx.none;
+                    trailEffect = Fx.none;
                 }};
             }});
         }};
