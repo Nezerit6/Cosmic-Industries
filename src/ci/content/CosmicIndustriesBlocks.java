@@ -2,12 +2,10 @@ package ci.content;
 
 import arc.graphics.Color;
 import arc.math.Interp;
+import ci.world.blocks.power.CIPowerNode;
 import ci.world.draw.DrawTemp;
 import ci.world.draw.SteamParticles;
-import mindustry.content.Fx;
-import mindustry.content.Items;
-import mindustry.content.Liquids;
-import mindustry.content.StatusEffects;
+import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.RegionPart;
 import mindustry.gen.Sounds;
@@ -17,18 +15,14 @@ import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
+import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
-import mindustry.world.blocks.distribution.Duct;
-import mindustry.world.blocks.distribution.Junction;
-import mindustry.world.blocks.distribution.Router;
+import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.liquid.Conduit;
 import mindustry.world.blocks.power.ConsumeGenerator;
 import mindustry.world.blocks.power.PowerNode;
-import mindustry.world.blocks.production.Drill;
-import mindustry.world.blocks.production.GenericCrafter;
-import mindustry.world.blocks.production.Pump;
-import mindustry.world.blocks.production.WallCrafter;
+import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.draw.*;
 import mindustry.world.meta.Attribute;
@@ -40,16 +34,19 @@ public class CosmicIndustriesBlocks {
     public static Block
 
     //distribution
+    pipeConveyor,
     magnesiumDuct, magnesiumJunction, magnesiumRouter,
 
     //environment
-    hematiteOre, ironOre, duneSand,
+    hematiteOre, ironOre, duneSand, gert, gertBoulder, gertWall, mercuryMud,
     chugalitra, chugalitraBoulder, chugalitraWall, chugalitraWater, echugalite, echugaliteWall, echugaliteWater, lechugate, lechugateBoulder, lechugateWall, lechugateWater, magnesiumOre,
 
     //liquid
+    lazyPump,
     magnesiumConduit, magnesiumPump,
 
     //power
+    mechanicalTurbine,
     magnesiumNode, magneticEnergySeparator,
 
     //production
@@ -61,7 +58,7 @@ public class CosmicIndustriesBlocks {
     misuneseSmelter, mechanicalPress, siliconeThermalSmelter,
 
     //turrets
-    shoker, splitter,
+    shoker, splitter, GelelectronBlaster,
     dissecter, salvx,
 
     //defense
@@ -71,6 +68,15 @@ public class CosmicIndustriesBlocks {
     coreHeart, corePixel;
     public static void load(){
         //distribution
+        pipeConveyor = new Conveyor("pipeConveyor"){{
+            requirements(Category.distribution, with(CosmicIndustriesItems.iron, 1));
+            health = 30;
+            speed = 0.07f;
+            displayedSpeed = 6f;
+            buildCostMultiplier = 2f;
+            researchCost = with(CosmicIndustriesItems.iron, 5);
+            }};
+
         magnesiumDuct = new Duct("magnesiumDuct"){{
             requirements(Category.distribution, with(CosmicIndustriesItems.magnesium, 1));
             health = 2;
@@ -113,6 +119,23 @@ public class CosmicIndustriesBlocks {
         duneSand = new Floor("duneSand") {{
             variants = 2;
         }};
+
+        gert = new Floor("gert"){{
+            variants = 3;
+        }};
+
+        gertBoulder = new Prop("gert-boulder"){{
+           variants = 2;
+        }};
+
+        gertWall = new StaticWall("gert-wall"){{
+            variants = 2;
+        }};
+
+        mercuryMud = new Floor("mercury-mud"){{
+           variants = 3;
+        }};
+
 
         chugalitra = new Floor("chugalitra") {{
             variants = 3;
@@ -192,6 +215,7 @@ public class CosmicIndustriesBlocks {
         }};
 
         magnesiumPump = new Pump("magnesiumPump"){{
+            requirements(Category.liquid, with(CosmicIndustriesItems.magnesium, 8));
             size = 1;
             pumpAmount = 0.05f;
             squareSprite = false;
@@ -199,7 +223,26 @@ public class CosmicIndustriesBlocks {
             liquidCapacity = 5;
         }};
 
+        lazyPump = new Pump("lazyPump"){{
+            requirements(Category.liquid, with(CosmicIndustriesItems.iron, 10));
+            size = 1;
+            pumpAmount = 3f / 60f;
+            squareSprite = false;
+            placeableLiquid = true;
+        }};
+
         //power
+
+        mechanicalTurbine = new SolidPump("mechanicalTurbine"){{
+            requirements(Category.power, with(CosmicIndustriesItems.iron, 1));
+            result = Liquids.water;
+            pumpAmount = 0.11f;
+            size = 2;
+            liquidCapacity = 6f;
+            rotateSpeed = 1.4f;
+
+            consumePower(1.5f);
+        }};
 
         magnesiumNode = new PowerNode("magnesiumNode"){{
             requirements(Category.power, with(CosmicIndustriesItems.magnesium, 10));
@@ -347,8 +390,7 @@ public class CosmicIndustriesBlocks {
             drawer = new DrawTurret("novia-");
         }};
 
-        splitter = new ItemTurret("splitter") {
-            {
+        splitter = new ItemTurret("splitter") {{
                 requirements(Category.turret, with(CosmicIndustriesItems.iron, 50, Items.graphite, 10));
                 health = 90;
                 rotateSpeed = 1.4f;
@@ -358,7 +400,7 @@ public class CosmicIndustriesBlocks {
                 reload = 120f;
 
                 ammo(
-                        CosmicIndustriesItems.iron, new ArtilleryBulletType(4.6f, 38) {{
+                        CosmicIndustriesItems.iron, new ArtilleryBulletType(3.8f, 38) {{
                             lifetime = 44f;
                             width = 12;
                             height = 12;
@@ -378,12 +420,18 @@ public class CosmicIndustriesBlocks {
 
                             splashDamageRadius = 20f * 0.75f;
                             splashDamage = 16f;
-                            fragBullet = new BasicBulletType(3.5f, 12) {{
+                            fragBullet = new BasicBulletType(3f, 12) {{
                                 lifetime = 14f;
                                 pierceBuilding = true;
                                 width = 7f;
                                 height = 5f;
                                 pierceCap = 3;
+
+                                trailLength = 12;
+                                trailWidth = 0.5f;
+                                trailSinScl = 2.5f;
+                                trailSinMag = 0.5f;
+                                trailEffect = Fx.none;
                             }};
                         }},
 
@@ -436,6 +484,47 @@ public class CosmicIndustriesBlocks {
                 }};
             }};
 
+        //todo requirements
+        GelelectronBlaster = new LiquidTurret("GelelectronBlaster"){{
+                requirements(Category.turret, with(CosmicIndustriesItems.iron, 1));
+                health = 110;
+                rotateSpeed = 1.6f;
+                recoil = 0.5f;
+                size = 2;
+                range = 160;
+                reload = 60f;
+                shootY = 5;
+                squareSprite = true;
+
+                shoot.firstShotDelay = 20f;
+
+                consumePower(0.6f);
+
+                ammo(
+                Liquids.water, new BasicBulletType(4.4f, 30) {{
+                            lifetime = 38f;
+                            width = 12;
+                            height = 32;
+                            hitColor = backColor = trailColor =Color.cyan;
+                            trailLength = 2;
+                            trailWidth = 2;
+                        }});
+
+                drawer = new DrawTurret("novia-") {{
+                parts.addAll(
+                new RegionPart("-nozzle"){{
+                progress = PartProgress.warmup;
+                heatProgress = PartProgress.recoil;
+                mirror = true;
+                under = false;
+                moveY = 0f;
+                moveX = 0f;
+                moveRot = 10f;
+                moves.add(new PartMove(PartProgress.recoil, 0f, 0f, -30f));
+                }});
+            }};
+        }};
+
         dissecter = new ItemTurret("dissecter") {{
             requirements(Category.turret, with(CosmicIndustriesItems.magnesium, 45));
             ammo(
@@ -479,6 +568,38 @@ public class CosmicIndustriesBlocks {
 
         }};
 
+        salvx = new ItemTurret("salvx"){{
+                requirements(Category.turret, with(CosmicIndustriesItems.magnesium, 10));
+                reload = 45;
+                rotateSpeed = 10;
+                targetGround = true;
+                targetAir = true;
+                range = 120;
+                recoil = 1.3f;
+                size = 2;
+                health = 20;
+                heatColor = Color.valueOf("a488eb");
+                outlineRadius = 0;
+
+                ammoPerShot = 1;
+                shootSound = Sounds.shootBig;
+                shootY = 3;
+                shoot.shots = 4;
+                shoot.shotDelay = 3;
+                shootCone = 20;
+
+                ammo(
+                        CosmicIndustriesItems.magnesium, new MissileBulletType(6f, 5) {{
+                            height = 15;
+                            width = 10;
+                            lifetime = 20;
+                            frontColor = trailColor = Color.valueOf("a488eb");
+                            trailLength = 5;
+                        }});
+
+                drawer = new DrawTurret("octavia-");
+
+            }};
 
         //defence
 
@@ -497,7 +618,7 @@ public class CosmicIndustriesBlocks {
 
         rustyDrill = new Drill("rustyDrill") {{
             requirements(Category.production, with(CosmicIndustriesItems.iron, 24));
-            tier = 2;
+            tier = 1;
             drillTime = 350;
             size = 2;
             alwaysUnlocked = true;

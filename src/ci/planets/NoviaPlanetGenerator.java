@@ -27,9 +27,13 @@ public class NoviaPlanetGenerator extends PlanetGenerator {
     public Block[] arr = {
             Blocks.snow,
             Blocks.snow,
+            Blocks.snow,
             Blocks.water,
-            Blocks.grass,
             Blocks.water,
+            Blocks.water,
+            CosmicIndustriesBlocks.mercuryMud,
+            CosmicIndustriesBlocks.gert,
+            CosmicIndustriesBlocks.duneSand,
             CosmicIndustriesBlocks.duneSand,
             Blocks.water,
 

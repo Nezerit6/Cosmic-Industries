@@ -5,7 +5,7 @@ import arc.struct.Seq;
 import mindustry.type.*;
 
 public class CosmicIndustriesItems {
-        public static Item hematite, iron, lithium,
+        public static Item hematite, iron, lithium, asfrit,
         magnesium, misunese;
 
     public static final Seq<Item> noviaItems = new Seq<>();
@@ -21,8 +21,12 @@ public class CosmicIndustriesItems {
         lithium = new Item("lithium") {{
             explosiveness = 2;
         }};
+
+        asfrit = new Item("asfrit", Color.yellow){{
+           hardness = 2;
+        }};
         noviaItems.addAll(
-        iron, hematite, lithium
+        iron, hematite, lithium, asfrit
         );
 
         magnesium = new Item("magnesium") {{

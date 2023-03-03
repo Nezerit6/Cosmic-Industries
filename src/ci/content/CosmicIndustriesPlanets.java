@@ -53,11 +53,10 @@ public class CosmicIndustriesPlanets {
             atmosphereColor = Color.valueOf("B79E54");
             startSector = 45;
             atmosphereRadIn = 0.01f;
-            atmosphereRadOut = 0.4f;
+            atmosphereRadOut = 0.2f;
             clearSectorOnLose = true;
             orbitRadius = 128;
             ruleSetter = r -> {
-                r.loadout = ItemStack.list(CosmicIndustriesItems.iron, 40);
                 r.waveTeam = Team.blue;
                 r.attributes.clear();
                 r.showSpawns = true;

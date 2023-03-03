@@ -3,7 +3,6 @@ package ci.content;
 import arc.graphics.Color;
 import mindustry.ai.types.BuilderAI;
 import mindustry.content.Fx;
-import mindustry.entities.bullet.ArtilleryBulletType;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.entities.bullet.BulletType;
 import mindustry.entities.bullet.MissileBulletType;
@@ -35,7 +34,7 @@ public class CosmicIndustriesUnits {
             mineSpeed = 7f;
             drag = 0.05f;
             accel = 0.1f;
-            speed = 3.6f;
+            speed = 4.1f;
             rotateSpeed = 15f;
             buildSpeed = 0.90f;
             itemCapacity = 40;
@@ -62,7 +61,6 @@ public class CosmicIndustriesUnits {
                     width = 5f;
                     height = 8f;
                     lifetime = 50f;
-                    recoil = 0.35f;
 
                     homingPower = 0.09f;
                     weaveMag = 2.5f;
@@ -132,24 +130,25 @@ public class CosmicIndustriesUnits {
         }};
 
         //mech
-        arrow = new UnitType("needle"){{
+        arrow = new UnitType("arrow"){{
             constructor = MechUnit::create;
             canBoost = true;
             boostMultiplier = 1.5f;
             speed = 0.40f;
-            hitSize = 7f;
+            hitSize = 10f;
             health = 230f;
             buildSpeed = 0.5f;
             armor = 2f;
             outlineColor = Color.darkGray;
 
-            weapons.add(new Weapon("ci-needle-weapon"){{
-                reload = 5f;
+            weapons.add(new Weapon("ci-arrow-weapon"){{
+                reload = 6f;
                 x = -4.6f;
                 top = false;
                 ejectEffect = Fx.casing1;
 
                 bullet = new BasicBulletType(3.4f, 8){{
+                    recoil = 0.1f;
                     height = 6;
                     width = 3;
                     lifetime = 26f;
