@@ -6,6 +6,7 @@ import ci.world.draw.DrawTemp;
 import ci.world.draw.SteamParticles;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
+import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.part.RegionPart;
 import mindustry.gen.Sounds;
 import mindustry.graphics.CacheLayer;
@@ -415,7 +416,7 @@ public class CosmicIndustriesBlocks {
 
         splitter = new ItemTurret("splitter") {{
                 requirements(Category.turret, with(CosmicIndustriesItems.iron, 50, Items.graphite, 10));
-                health = 90;
+                health = 900;
                 rotateSpeed = 1.4f;
                 recoil = 0.5f;
                 size = 2;
@@ -507,49 +508,85 @@ public class CosmicIndustriesBlocks {
                 }};
             }};
 
-        //todo requirements and balance
+        //todo balance
         GelelectronBlaster = new LiquidTurret("GelelectronBlaster"){{
-                requirements(Category.turret, with(CosmicIndustriesItems.iron, 1));
-                health = 110;
-                rotateSpeed = 1.6f;
-                recoil = 0.5f;
+                requirements(Category.turret, with(CosmicIndustriesItems.iron, 110, CosmicIndustriesItems.hematite, 65, CosmicIndustriesItems.asfrit, 20));
+                health = 930;
+                rotateSpeed = 1.9f;
+                recoil = 1f;
                 size = 2;
-                range = 160;
-                reload = 60f;
-                shootY = 5;
-                liquidCapacity = 4f;
+                range = 240;
+                reload = 120f;
+                shootY = 6.5f;
+                liquidCapacity = 10f;
+                ammoPerShot = 5;
+                inaccuracy = 5;
                 squareSprite = true;
+                shootSound = Sounds.laser;
+                targetAir = false;
+                moveWhileCharging = false;
+                accurateDelay = false;
+                shoot.firstShotDelay = 60f;
 
-                shoot.firstShotDelay = 20f;
-
-                consumePower(0.6f);
+                consumePower(1f);
 
                 ammo(
-                Liquids.water, new BasicBulletType(4.4f, 30) {{
-                            lifetime = 38f;
-                            width = 12;
-                            height = 32;
+                        Liquids.water, new LaserBoltBulletType(7.2f, 170) {{
+                            lifetime = 32f;
+                            width = 2;
+                            height = 11;
 
+                            splashDamageRadius = 32f * 0.75f;
+                            splashDamage = 40f;
+
+                            chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
+
+                            status = StatusEffects.wet;
+                            statusDuration = 360f;
+
+                            ammoMultiplier = 5f;
                             knockback = 0.35f;
-                            hitColor = backColor = trailColor =Color.cyan;
-                            trailLength = 2;
-                            trailWidth = 2;
-                        }});
+                            hitColor = backColor = trailColor = Color.cyan;
+                            trailLength = 4;
+                            trailWidth = 1.6f;
+
+                            /**fragBullets = 1;
+                            fragRandomSpread = 0;
+                            fragVelocityMax = 2.7f;
+                            fragVelocityMin = 2.7f;
+
+                            fragBullet = new LaserBoltBulletType(5.2f, 70){{
+                                    fragLifeMin = 16;
+                                    fragLifeMax = 16;
+                                    width = 2;
+                                    height = 8;
+
+                                    status = StatusEffects.wet;
+                                    statusDuration = 180f;
+                                    knockback = 0.35f;
+                                    hitColor = backColor = trailColor = Color.cyan;
+                                    trailLength = 3;
+                                    trailWidth = 1.6f;
+
+                                    homingPower = 0.9f;
+                                    homingDelay = 10f;
+                                    homingRange = 60f;
+                                }};*/
+                            }}
+                        );
 
                 drawer = new DrawTurret("novia-") {{
-                parts.addAll(
-                new RegionPart("-nozzle"){{
-                progress = PartProgress.warmup;
-                heatProgress = PartProgress.recoil;
-                mirror = true;
-                under = false;
-                moveY = 0f;
-                moveX = 0f;
-                moveRot = 10f;
-                moves.add(new PartMove(PartProgress.recoil, 0f, 0f, -30f));
-                }});
+                    parts.addAll(
+                            new RegionPart("-nozzle") {{
+                                progress = PartProgress.warmup;
+                                heatProgress = PartProgress.charge;
+                                mirror = true;
+                                under = false;
+                                moveRot = 7f;
+                                moves.add(new PartMove(PartProgress.recoil, 0f, 0f, -30f));
+                            }});
+                }};
             }};
-        }};
 
         dissecter = new ItemTurret("dissecter") {{
             requirements(Category.turret, with(CosmicIndustriesItems.magnesium, 45));
