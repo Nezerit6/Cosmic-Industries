@@ -2,7 +2,6 @@ package ci.content;
 
 import arc.graphics.Color;
 import arc.math.Interp;
-import ci.world.blocks.power.CIPowerNode;
 import ci.world.draw.DrawTemp;
 import ci.world.draw.SteamParticles;
 import mindustry.content.*;
@@ -258,9 +257,29 @@ public class CosmicIndustriesBlocks {
         }};
 
         magneticEnergySeparator = new ConsumeGenerator("magneticEnergySeparator"){{
+            requirements(Category.power, with(CosmicIndustriesItems.magnesium, 75));
             size = 2;
             powerProduction = 1;
-            //TODO fix
+
+            drawer = new DrawMulti(new DrawDefault(),
+                    new DrawRegion(){{
+                       suffix = ("-bottom");
+                    }},
+                    new DrawRegion(){{
+                        spinSprite = true;
+                        rotateSpeed = 4f;
+                        suffix = ("-rotator");
+                    }},
+                    new DrawRegion(){{
+                        suffix = ("-top");
+                    }},
+                    new DrawGlowRegion(){{
+                        color = Color.valueOf("ff6ef8");
+                        suffix = ("-glow");
+                    }});
+
+            consumeItem(CosmicIndustriesItems.magnesium, 1);
+            consumeLiquid(Liquids.water, 1);
         }};
 
         //production
@@ -296,7 +315,11 @@ public class CosmicIndustriesBlocks {
             size = 1;
             hasPower = true;
 
-            //todo drawers
+            drawer = new DrawMulti(new DrawDefault(),
+                    new DrawGlowRegion(){{
+                        suffix = ("glow");
+                        color = Color.valueOf("ca70e6");
+                    }});
 
             ambientSound = Sounds.smelter;
             ambientSoundVolume = 0.15f;
@@ -484,7 +507,7 @@ public class CosmicIndustriesBlocks {
                 }};
             }};
 
-        //todo requirements
+        //todo requirements and balance
         GelelectronBlaster = new LiquidTurret("GelelectronBlaster"){{
                 requirements(Category.turret, with(CosmicIndustriesItems.iron, 1));
                 health = 110;
@@ -494,6 +517,7 @@ public class CosmicIndustriesBlocks {
                 range = 160;
                 reload = 60f;
                 shootY = 5;
+                liquidCapacity = 4f;
                 squareSprite = true;
 
                 shoot.firstShotDelay = 20f;
@@ -505,6 +529,8 @@ public class CosmicIndustriesBlocks {
                             lifetime = 38f;
                             width = 12;
                             height = 32;
+
+                            knockback = 0.35f;
                             hitColor = backColor = trailColor =Color.cyan;
                             trailLength = 2;
                             trailWidth = 2;
