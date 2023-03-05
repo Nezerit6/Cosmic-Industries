@@ -15,15 +15,16 @@ import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
-import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.liquid.Conduit;
+import mindustry.world.blocks.liquid.LiquidRouter;
 import mindustry.world.blocks.power.ConsumeGenerator;
 import mindustry.world.blocks.power.PowerNode;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.world.blocks.storage.StorageBlock;
 import mindustry.world.draw.*;
 import mindustry.world.meta.Attribute;
 import mindustry.world.meta.BuildVisibility;
@@ -42,7 +43,7 @@ public class CosmicIndustriesBlocks {
     chugalitra, chugalitraBoulder, chugalitraWall, chugalitraWater, echugalite, echugaliteWall, echugaliteWater, lechugate, lechugateBoulder, lechugateWall, lechugateWater, magnesiumOre,
 
     //liquid
-    lazyPump,
+    lazyPump, liquidCistern, liquidLargeCistern,
     magnesiumConduit, magnesiumPump,
 
     //power
@@ -65,6 +66,7 @@ public class CosmicIndustriesBlocks {
     ironWall, ironWallLarge,
 
     //storage
+    storage,
     coreHeart, corePixel;
     public static void load(){
         //distribution
@@ -229,6 +231,25 @@ public class CosmicIndustriesBlocks {
             pumpAmount = 3f / 60f;
             squareSprite = false;
             placeableLiquid = true;
+        }};
+
+        //todo create new class
+        liquidCistern = new LiquidRouter("liquidCistern"){{
+           requirements(Category.liquid, with(CosmicIndustriesItems.iron, 70, CosmicIndustriesItems.hematite, 20));
+           size = 2;
+           health = 300;
+           liquidCapacity = 350;
+           squareSprite = false;
+           solid = true;
+        }};
+
+        liquidLargeCistern = new LiquidRouter("liquidLargeCistern"){{
+           requirements(Category.liquid, with(CosmicIndustriesItems.iron, 110, CosmicIndustriesItems.hematite, 45));
+           size = 3;
+           health = 550;
+           liquidCapacity = 800;
+           squareSprite = false;
+           solid = true;
         }};
 
         //power
@@ -509,19 +530,19 @@ public class CosmicIndustriesBlocks {
             }};
 
         //todo balance
-        GelelectronBlaster = new LiquidTurret("GelelectronBlaster"){{
+        GelelectronBlaster = new PowerTurret("GelelectronBlaster"){{
                 requirements(Category.turret, with(CosmicIndustriesItems.iron, 110, CosmicIndustriesItems.hematite, 65, CosmicIndustriesItems.asfrit, 20));
                 health = 930;
                 rotateSpeed = 1.9f;
                 recoil = 1f;
                 size = 2;
-                range = 240;
+                range = 235;
                 reload = 120f;
                 shootY = 6.5f;
-                liquidCapacity = 10f;
-                ammoPerShot = 5;
-                inaccuracy = 5;
-                squareSprite = true;
+                heatColor = Color.cyan;
+                hasLiquids = true;
+                liquidCapacity = 25f;
+                squareSprite = false;
                 shootSound = Sounds.laser;
                 targetAir = false;
                 moveWhileCharging = false;
@@ -529,51 +550,34 @@ public class CosmicIndustriesBlocks {
                 shoot.firstShotDelay = 60f;
 
                 consumePower(1f);
+                consumeLiquid(Liquids.water, 0.5f);
 
-                ammo(
-                        Liquids.water, new LaserBoltBulletType(7.2f, 170) {{
-                            lifetime = 32f;
-                            width = 2;
-                            height = 11;
+                shootType = new BasicBulletType(7.2f,90){{
+                    despawnEffect = Fx.freezing;
+                    lifetime = 32f;
+                    width = 8;
+                    height = 24;
+                    ammoMultiplier = 1;
 
-                            splashDamageRadius = 32f * 0.75f;
-                            splashDamage = 40f;
+                    splashDamageRadius = 32f * 0.75f;
+                    splashDamage = 75f;
 
-                            chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
+                    chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
 
-                            status = StatusEffects.wet;
-                            statusDuration = 360f;
+                    status = StatusEffects.wet;
+                    statusDuration = 360f;
 
-                            ammoMultiplier = 5f;
-                            knockback = 0.35f;
-                            hitColor = backColor = trailColor = Color.cyan;
-                            trailLength = 4;
-                            trailWidth = 1.6f;
+                    knockback = 0.55f;
+                    hitColor = backColor = trailColor = Color.cyan;
+                    trailLength = 6;
+                    trailWidth = 2.6f;
 
-                            /**fragBullets = 1;
-                            fragRandomSpread = 0;
-                            fragVelocityMax = 2.7f;
-                            fragVelocityMin = 2.7f;
+                    homingPower = 0.8f;
+                    homingDelay = 10f;
+                    homingRange = 60f;
 
-                            fragBullet = new LaserBoltBulletType(5.2f, 70){{
-                                    fragLifeMin = 16;
-                                    fragLifeMax = 16;
-                                    width = 2;
-                                    height = 8;
-
-                                    status = StatusEffects.wet;
-                                    statusDuration = 180f;
-                                    knockback = 0.35f;
-                                    hitColor = backColor = trailColor = Color.cyan;
-                                    trailLength = 3;
-                                    trailWidth = 1.6f;
-
-                                    homingPower = 0.9f;
-                                    homingDelay = 10f;
-                                    homingRange = 60f;
-                                }};*/
-                            }}
-                        );
+                    collidesAir = false;
+                    }};
 
                 drawer = new DrawTurret("novia-") {{
                     parts.addAll(
@@ -584,6 +588,7 @@ public class CosmicIndustriesBlocks {
                                 under = false;
                                 moveRot = 7f;
                                 moves.add(new PartMove(PartProgress.recoil, 0f, 0f, -30f));
+                                heatColor = Color.cyan;
                             }});
                 }};
             }};
@@ -688,6 +693,14 @@ public class CosmicIndustriesBlocks {
         }};
 
         //storage
+
+        //todo rename
+        storage = new StorageBlock("vault"){{
+            requirements(Category.effect, with(CosmicIndustriesItems.iron, 170, CosmicIndustriesItems.hematite, 70));
+            size = 3;
+            itemCapacity = 500;
+            scaledHealth = 35;
+        }};
 
         coreHeart = new CoreBlock("coreHeart") {{
             requirements(Category.effect, BuildVisibility.editorOnly, with(CosmicIndustriesItems.iron, 800, CosmicIndustriesItems.hematite, 1200));
