@@ -235,21 +235,24 @@ public class CosmicIndustriesBlocks {
 
         //todo create new class
         liquidCistern = new LiquidRouter("liquidCistern"){{
-           requirements(Category.liquid, with(CosmicIndustriesItems.iron, 70, CosmicIndustriesItems.hematite, 20));
-           size = 2;
-           health = 300;
-           liquidCapacity = 350;
-           squareSprite = false;
-           solid = true;
+            requirements(Category.liquid, with(CosmicIndustriesItems.iron, 70, CosmicIndustriesItems.hematite, 20));
+            size = 2;
+            solid = true;
+            liquidCapacity = 350;
+            liquidPadding = 1.5f;
+            health = 300;
+            squareSprite = false;
         }};
 
+
         liquidLargeCistern = new LiquidRouter("liquidLargeCistern"){{
-           requirements(Category.liquid, with(CosmicIndustriesItems.iron, 110, CosmicIndustriesItems.hematite, 45));
-           size = 3;
-           health = 550;
-           liquidCapacity = 800;
-           squareSprite = false;
-           solid = true;
+            requirements(Category.liquid, with(CosmicIndustriesItems.iron, 110, CosmicIndustriesItems.hematite, 45));
+            size = 3;
+            solid = true;
+            liquidCapacity = 800f;
+            liquidPadding = 2f;
+            health = 550;
+            squareSprite = false;
         }};
 
         //power
@@ -544,6 +547,8 @@ public class CosmicIndustriesBlocks {
                 liquidCapacity = 25f;
                 squareSprite = false;
                 shootSound = Sounds.laser;
+                shootEffect = Fx.none;
+                smokeEffect = Fx.none;
                 targetAir = false;
                 moveWhileCharging = false;
                 accurateDelay = false;
@@ -553,7 +558,8 @@ public class CosmicIndustriesBlocks {
                 consumeLiquid(Liquids.water, 0.5f);
 
                 shootType = new BasicBulletType(7.2f,90){{
-                    despawnEffect = Fx.freezing;
+                    despawnEffect = Fx.colorSpark;
+                    hitEffect = Fx.none;
                     lifetime = 32f;
                     width = 8;
                     height = 24;
