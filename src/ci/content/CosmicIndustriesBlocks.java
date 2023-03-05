@@ -695,7 +695,7 @@ public class CosmicIndustriesBlocks {
         //storage
 
         //todo rename
-        storage = new StorageBlock("vault"){{
+        storage = new StorageBlock("storage"){{
             requirements(Category.effect, with(CosmicIndustriesItems.iron, 170, CosmicIndustriesItems.hematite, 70));
             size = 3;
             itemCapacity = 500;
