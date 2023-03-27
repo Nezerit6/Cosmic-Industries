@@ -2,9 +2,11 @@ package ci.content;
 
 import arc.graphics.Color;
 import arc.math.Interp;
+import ci.content.blocks.power.MagnesiumNode;
 import ci.world.draw.DrawTemp;
 import ci.world.draw.SteamParticles;
 import mindustry.content.*;
+import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.part.RegionPart;
@@ -32,6 +34,7 @@ import mindustry.world.meta.BuildVisibility;
 import static mindustry.type.ItemStack.with;
 
 public class CosmicIndustriesBlocks {
+    public Effect effect;
     public static Block
 
     //distribution
@@ -268,7 +271,7 @@ public class CosmicIndustriesBlocks {
             consumePower(1.5f);
         }};
 
-        magnesiumNode = new PowerNode("magnesiumNode"){{
+        magnesiumNode = new MagnesiumNode("magnesiumNode"){{
             requirements(Category.power, with(CosmicIndustriesItems.magnesium, 10));
             health = 10;
             baseExplosiveness = 2;
@@ -277,6 +280,8 @@ public class CosmicIndustriesBlocks {
             outputsPower = true;
             laserColor1 = Color.valueOf("a488eb");
             laserColor2 = Color.valueOf("5c5e9e");
+
+
             maxNodes = 5;
             consumePowerBuffered(750f);
         }};
