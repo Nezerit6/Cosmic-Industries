@@ -278,7 +278,7 @@ public class CosmicIndustriesBlocks {
             laserRange = 5;
             hasPower = true;
             outputsPower = true;
-            laserColor1 = Color.valueOf("a488eb");
+            laserColor1 = Color.black;
             laserColor2 = Color.valueOf("5c5e9e");
 
 
