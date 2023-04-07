@@ -1,7 +1,9 @@
 package ci;
 
+import arc.Core;
 import mindustry.mod.*;
 import ci.content.*;
+import mindustry.ui.dialogs.LanguageDialog;
 
 public class CosmicIndustries extends Mod {
 
@@ -18,5 +20,6 @@ public class CosmicIndustries extends Mod {
         CosmicIndustriesPlanets.load();
         CosmicIndustriesSectors.load();
         CosmicIndustriesTechTree.load();
+
     }
 }
