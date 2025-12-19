@@ -7,7 +7,7 @@ import mindustry.entities.*;
 import static arc.graphics.g2d.Draw.*;
 import static arc.math.Angles.*;
 
-public class CosmicIndustriesFx {
+public class CIFx {
 
     public static final Effect none = new Effect(0, 0f, e -> {
     }),

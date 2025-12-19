@@ -14,7 +14,7 @@ import mindustry.type.UnitType;
 import mindustry.type.Weapon;
 import mindustry.type.weapons.RepairBeamWeapon;
 
-public class CosmicIndustriesUnits {
+public class CIUnits {
     public static UnitType
     //core units
     falcon, hawk,

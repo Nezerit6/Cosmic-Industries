@@ -1,8 +1,8 @@
-displayName: "CosmicIndustries"
+displayName: "Cosmic Industries"
 name: "ci"
 author: "CI-team"
 main: "ci.CosmicIndustries"
 description: "New planets."
 version: 0.2
-minGameVersion: 140.4
+minGameVersion: 146
 java: true

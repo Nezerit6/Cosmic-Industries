@@ -23,7 +23,6 @@ import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.liquid.Conduit;
 import mindustry.world.blocks.liquid.LiquidRouter;
 import mindustry.world.blocks.power.ConsumeGenerator;
-import mindustry.world.blocks.power.PowerNode;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.blocks.storage.StorageBlock;
@@ -33,7 +32,7 @@ import mindustry.world.meta.BuildVisibility;
 
 import static mindustry.type.ItemStack.with;
 
-public class CosmicIndustriesBlocks {
+public class CIBlocks {
     public Effect effect;
     public static Block
 
@@ -74,23 +73,23 @@ public class CosmicIndustriesBlocks {
     public static void load(){
         //distribution
         pipeConveyor = new Conveyor("pipeConveyor"){{
-            requirements(Category.distribution, with(CosmicIndustriesItems.iron, 1));
+            requirements(Category.distribution, with(CIItems.iron, 1));
             health = 30;
             speed = 0.07f;
             displayedSpeed = 6f;
             buildCostMultiplier = 2f;
-            researchCost = with(CosmicIndustriesItems.iron, 5);
+            researchCost = with(CIItems.iron, 5);
             }};
 
         magnesiumDuct = new Duct("magnesiumDuct"){{
-            requirements(Category.distribution, with(CosmicIndustriesItems.magnesium, 1));
+            requirements(Category.distribution, with(CIItems.magnesium, 1));
             health = 2;
             speed = 3.6f;
-            researchCost = with(CosmicIndustriesItems.magnesium, 5);
+            researchCost = with(CIItems.magnesium, 5);
         }};
 
         magnesiumJunction = new Junction("magnesiumJunction"){{
-            requirements(Category.distribution, with(CosmicIndustriesItems.magnesium, 2));
+            requirements(Category.distribution, with(CIItems.magnesium, 2));
             speed = 3;
             capacity = 4;
             health = 5;
@@ -98,23 +97,23 @@ public class CosmicIndustriesBlocks {
         }};
 
         magnesiumRouter = new Router("magnesiumRouter"){{
-            requirements(Category.distribution, with(CosmicIndustriesItems.magnesium, 3));
+            requirements(Category.distribution, with(CIItems.magnesium, 3));
             health = 5;
             speed = 3f;
             regionRotated1 = 1;
             solid = false;
-            researchCost = with(CosmicIndustriesItems.magnesium, 30);
+            researchCost = with(CIItems.magnesium, 30);
         }};
 
         //environment
 
-        ironOre = new OreBlock(CosmicIndustriesItems.iron) {{
+        ironOre = new OreBlock(CIItems.iron) {{
             oreDefault = true;
             oreThreshold = 0.81f;
             oreScale = 23.47619f;
             variants = 3;
         }};
-        hematiteOre = new OreBlock(CosmicIndustriesItems.hematite) {{
+        hematiteOre = new OreBlock(CIItems.hematite) {{
             oreDefault = true;
             oreThreshold = 0.93f;
             oreScale = 21.42365f;
@@ -202,7 +201,7 @@ public class CosmicIndustriesBlocks {
             supportsOverlay = true;
         }};
 
-        magnesiumOre = new OreBlock(CosmicIndustriesItems.magnesium){{
+        magnesiumOre = new OreBlock(CIItems.magnesium){{
             oreDefault = true;
             oreThreshold = 0.51f;
             oreScale = 21.47619f;
@@ -211,7 +210,7 @@ public class CosmicIndustriesBlocks {
 
         //liquid
         magnesiumConduit = new Conduit("magnesiumConduit"){{
-            requirements(Category.liquid, with(CosmicIndustriesItems.magnesium, 4));
+            requirements(Category.liquid, with(CIItems.magnesium, 4));
             leaks = true;
             health = 10;
             liquidCapacity = 5;
@@ -220,7 +219,7 @@ public class CosmicIndustriesBlocks {
         }};
 
         magnesiumPump = new Pump("magnesiumPump"){{
-            requirements(Category.liquid, with(CosmicIndustriesItems.magnesium, 8));
+            requirements(Category.liquid, with(CIItems.magnesium, 8));
             size = 1;
             pumpAmount = 0.05f;
             squareSprite = false;
@@ -229,7 +228,7 @@ public class CosmicIndustriesBlocks {
         }};
 
         lazyPump = new Pump("lazyPump"){{
-            requirements(Category.liquid, with(CosmicIndustriesItems.iron, 10));
+            requirements(Category.liquid, with(CIItems.iron, 10));
             size = 1;
             pumpAmount = 3f / 60f;
             squareSprite = false;
@@ -238,7 +237,7 @@ public class CosmicIndustriesBlocks {
 
         //todo create new class
         liquidCistern = new LiquidRouter("liquidCistern"){{
-            requirements(Category.liquid, with(CosmicIndustriesItems.iron, 70, CosmicIndustriesItems.hematite, 20));
+            requirements(Category.liquid, with(CIItems.iron, 70, CIItems.hematite, 20));
             size = 2;
             solid = true;
             liquidCapacity = 350;
@@ -249,7 +248,7 @@ public class CosmicIndustriesBlocks {
 
 
         liquidLargeCistern = new LiquidRouter("liquidLargeCistern"){{
-            requirements(Category.liquid, with(CosmicIndustriesItems.iron, 110, CosmicIndustriesItems.hematite, 45));
+            requirements(Category.liquid, with(CIItems.iron, 110, CIItems.hematite, 45));
             size = 3;
             solid = true;
             liquidCapacity = 800f;
@@ -261,7 +260,7 @@ public class CosmicIndustriesBlocks {
         //power
 
         mechanicalTurbine = new SolidPump("mechanicalTurbine"){{
-            requirements(Category.power, with(CosmicIndustriesItems.iron, 1));
+            requirements(Category.power, with(CIItems.iron, 1));
             result = Liquids.water;
             pumpAmount = 0.11f;
             size = 2;
@@ -272,7 +271,7 @@ public class CosmicIndustriesBlocks {
         }};
 
         magnesiumNode = new MagnesiumNode("magnesiumNode"){{
-            requirements(Category.power, with(CosmicIndustriesItems.magnesium, 10));
+            requirements(Category.power, with(CIItems.magnesium, 10));
             health = 10;
             baseExplosiveness = 2;
             laserRange = 5;
@@ -287,7 +286,7 @@ public class CosmicIndustriesBlocks {
         }};
 
         magneticEnergySeparator = new ConsumeGenerator("magneticEnergySeparator"){{
-            requirements(Category.power, with(CosmicIndustriesItems.magnesium, 75));
+            requirements(Category.power, with(CIItems.magnesium, 75));
             size = 2;
             powerProduction = 1;
 
@@ -308,14 +307,14 @@ public class CosmicIndustriesBlocks {
                         suffix = ("-glow");
                     }});
 
-            consumeItem(CosmicIndustriesItems.magnesium, 1);
+            consumeItem(CIItems.magnesium, 1);
             consumeLiquid(Liquids.water, 1);
         }};
 
         //production
 
         miniDrill = new Drill("miniDrill"){{
-            requirements(Category.production, with(CosmicIndustriesItems.magnesium, 10));
+            requirements(Category.production, with(CIItems.magnesium, 10));
             size = 1;
             health = 15;
             drillTime = 500;
@@ -327,7 +326,7 @@ public class CosmicIndustriesBlocks {
         }};
 
         miniMiller = new WallCrafter("miniMiller"){{
-            requirements(Category.production, with(CosmicIndustriesItems.magnesium, 15));
+            requirements(Category.production, with(CIItems.magnesium, 15));
             size = 1;
             health = 20;
             drillTime = 420;
@@ -338,9 +337,9 @@ public class CosmicIndustriesBlocks {
 
         //crafting
         misuneseSmelter = new GenericCrafter("misuneseSmelter"){{
-            requirements(Category.crafting, with(CosmicIndustriesItems.magnesium, 80));
+            requirements(Category.crafting, with(CIItems.magnesium, 80));
             craftEffect = Fx.smeltsmoke;
-            outputItem = new ItemStack(CosmicIndustriesItems.misunese, 1);
+            outputItem = new ItemStack(CIItems.misunese, 1);
             craftTime = 150;
             size = 1;
             hasPower = true;
@@ -355,12 +354,12 @@ public class CosmicIndustriesBlocks {
             ambientSoundVolume = 0.15f;
 
             consumePower(0.33f);
-            consumeItems(with(CosmicIndustriesItems.magnesium, 1, Items.sand, 4));
+            consumeItems(with(CIItems.magnesium, 1, Items.sand, 4));
         }};
 
         mechanicalPress = new GenericCrafter("mechanicalPress"){{
-            requirements(Category.crafting, with(CosmicIndustriesItems.iron, 40));
-            craftEffect = CosmicIndustriesFx.CISteam;
+            requirements(Category.crafting, with(CIItems.iron, 40));
+            craftEffect = CIFx.CISteam;
             squareSprite = false;
             outputItem = new ItemStack(Items.graphite, 2);
             craftTime = 160;
@@ -374,11 +373,11 @@ public class CosmicIndustriesBlocks {
             ambientSoundVolume = 0.15f;
 
             consumePower(0.5f);
-            consumeItems(with(CosmicIndustriesItems.hematite, 1));
+            consumeItems(with(CIItems.hematite, 1));
         }};
 
         siliconeThermalSmelter = new GenericCrafter("siliconeThermalSmelter"){{
-                requirements(Category.crafting, with(CosmicIndustriesItems.iron, 40, Items.graphite, 30));
+                requirements(Category.crafting, with(CIItems.iron, 40, Items.graphite, 30));
                 squareSprite = false;
                 outputItem = new ItemStack(Items.silicon, 2);
                 craftTime = 85;
@@ -408,7 +407,7 @@ public class CosmicIndustriesBlocks {
         //turrets
 
         shoker = new PowerTurret("shoker"){{
-            requirements(Category.turret, with(CosmicIndustriesItems.iron, 25));
+            requirements(Category.turret, with(CIItems.iron, 25));
             shootType = new LightningBulletType() {{
                 damage = 5;
                 lightningLength = 10;
@@ -444,7 +443,7 @@ public class CosmicIndustriesBlocks {
         }};
 
         splitter = new ItemTurret("splitter") {{
-                requirements(Category.turret, with(CosmicIndustriesItems.iron, 50, Items.graphite, 10));
+                requirements(Category.turret, with(CIItems.iron, 50, Items.graphite, 10));
                 health = 900;
                 rotateSpeed = 1.4f;
                 recoil = 0.5f;
@@ -453,7 +452,7 @@ public class CosmicIndustriesBlocks {
                 reload = 120f;
 
                 ammo(
-                        CosmicIndustriesItems.iron, new ArtilleryBulletType(3.8f, 38) {{
+                        CIItems.iron, new ArtilleryBulletType(3.8f, 38) {{
                             lifetime = 44f;
                             width = 12;
                             height = 12;
@@ -539,7 +538,7 @@ public class CosmicIndustriesBlocks {
 
         //todo balance
         GelelectronBlaster = new PowerTurret("GelelectronBlaster"){{
-                requirements(Category.turret, with(CosmicIndustriesItems.iron, 110, CosmicIndustriesItems.hematite, 65, CosmicIndustriesItems.asfrit, 20));
+                requirements(Category.turret, with(CIItems.iron, 110, CIItems.hematite, 65, CIItems.asfrit, 20));
                 health = 930;
                 rotateSpeed = 1.9f;
                 recoil = 1f;
@@ -605,9 +604,9 @@ public class CosmicIndustriesBlocks {
             }};
 
         dissecter = new ItemTurret("dissecter") {{
-            requirements(Category.turret, with(CosmicIndustriesItems.magnesium, 45));
+            requirements(Category.turret, with(CIItems.magnesium, 45));
             ammo(
-                    CosmicIndustriesItems.magnesium, new MissileBulletType(6f, 112) {{
+                    CIItems.magnesium, new MissileBulletType(6f, 112) {{
                         consumePower(10f);
                         despawnEffect = Fx.instBomb;
                         height = 80f;
@@ -648,7 +647,7 @@ public class CosmicIndustriesBlocks {
         }};
 
         salvx = new ItemTurret("salvx"){{
-                requirements(Category.turret, with(CosmicIndustriesItems.magnesium, 10));
+                requirements(Category.turret, with(CIItems.magnesium, 10));
                 reload = 45;
                 rotateSpeed = 10;
                 targetGround = true;
@@ -668,7 +667,7 @@ public class CosmicIndustriesBlocks {
                 shootCone = 20;
 
                 ammo(
-                        CosmicIndustriesItems.magnesium, new MissileBulletType(6f, 5) {{
+                        CIItems.magnesium, new MissileBulletType(6f, 5) {{
                             height = 15;
                             width = 10;
                             lifetime = 20;
@@ -685,18 +684,18 @@ public class CosmicIndustriesBlocks {
         ironWall = new Wall("ironWall") {{
             size = 1;
             health = 920;
-            requirements(Category.defense, with(CosmicIndustriesItems.iron, 6));
+            requirements(Category.defense, with(CIItems.iron, 6));
         }};
         ironWallLarge = new Wall("ironWallLarge") {{
             size = 2;
             health = 1840;
-            requirements(Category.defense, with(CosmicIndustriesItems.iron, 24));
+            requirements(Category.defense, with(CIItems.iron, 24));
         }};
 
         //drills
 
         rustyDrill = new Drill("rustyDrill") {{
-            requirements(Category.production, with(CosmicIndustriesItems.iron, 24));
+            requirements(Category.production, with(CIItems.iron, 24));
             tier = 1;
             drillTime = 350;
             size = 2;
@@ -707,18 +706,18 @@ public class CosmicIndustriesBlocks {
 
         //todo rename
         storage = new StorageBlock("storage"){{
-            requirements(Category.effect, with(CosmicIndustriesItems.iron, 170, CosmicIndustriesItems.hematite, 70));
+            requirements(Category.effect, with(CIItems.iron, 170, CIItems.hematite, 70));
             size = 3;
             itemCapacity = 500;
             scaledHealth = 35;
         }};
 
         coreHeart = new CoreBlock("coreHeart") {{
-            requirements(Category.effect, BuildVisibility.editorOnly, with(CosmicIndustriesItems.iron, 800, CosmicIndustriesItems.hematite, 1200));
+            requirements(Category.effect, BuildVisibility.editorOnly, with(CIItems.iron, 800, CIItems.hematite, 1200));
             alwaysUnlocked = true;
 
             isFirstTier = true;
-            unitType = CosmicIndustriesUnits.falcon;
+            unitType = CIUnits.falcon;
             health = 2000;
             itemCapacity = 3000;
             size = 4;
@@ -727,11 +726,11 @@ public class CosmicIndustriesBlocks {
         }};
 
         corePixel = new CoreBlock("corePixel") {{
-            requirements(Category.effect, BuildVisibility.editorOnly, with(CosmicIndustriesItems.magnesium, 500));
+            requirements(Category.effect, BuildVisibility.editorOnly, with(CIItems.magnesium, 500));
             alwaysUnlocked = true;
 
             isFirstTier = true;
-            unitType = CosmicIndustriesUnits.hawk;
+            unitType = CIUnits.hawk;
             health = 250;
             itemCapacity = 500;
             size = 2;

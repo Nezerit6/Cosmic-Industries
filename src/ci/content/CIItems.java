@@ -4,7 +4,7 @@ import arc.graphics.*;
 import arc.struct.Seq;
 import mindustry.type.*;
 
-public class CosmicIndustriesItems {
+public class CIItems {
         public static Item hematite, iron, lithium, asfrit,
         magnesium, misunese;
 

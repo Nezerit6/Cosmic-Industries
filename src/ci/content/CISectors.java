@@ -2,9 +2,9 @@ package ci.content;
 
 import mindustry.type.*;
 
-import static ci.content.CosmicIndustriesPlanets.novia;
+import static ci.content.CIPlanets.novia;
 
-public class CosmicIndustriesSectors {
+public class CISectors {
 
     public static SectorPreset
     firstWay;

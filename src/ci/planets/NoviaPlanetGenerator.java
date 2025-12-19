@@ -16,295 +16,241 @@ import mindustry.type.*;
 import mindustry.world.*;
 
 import static mindustry.Vars.*;
+
 public class NoviaPlanetGenerator extends PlanetGenerator {
-    public float heightPow = 3f, heightMult = 1.6f;
+    public float scl = 5f;
+    public float waterOffset = 0.07f;
     String launchSchem = "bXNjaAF4nGNgYWBhZmDJS8xNZWDUY+BOSS1OLsosKMnMz2NgYGDLSUxKzSlmYIqOZWTgSc7UTc4vSvVITSwqAUoyghCQAAD77w5o";
 
-    /**NoviaBase basegen = new NoviaBase();*/
-    public static final int seed = 7;
-    public static int widthSeed = 1, heightSeed = 2, roomSeed = 3, strokeSeed = 4;
-
-    public Block[] arr = {
-            Blocks.snow,
-            Blocks.snow,
-            Blocks.snow,
-            Blocks.water,
-            Blocks.water,
-            Blocks.water,
-            CosmicIndustriesBlocks.mercuryMud,
-            CosmicIndustriesBlocks.gert,
-            CosmicIndustriesBlocks.duneSand,
-            CosmicIndustriesBlocks.duneSand,
-            Blocks.water,
-
+    Block[][] arr = {
+            {Blocks.water, Blocks.water, CIBlocks.mercuryMud, CIBlocks.mercuryMud, CIBlocks.gert, CIBlocks.gert, CIBlocks.duneSand, CIBlocks.duneSand},
+            {Blocks.water, Blocks.water, CIBlocks.mercuryMud, CIBlocks.gert, CIBlocks.gert, CIBlocks.duneSand, CIBlocks.duneSand, Blocks.snow},
+            {Blocks.water, CIBlocks.mercuryMud, CIBlocks.gert, CIBlocks.gert, CIBlocks.duneSand, CIBlocks.duneSand, Blocks.snow, Blocks.snow},
+            {CIBlocks.mercuryMud, CIBlocks.gert, CIBlocks.gert, CIBlocks.duneSand, CIBlocks.duneSand, Blocks.snow, Blocks.snow, Blocks.ice},
+            {CIBlocks.gert, CIBlocks.gert, CIBlocks.duneSand, CIBlocks.duneSand, Blocks.snow, Blocks.snow, Blocks.ice, Blocks.ice}
     };
-    ObjectMap<Block, Block> dec = ObjectMap.of(
 
-    );
+    ObjectMap<Block, Block> dec = ObjectMap.of();
 
-    float rawHeight(Vec3 pos) {
-        return Simplex.noise3d(seed, 13, 0.6f, 0.9f, pos.x, pos.y, pos.z);
-    }
-    float humidity(Vec3 pos)  {
-        return Simplex.noise3d(13, 7, 0.5f, 0.5f, pos.x, pos.y, pos.z);
-    }
-
-    Block getBlock(Vec3 pos) {
-        float height = 1 - rawHeight(pos);
-        float humidity = humidity(pos);
-        return arr[Mathf.clamp((int) (height + humidity * arr.length), 0, arr.length -1)];
-    }
-    Block getBlock(float x, float y, float z) {
-        Vec3 pos = new Vec3(x, y, z);
-        float height = 1 - rawHeight(pos);
-        float humidity = humidity(pos);
-        return arr[Mathf.clamp((int) (height + humidity * arr.length), 0, arr.length -1)];
+    float rawHeight(Vec3 position){
+        position = Tmp.v33.set(position).scl(scl);
+        return (Mathf.pow(Simplex.noise3d(seed, 7, 0.5f, 1f/3f, position.x, position.y, position.z), 2.3f) + waterOffset) / (1f + waterOffset);
     }
 
     @Override
-    public void generateSector(Sector sector){
-        //no bases
-    }
-
-    @Override
-    public boolean allowLanding(Sector sector){
-        return false;
-    }
+    public void generateSector(Sector sector){}
 
     @Override
     public float getHeight(Vec3 position){
-        return Mathf.pow(rawHeight(position), heightPow) * heightMult;
+        float height = rawHeight(position);
+        return Math.max(height, 2f / arr[0].length);
     }
 
     @Override
-    public Color getColor(Vec3 pos) {
-        return getBlock(pos).mapColor;
+    public Color getColor(Vec3 position){
+        Block block = getBlock(position);
+        return Tmp.c1.set(block.mapColor).a(1f - block.albedo);
     }
 
     @Override
-    protected float noise(float x, float y, double octaves, double falloff, double scl, double mag) {
-        return Simplex.noise2d(seed, octaves, falloff, 1f / scl, x, y) * (float)mag;
+    public void genTile(Vec3 position, TileGen tile){
+        tile.floor = getBlock(position);
+        tile.block = tile.floor.asFloor().wall;
+
+        if(Ridged.noise3d(seed + 1, position.x, position.y, position.z, 2, 22) > 0.31){
+            tile.block = Blocks.air;
+        }
     }
-    protected float noise3d(int seed, Vec3 p, double octaves, double falloff, double scl, double mag) {
-        return Simplex.noise3d(seed, octaves, falloff, 1f / scl, p.x, p.y, p.z) * (float)mag;
+
+    Block getBlock(Vec3 position){
+        float height = rawHeight(position);
+        Tmp.v31.set(position);
+        position = Tmp.v33.set(position).scl(scl);
+        float rad = scl;
+        float temp = Mathf.clamp(Math.abs(position.y * 2f) / rad);
+        float tnoise = Simplex.noise3d(seed, 7, 0.56, 1f/3f, position.x, position.y + 999f, position.z);
+        temp = Mathf.lerp(temp, tnoise, 0.5f);
+        height *= 1.2f;
+        height = Mathf.clamp(height);
+
+        return arr[Mathf.clamp((int)(temp * arr.length), 0, arr.length - 1)][Mathf.clamp((int)(height * arr[0].length), 0, arr[0].length - 1)];
     }
 
     @Override
-    public Seq<Tile> pathfind(int startX, int startY, int endX, int endY, TileHueristic th, DistanceHeuristic dh){
-        return Astar.pathfind(startX, startY, endX, endY, th, dh, tile -> true);
+    protected float noise(float x, float y, double octaves, double falloff, double scl, double mag){
+        Vec3 v = sector.rect.project(x, y).scl(5f);
+        return Simplex.noise3d(seed, octaves, falloff, 1f / scl, v.x, v.y, v.z) * (float)mag;
     }
 
     @Override
     protected void generate() {
+        class Room {
+            int x, y, radius;
+            ObjectSet<Room> connected = new ObjectSet<>();
 
-        Vec2 pos = new Vec2();
-        Seq<Room> r = new Seq<>();
-        Seq<Room> roomseq = new Seq<>();
-        float maxd = Mathf.dst(width/2f, height/2f);
-
-        // enemy and player rooms
-        Vec2 trns = Tmp.v1.trns(rand.random(360f), width/2.6f);
-        int
-                spawnX = (int)(trns.x + width/2f), spawnY = (int)(trns.y + height/2f),
-                launchX = (int)(-trns.y + width/2f), launchY = (int)(-trns.y + height/2f);
-        r.add(
-                new Room(
-                        spawnX,
-                        spawnY,
-                        (int) (10f + noise3d(strokeSeed * 90, sector.tile.v, 1, 1, 1f, 5))
-                ),
-                new Room(
-                        launchX,
-                        launchY,
-                        (int)( 10f + noise3d(strokeSeed * 96, sector.tile.v, 1, 1, 1f, 5))
-                )
-        );
-
-        // floor
-        pass((x, y) -> {
-            floor = getBlock(x / (width * 0.5f), y / (height * 0.5f), sector.tile.v.z);
-        });
-
-        pass((x, y) -> {
-            if (block == Blocks.air) {
-                block = floor.asFloor().wall;
+            Room(int x, int y, int radius){
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                connected.add(this);
             }
 
-            //decoration
-            if (rand.chance(0.01) && block == Blocks.air) {
-                block = dec.get(floor, floor.asFloor().decoration);
+            void join(int x1, int y1, int x2, int y2){
+                float nscl = rand.random(100f, 140f) * 6f;
+                int stroke = rand.random(3, 9);
+                brush(pathfind(x1, y1, x2, y2, tile -> (tile.solid() ? 50f : 0f) + noise(tile.x, tile.y, 2, 0.4f, 1f / nscl) * 500, Astar.manhattan), stroke);
             }
 
-            //gallium
-            if(floor == CosmicIndustriesBlocks.duneSand){
-                if(Math.abs(0.5f - noise(x - 40, y, 2, 0.7, 80)) > 0.25f &&
-                        Math.abs(0.5f - noise(x, y + sector.id*10, 1, 1.5f, 80)) > 0.41f && !(roomseq.contains(t -> Mathf.within(x, y, t.x, t.y, 15)))){
-                    floor = CosmicIndustriesBlocks.duneSand;
-                }
-            }
-        });
+            void connect(Room to){
+                if(!connected.add(to) || to == this) return;
 
-        // create rooms
-        for (int i = 0; i < 7; i++) {
-            pos.set(
-                    Mathf.clamp((int) noise3d(widthSeed * i, sector.tile.v, 1, 1, 1f, width), 20, width - 20),
-                    Mathf.clamp((int) noise3d(heightSeed * i, sector.tile.v, 1, 1, 1f, height), 20, height - 20)
-            );
-            r.add(
-                    new Room(
-                            (int) pos.x,
-                            (int) pos.y,
-                            (int) (10f + noise3d(strokeSeed * i, sector.tile.v, 1, 1, 1f, 5))
-                    )
-            );
+                Vec2 midpoint = Tmp.v1.set(to.x, to.y).add(x, y).scl(0.5f);
+                rand.nextFloat();
+
+                midpoint.add(Tmp.v2.setToRandomDirection(rand).scl(Tmp.v1.dst(x, y)));
+                midpoint.sub(width/2f, height/2f).limit(width / 2f / Mathf.sqrt3).add(width/2f, height/2f);
+
+                int mx = (int)midpoint.x, my = (int)midpoint.y;
+
+                join(x, y, mx, my);
+                join(mx, my, to.x, to.y);
+            }
         }
 
-        // connect rooms
-        r.each(room -> {
-            int roomId = 0;
+        cells(4);
+        distort(10f, 12f);
 
-            // get room to connect
-            room.connect(
-                    r.get(
-                            (int) noise3d((int) roomSeed * roomId, sector.tile.v, 1, 1, 1f, r.size - 1)
-                    )
-            );
+        float constraint = 1.3f;
+        float radius = width / 2f / Mathf.sqrt3;
+        int rooms = rand.random(2, 5);
+        Seq<Room> roomseq = new Seq<>();
 
-            // if it tries to connect to itself, it'll connect to spawn instead
-            if (room.connected == room) room.connect(r.get(0));
+        for(int i = 0; i < rooms; i++){
+            Tmp.v1.trns(rand.random(360f), rand.random(radius / constraint));
+            float rx = (width/2f + Tmp.v1.x);
+            float ry = (height/2f + Tmp.v1.y);
+            float maxrad = radius - Tmp.v1.len();
+            float rrad = Math.min(rand.random(9f, maxrad / 2f), 30f);
+            roomseq.add(new Room((int)rx, (int)ry, (int)rrad));
+        }
 
-            // actually connect the rooms
-            room.open();
-            if (room.isConnected()) {
-                brush(pathfind(room.x, room.y, room.connected.x, room.connected.y, tile -> 5000f, Astar.manhattan), 20);
+        Room spawn = null;
+        Seq<Room> enemies = new Seq<>();
+        int enemySpawns = rand.random(1, Math.max((int)(sector.threat * 4), 1));
+        int offset = rand.nextInt(360);
+        float length = width/2.55f - rand.random(13, 23);
+        int angleStep = 5;
+        int waterCheckRad = 5;
+
+        for(int i = 0; i < 360; i+= angleStep){
+            int angle = offset + i;
+            int cx = (int)(width/2 + Angles.trnsx(angle, length));
+            int cy = (int)(height/2 + Angles.trnsy(angle, length));
+
+            int waterTiles = 0;
+
+            for(int rx = -waterCheckRad; rx <= waterCheckRad; rx++){
+                for(int ry = -waterCheckRad; ry <= waterCheckRad; ry++){
+                    Tile tile = tiles.get(cx + rx, cy + ry);
+                    if(tile == null || tile.floor().liquidDrop != null){
+                        waterTiles++;
+                    }
+                }
             }
-            roomId++;
-        });
 
-        // make connections look more natural
-        distort(130f, 76f);
+            if(waterTiles <= 4 || (i + angleStep >= 360)){
+                roomseq.add(spawn = new Room(cx, cy, rand.random(8, 15)));
 
-        // make core and enemy area
-        erase(spawnX, spawnY, 15);
-        erase(launchX, launchY, 10);
-        brush(pathfind(r.get(0).x, r.get(0).y, r.get(1).x, r.get(1).y, tile -> 5000f, Astar.manhattan), 20);
+                for(int j = 0; j < enemySpawns; j++){
+                    float enemyOffset = rand.range(60f);
+                    Tmp.v1.set(cx - width/2, cy - height/2).rotate(180f + enemyOffset).add(width/2, height/2);
+                    Room espawn = new Room((int)Tmp.v1.x, (int)Tmp.v1.y, rand.random(8, 16));
+                    roomseq.add(espawn);
+                    enemies.add(espawn);
+                }
+                break;
+            }
+        }
 
-        // more roughness
-        distort(112f, 24f);
-        distort(7f, 13f);
-        distort(2f, 7f);
-        median(3);
+        for(Room room : roomseq){
+            erase(room.x, room.y, room.radius);
+        }
 
+        int connections = rand.random(Math.max(rooms - 1, 1), rooms + 3);
+        for(int i = 0; i < connections; i++){
+            roomseq.random(rand).connect(roomseq.random(rand));
+        }
 
-        // ores
-        Seq<Block> ores = Seq.with(CosmicIndustriesBlocks.ironOre, CosmicIndustriesBlocks.hematiteOre);
-        float poles = 1f - Math.abs(sector.tile.v.y);
+        for(Room room : roomseq){
+            spawn.connect(room);
+        }
+
+        cells(1);
+        distort(10f, 6f);
+
+        Seq<Block> ores = Seq.with(CIBlocks.ironOre, CIBlocks.hematiteOre);
+        float poles = Math.abs(sector.tile.v.y);
         float nmag = 0.5f;
         float scl = 1f;
         float addscl = 1.3f;
-        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.3f*addscl){
-            ores.add(CosmicIndustriesBlocks.ironOre);
-        }
+
         if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.25f*addscl){
-            ores.add(CosmicIndustriesBlocks.hematiteOre);
+            ores.add(CIBlocks.ironOre);
         }
 
+        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.5f*addscl){
+            ores.add(CIBlocks.hematiteOre);
+        }
+
+        FloatSeq frequencies = new FloatSeq();
+        for(int i = 0; i < ores.size; i++){
+            frequencies.add(rand.random(-0.1f, 0.01f) - i * 0.01f + poles * 0.04f);
+        }
 
         pass((x, y) -> {
-            if (!floor.asFloor().hasSurface()) return;
+            if(!floor.asFloor().hasSurface()) return;
 
-            float offsetX = x - 4, offsetY = y + 23;
-            for (int i = ores.size - 1; i >= 0; i--) {
+            int offsetX = x - 4, offsetY = y + 23;
+            for(int i = ores.size - 1; i >= 0; i--){
                 Block entry = ores.get(i);
-                if (Math.abs(0.5 - noise(offsetX, offsetY + i * 999, 2, 0.7f, (40 + i * 2))) > 0.22f + i * 0.01 &&
-                        Math.abs(0.5 - noise(offsetX, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.35f ) {
+                float freq = frequencies.get(i);
+                if(Math.abs(0.5f - noise(offsetX, offsetY + i*999, 2, 0.7, (40 + i * 2))) > 0.22f + i*0.01 &&
+                        Math.abs(0.5f - noise(offsetX, offsetY - i*999, 1, 1, (30 + i * 4))) > 0.37f + freq){
                     ore = entry;
                     break;
                 }
             }
         });
 
-        Room spawn = null;
-        Seq<Room> enemies = new Seq<>();
-        int enemySpawns = rand.random(1, Math.max(Mathf.floor(sector.threat * 4), 1));
-        int offset = rand.nextInt(360);
-        float length = (float)(width / 2.55 - rand.random(13, 23));
-        int angleStep = 5;
+        trimDark();
+        median(2);
+        inverseFloodFill(tiles.getn(spawn.x, spawn.y));
+        tech();
 
-        for (int i = 0; i < 360; i += angleStep){
-            int angle = offset + i;
-            int cx = (int)Math.floor(width / 2f + Angles.trnsx(angle, length));
-            int cy = (int)Math.floor(height / 2f + Angles.trnsy(angle, length));
+        pass((x, y) -> {
+            if(rand.chance(0.01) && floor.asFloor().hasSurface() && block == Blocks.air){
+                block = dec.get(floor, floor.asFloor().decoration);
+            }
+        });
 
-            if (i + angleStep >= 360){
-                spawn = new Room(cx, cy, rand.random(10, 18));
-                r.add(spawn);
-
-                for(int j = 0; j < enemySpawns; j++){
-                    float enemyOffset = rand.range(60);
-
-                    Tmp.v1.set(cx - width / 2f, cy - height / 2f).rotate(180 + enemyOffset).add(width / 2f, height / 2f);
-                    Room espawn = new Room((int)Math.floor(Tmp.v1.x), (int)Math.floor(Tmp.v1.y), rand.random(10, 16));
-                    r.add(espawn);
-                    enemies.add(espawn);
-                }
-                break;
+        for(Tile tile : tiles){
+            if(tile.overlay().needsSurface && !tile.floor().hasSurface()){
+                tile.setOverlay(Blocks.air);
             }
         }
-        Schematics.placeLoadout(Schematics.readBase64(launchSchem), spawnX, spawnY, Team.sharded);
 
-        tiles.getn(r.get(1).x, r.get(1).y).setOverlay(Blocks.spawn);
+        Schematics.placeLoadout(Schematics.readBase64(launchSchem), spawn.x, spawn.y, Team.sharded);
 
-        /**if (sector.hasEnemyBase()){
-         basegen.generate(tiles, enemies.map(room -> tiles.getn(room.x, room.y)), tiles.get(spawnX, spawnY), state.rules.waveTeam, sector, sector.threat);
-         state.rules.attackMode = sector.info.attack = true;
-         }else{
-         state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 10, 1);
-         }*/
+        for(Room espawn : enemies){
+            tiles.getn(espawn.x, espawn.y).setOverlay(Blocks.spawn);
+        }
 
         state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 1f, Math.max(sector.threat - 0.4f, 0f));
-        state.rules.spawns = NoviaWaves.generate(sector.threat, new Rand(), state.rules.attackMode);
-        state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 12, 1);
-        state.rules.waves = sector.info.waves = true;
+        state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 10, 1);
+        state.rules.waves = true;
         state.rules.env = sector.planet.defaultEnv;
     }
 
     @Override
-    public void postGenerate(Tiles tiles) {
-    }
-
-    public class Room {
-        int x, y, size;
-        Room connected;
-
-        public Room(int x, int y, int size) {
-            this.x = x;
-            this.y = y;
-            this.size = size;
-            this.connected = this;
-        }
-
-        public int getDistance(Room to) {
-            int
-                    distX = Math.abs(x - to.x),
-                    distY = Math.abs(y - to.y);
-            return (int) (distX+distY/2f);
-        }
-
-        public boolean isConnected() {
-            return connected != this;
-        }
-
-        public void open() {erase(x, y, size);}
-
-        public void connect(Room to) {
-            if (
-                    to.connected == this ||
-                            connected != this ||
-                            getDistance(to) < size
-            ) return;
-
-            connected = to;
-        }
-    }
+    public void postGenerate(Tiles tiles){}
 }

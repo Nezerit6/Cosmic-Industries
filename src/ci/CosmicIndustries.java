@@ -1,25 +1,31 @@
 package ci;
 
-import arc.Core;
 import mindustry.mod.*;
 import ci.content.*;
-import mindustry.ui.dialogs.LanguageDialog;
 
 public class CosmicIndustries extends Mod {
 
     @Override
     public void loadContent() {
 
-        /**Log.info("Loading some ci content.");*/
-
-        CosmicIndustriesItems.load();
-        /**CosmicIndustriesLiquids.load();
-        CosmicIndustriesBullets.load();*/
-        CosmicIndustriesUnits.load();
-        CosmicIndustriesBlocks.load();
-        CosmicIndustriesPlanets.load();
-        CosmicIndustriesSectors.load();
-        CosmicIndustriesTechTree.load();
-
+        CIItems.load();
+        CIUnits.load();
+        CIBlocks.load();
+        CIPlanets.load();
+        CISectors.load();
+        CITechTree.load();
+        /*
+         * Initialization
+         * - Teams
+         * - Status effects
+         * - Weather
+         * - Items
+         * - Liquids
+         * - Bullet
+         * - Units
+         * - Blocks
+         * - Planets(Sectors)
+         * - Tech tree
+         */
     }
 }
