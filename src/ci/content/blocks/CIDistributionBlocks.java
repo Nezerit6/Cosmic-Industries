@@ -1,9 +1,9 @@
 package ci.content.blocks;
 
 import ci.content.*;
+import ci.world.blocks.distribution.PipeConveyor;
 import mindustry.type.Category;
 import mindustry.world.Block;
-import mindustry.world.blocks.distribution.*;
 
 import static mindustry.type.ItemStack.with;
 
@@ -12,10 +12,10 @@ public class CIDistributionBlocks {
             pipeConveyor;
 
     public static void load() {
-        pipeConveyor = new Conveyor("pipeConveyor"){{
+        pipeConveyor = new PipeConveyor("pipeConveyor"){{
             requirements(Category.distribution, with(CIItems.iron, 1));
-            health = 30;
-            speed = 0.07f;
+            health = 45;
+            speed = 0.04f;
             displayedSpeed = 6f;
             buildCostMultiplier = 2f;
             researchCost = with(CIItems.iron, 5);
