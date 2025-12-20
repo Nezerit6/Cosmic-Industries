@@ -7,6 +7,7 @@ import arc.struct.*;
 import arc.util.*;
 import arc.util.noise.*;
 import ci.content.*;
+import ci.content.blocks.CIEnvironmentBlocks;
 import mindustry.ai.*;
 import mindustry.ai.Astar.*;
 import mindustry.content.*;
@@ -23,11 +24,11 @@ public class NoviaPlanetGenerator extends PlanetGenerator {
     String launchSchem = "bXNjaAF4nGNgYWBhZmDJS8xNZWDUY+BOSS1OLsosKMnMz2NgYGDLSUxKzSlmYIqOZWTgSc7UTc4vSvVITSwqAUoyghCQAAD77w5o";
 
     Block[][] arr = {
-            {Blocks.water, Blocks.water, CIBlocks.mercuryMud, CIBlocks.mercuryMud, CIBlocks.gert, CIBlocks.gert, CIBlocks.duneSand, CIBlocks.duneSand},
-            {Blocks.water, Blocks.water, CIBlocks.mercuryMud, CIBlocks.gert, CIBlocks.gert, CIBlocks.duneSand, CIBlocks.duneSand, Blocks.snow},
-            {Blocks.water, CIBlocks.mercuryMud, CIBlocks.gert, CIBlocks.gert, CIBlocks.duneSand, CIBlocks.duneSand, Blocks.snow, Blocks.snow},
-            {CIBlocks.mercuryMud, CIBlocks.gert, CIBlocks.gert, CIBlocks.duneSand, CIBlocks.duneSand, Blocks.snow, Blocks.snow, Blocks.ice},
-            {CIBlocks.gert, CIBlocks.gert, CIBlocks.duneSand, CIBlocks.duneSand, Blocks.snow, Blocks.snow, Blocks.ice, Blocks.ice}
+            {Blocks.water, Blocks.water, CIEnvironmentBlocks.mercuryMud, CIEnvironmentBlocks.mercuryMud, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.duneSand, CIEnvironmentBlocks.duneSand},
+            {Blocks.water, Blocks.water, CIEnvironmentBlocks.mercuryMud, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.duneSand, CIEnvironmentBlocks.duneSand, Blocks.snow},
+            {Blocks.water, CIEnvironmentBlocks.mercuryMud, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.duneSand, CIEnvironmentBlocks.duneSand, Blocks.snow, Blocks.snow},
+            {CIEnvironmentBlocks.mercuryMud, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.duneSand, CIEnvironmentBlocks.duneSand, Blocks.snow, Blocks.snow, Blocks.ice},
+            {CIEnvironmentBlocks.gert, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.duneSand, CIEnvironmentBlocks.duneSand, Blocks.snow, Blocks.snow, Blocks.ice, Blocks.ice}
     };
 
     ObjectMap<Block, Block> dec = ObjectMap.of();
@@ -188,18 +189,18 @@ public class NoviaPlanetGenerator extends PlanetGenerator {
         cells(1);
         distort(10f, 6f);
 
-        Seq<Block> ores = Seq.with(CIBlocks.ironOre, CIBlocks.hematiteOre);
+        Seq<Block> ores = Seq.with(CIEnvironmentBlocks.ironOre, CIEnvironmentBlocks.hematiteOre);
         float poles = Math.abs(sector.tile.v.y);
         float nmag = 0.5f;
         float scl = 1f;
         float addscl = 1.3f;
 
         if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.25f*addscl){
-            ores.add(CIBlocks.ironOre);
+            ores.add(CIEnvironmentBlocks.ironOre);
         }
 
         if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.5f*addscl){
-            ores.add(CIBlocks.hematiteOre);
+            ores.add(CIEnvironmentBlocks.hematiteOre);
         }
 
         FloatSeq frequencies = new FloatSeq();

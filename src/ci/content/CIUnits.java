@@ -3,24 +3,17 @@ package ci.content;
 import arc.graphics.Color;
 import mindustry.ai.types.BuilderAI;
 import mindustry.content.Fx;
-import mindustry.entities.bullet.BasicBulletType;
-import mindustry.entities.bullet.BulletType;
-import mindustry.entities.bullet.MissileBulletType;
-import mindustry.gen.MechUnit;
-import mindustry.gen.Sounds;
-import mindustry.gen.UnitEntity;
-import mindustry.graphics.Pal;
-import mindustry.type.UnitType;
-import mindustry.type.Weapon;
-import mindustry.type.weapons.RepairBeamWeapon;
+import mindustry.entities.bullet.*;
+import mindustry.gen.*;
+import mindustry.type.*;
 
 public class CIUnits {
     public static UnitType
     //core units
-    falcon, hawk,
+    falcon,
 
     //mech
-    arrow /**needle its T2*/;
+    arrow;
 
     public static void load() {
 
@@ -77,54 +70,6 @@ public class CIUnits {
                     shootEffect = Fx.shootSmall;
                     smokeEffect = Fx.shootSmallSmoke;
                     buildingDamageMultiplier = 0.001f;
-                }};
-            }});
-        }};
-
-        hawk  = new UnitType("hawk") {{
-            aiController = BuilderAI::new;
-            isEnemy = false;
-            constructor = UnitEntity::create;
-            lowAltitude = true;
-            flying = true;
-            mineTier = 1;
-            mineSpeed = 5f;
-            drag = 0.05f;
-            accel = 0.05f;
-            speed = 4f;
-            rotateSpeed = 12f;
-            buildSpeed = 1f;
-            itemCapacity = 20;
-            health = 20;
-            engineOffset = 3f;
-            hitSize = 5f;
-            alwaysUnlocked = true;
-            outlineColor = Color.black;
-            outlineRadius = 3;
-
-            weapons.add(new RepairBeamWeapon(){{
-                widthSinMag = 0.11f;
-                reload = 20f;
-                x = 0f;
-                y = 1f;
-                rotate = false;
-                shootY = 0f;
-                beamWidth = 0.7f;
-                repairSpeed = 3.1f;
-                fractionRepairSpeed = 0.06f;
-                aimDst = 0f;
-                shootCone = 15f;
-                mirror = false;
-
-                targetUnits = false;
-                targetBuildings = true;
-                autoTarget = false;
-                controllable = true;
-                laserColor = Pal.accent;
-                healColor = Pal.accent;
-
-                bullet = new BulletType(){{
-                    maxRange = 60f;
                 }};
             }});
         }};

@@ -5,10 +5,10 @@ import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.Tmp;
+import ci.content.blocks.*;
 import ci.planets.*;
 import mindustry.Vars;
-import mindustry.content.Items;
-import mindustry.content.Planets;
+import mindustry.content.*;
 import mindustry.game.Team;
 import mindustry.graphics.g3d.*;
 import mindustry.maps.planet.*;
@@ -53,7 +53,7 @@ public class CIPlanets {
             orbitRadius = 58f;
             rotateTime = 30f * 60f;
 
-            defaultCore = CIBlocks.coreHeart;
+            defaultCore = CIStorageBlocks.coreHeart;
             startSector = 45;
             sectorSeed = 8;
 
@@ -89,7 +89,7 @@ public class CIPlanets {
             };
 
             itemWhitelist.addAll(CIItems.noviaItems);
-            unlockedOnLand.add(CIBlocks.coreHeart);
+            unlockedOnLand.add(CIStorageBlocks.coreHeart);
             hiddenItems.addAll(Vars.content.items()).removeAll(CIItems.noviaItems);
         }};
 
@@ -135,8 +135,8 @@ public class CIPlanets {
             minZoom = 0.6f;
             clipRadius = 2f;
 
-            Block base = CIBlocks.gert;
-            Block tint = CIBlocks.duneSand;
+            Block base = CIEnvironmentBlocks.gert;
+            Block tint = CIEnvironmentBlocks.duneSand;
 
             generator = new AsteroidGenerator();
 

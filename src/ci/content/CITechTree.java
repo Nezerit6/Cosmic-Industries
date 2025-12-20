@@ -1,7 +1,6 @@
 package ci.content;
 
-
-
+import ci.content.blocks.*;
 import mindustry.content.Items;
 
 import static mindustry.content.TechTree.*;
@@ -9,7 +8,7 @@ import static mindustry.content.TechTree.nodeProduce;
 
 public class CITechTree {
     public static void load() {
-        CIPlanets.novia.techTree = nodeRoot("Novia", CIBlocks.coreHeart, () -> {
+        CIPlanets.novia.techTree = nodeRoot("Novia", CIStorageBlocks.coreHeart, () -> {
             nodeProduce(CIItems.iron, () -> {
                 node(CIItems.hematite, () -> {
                     node(Items.graphite, () -> {
@@ -17,11 +16,11 @@ public class CITechTree {
                 });
             });
 
-            nodeProduce(CIBlocks.rustyDrill, () -> {
+            nodeProduce(CIProductionBlocks.rustyDrill, () -> {
 
-                node(CIBlocks.shoker, () -> {
+                node(CIDefenseBlocks.shoker, () -> {
                 });
-                node(CIBlocks.mechanicalPress, () -> {
+                node(CICraftingBlocks.mechanicalPress, () -> {
                 });
             });
         });

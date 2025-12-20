@@ -5,11 +5,9 @@ import arc.struct.Seq;
 import mindustry.type.*;
 
 public class CIItems {
-        public static Item hematite, iron, lithium, asfrit,
-        magnesium, misunese;
+        public static Item hematite, iron, lithium, asfrit;
 
     public static final Seq<Item> noviaItems = new Seq<>();
-    public static final Seq<Item> octaviaItems = new Seq<>();
     public static void load() {
         hematite = new Item("hematite", Color.valueOf("ffc88cff")) {{
             hardness = 1;
@@ -27,20 +25,6 @@ public class CIItems {
         }};
         noviaItems.addAll(
         iron, hematite, lithium, asfrit
-        );
-
-        magnesium = new Item("magnesium") {{
-            hardness = 1;
-            explosiveness = 1;
-
-        }};
-
-        misunese = new Item("misunese", Color.valueOf("ca70e5")){{
-            hardness = 2;
-        }};
-
-        octaviaItems.addAll(
-                magnesium, misunese
         );
     }
 }
