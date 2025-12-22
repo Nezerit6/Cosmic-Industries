@@ -2,7 +2,7 @@ displayName: "Cosmic Industries"
 name: "ci"
 author: "CI-team"
 main: "ci.CosmicIndustries"
-description: "New planets."
+description: "NOT PLAYABLE"
 version: 0.2
 minGameVersion: 146
 java: true
