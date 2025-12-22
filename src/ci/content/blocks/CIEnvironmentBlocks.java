@@ -6,167 +6,93 @@ import mindustry.world.Block;
 import mindustry.world.blocks.environment.*;
 
 public class CIEnvironmentBlocks {
+
     public static Block
-            hematiteOre, ironOre, cobaltOre, iridiumOre,
-
-    duneSand, gert, mercuryMud, graysand, dune, dehydrate,
-            chugalitra, echugalite, lechugate,
-            pinkgrass, darkgrass, pinkstone,
-
-    gertWall, chugalitraWall, echugaliteWall, lechugateWall,
-            dunecliffWall, darkmossWall, lightmossWall,
-
-    gertBoulder, chugalitraBoulder, lechugateBoulder,
-
-    chugalitraWater, echugaliteWater, lechugateWater;
+            crackedStone, crackedStoneWall, crackedStoneWater,
+            drySoil, drySoilWall, drySoilWater,
+            hardenedClay, hardenedClayWall, hardenedClayWater,
+            slate, slateWall, slateWater,
+            sandstone, sandstoneWall, sandstoneWater,
+            cobaltOre;
 
     public static void load() {
-        ironOre = new OreBlock(CIItems.iron){{
-            oreDefault = true;
-            oreThreshold = 0.93f;
-            oreScale = 21.42365f;
-            variants = 3;
-        }};
-
-        hematiteOre = new OreBlock(CIItems.hematite){{
-            oreDefault = true;
-            oreThreshold = 0.93f;
-            oreScale = 21.42365f;
-            variants = 3;
-        }};
 
         cobaltOre = new OreBlock(CIItems.cobalt){{
             oreDefault = true;
-            oreThreshold = 0.93f;
-            oreScale = 21.42365f;
+            oreThreshold = 0.9f;
+            oreScale = 20f;
             variants = 3;
         }};
 
-        iridiumOre = new OreBlock(CIItems.iridium){{
-            oreDefault = true;
-            oreThreshold = 0.93f;
-            oreScale = 21.42365f;
+        crackedStone = new Floor("cracked-stone"){{
             variants = 3;
         }};
 
-        duneSand = new Floor("duneSand"){{
+        crackedStoneWall = new StaticWall("cracked-stone-wall"){{
             variants = 2;
         }};
 
-        gert = new Floor("gert"){{
-            variants = 3;
-        }};
-
-        mercuryMud = new Floor("mercury-mud"){{
-            variants = 3;
-        }};
-
-        graysand = new Floor("graysand"){{
-            variants = 3;
-        }};
-
-        dune = new Floor("dune"){{
-            variants = 3;
-        }};
-
-        dehydrate = new Floor("dehydrate"){{
-            variants = 3;
-        }};
-
-        chugalitra = new Floor("chugalitra"){{
-            variants = 3;
-        }};
-
-        echugalite = new Floor("echugalite"){{
-            variants = 3;
-        }};
-
-        lechugate = new Floor("lechugate"){{
-            variants = 3;
-        }};
-
-        pinkgrass = new Floor("pinkgrass"){{
-            variants = 3;
-        }};
-
-        darkgrass = new Floor("darkgrass"){{
-            variants = 3;
-        }};
-
-        pinkstone = new Floor("pinkstone"){{
-            variants = 3;
-        }};
-
-        gertBoulder = new Prop("gert-boulder"){{
-            variants = 2;
-            squareSprite = true;
-            gert.asFloor().decoration = this;
-        }};
-
-        chugalitraBoulder = new Prop("chugalitraBoulder"){{
-            variants = 3;
-            squareSprite = true;
-            chugalitra.asFloor().decoration = this;
-        }};
-
-        lechugateBoulder = new Prop("lechugateBoulder"){{
-            variants = 3;
-            squareSprite = true;
-            lechugate.asFloor().decoration = this;
-        }};
-
-        gertWall = new StaticWall("gert-wall"){{
-            variants = 2;
-        }};
-
-        chugalitraWall = new StaticWall("chugalitraWall"){{
-            variants = 3;
-        }};
-
-        echugaliteWall = new StaticWall("echugaliteWall"){{
-            variants = 3;
-        }};
-
-        lechugateWall = new StaticWall("lechugateWall"){{
-            variants = 3;
-        }};
-
-        dunecliffWall = new StaticWall("dunecliffWall"){{
-            variants = 2;
-        }};
-
-        darkmossWall = new StaticWall("darkmossWall"){{
-            variants = 2;
-        }};
-
-        lightmossWall = new StaticWall("lightmossWall"){{
-            variants = 2;
-        }};
-
-        chugalitraWater = new Floor("chugalitraWater"){{
-            speedMultiplier = 0.35f;
+        crackedStoneWater = new Floor("cracked-stone-water"){{
             variants = 3;
             isLiquid = true;
+            speedMultiplier = 0.35f;
             cacheLayer = CacheLayer.water;
-            albedo = 0.9f;
             supportsOverlay = true;
         }};
 
-        echugaliteWater = new Floor("echugaliteWater"){{
-            speedMultiplier = 0.35f;
-            variants = 3;
+        drySoil = new Floor("dry-soil"){{
+            variants = 4;
+        }};
+
+        drySoilWall = new StaticWall("dry-soil-wall"){{
+            variants = 2;
+        }};
+
+        drySoilWater = new Floor("dry-soil-water"){{
+            variants = 4;
             isLiquid = true;
+            speedMultiplier = 0.35f;
             cacheLayer = CacheLayer.water;
-            albedo = 0.9f;
             supportsOverlay = true;
         }};
 
-        lechugateWater = new Floor("lechugateWater"){{
-            speedMultiplier = 0.35f;
+        hardenedClay = new Floor("hardened-clay"){{
+            variants = 3;
+        }};
+
+        hardenedClayWall = new StaticWall("hardened-clay-wall"){{
+            variants = 3;
+        }};
+
+        hardenedClayWater = new Floor("hardened-clay-water"){{
             variants = 3;
             isLiquid = true;
+            speedMultiplier = 0.35f;
             cacheLayer = CacheLayer.water;
-            albedo = 0.9f;
+            supportsOverlay = true;
+        }};
+
+        slate = new Floor("slate"){{
+            variants = 3;
+        }};
+
+        slateWall = new StaticWall("slate-wall"){{
+            variants = 2;
+        }};
+
+        sandstone = new Floor("sandstone"){{
+            variants = 3;
+        }};
+
+        sandstoneWall = new StaticWall("sandstone-wall"){{
+            variants = 3;
+        }};
+
+        sandstoneWater = new Floor("sandstone-water"){{
+            variants = 3;
+            isLiquid = true;
+            speedMultiplier = 0.35f;
+            cacheLayer = CacheLayer.water;
             supportsOverlay = true;
         }};
     }
