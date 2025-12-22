@@ -6,6 +6,7 @@ import mindustry.world.Block;
 import mindustry.world.blocks.liquid.Conduit;
 import mindustry.world.blocks.liquid.LiquidRouter;
 import mindustry.world.blocks.production.Pump;
+import mindustry.world.meta.*;
 
 import static mindustry.type.ItemStack.with;
 
@@ -15,7 +16,7 @@ public class CILiquidBlocks {
 
     public static void load() {
         lazyPump = new Pump("lazyPump"){{
-            requirements(Category.liquid, with(CIItems.iron, 10));
+            requirements(Category.liquid, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 10));
             size = 1;
             pumpAmount = 3f / 60f;
             squareSprite = false;
@@ -23,7 +24,7 @@ public class CILiquidBlocks {
         }};
 
         liquidCistern = new LiquidRouter("liquidCistern"){{
-            requirements(Category.liquid, with(CIItems.iron, 70, CIItems.hematite, 20));
+            requirements(Category.liquid, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 70));
             size = 2;
             solid = true;
             liquidCapacity = 350;
@@ -33,7 +34,7 @@ public class CILiquidBlocks {
         }};
 
         liquidLargeCistern = new LiquidRouter("liquidLargeCistern"){{
-            requirements(Category.liquid, with(CIItems.iron, 110, CIItems.hematite, 45));
+            requirements(Category.liquid, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 110));
             size = 3;
             solid = true;
             liquidCapacity = 800f;

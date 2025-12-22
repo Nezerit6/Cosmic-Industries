@@ -1,6 +1,7 @@
 package ci.world.blocks.power;
 
 import arc.math.*;
+import arc.math.geom.*;
 import arc.util.*;
 import mindustry.game.*;
 import mindustry.graphics.*;
@@ -13,9 +14,10 @@ import mindustry.world.meta.*;
 import static mindustry.Vars.*;
 
 public class HydroTurbine extends PowerGenerator {
+    public Rect exclusionRect = new Rect(0, 0, 4, 4);
+
     public float pumpAmount = 0.1f;
     public float warmupSpeed = 0.019f;
-    public int exclusionRange = 1;
 
     public HydroTurbine(String name) {
         super(name);
@@ -50,12 +52,24 @@ public class HydroTurbine extends PowerGenerator {
 
             if(waterTiles != totalTiles || last == null) return false;
 
-            return !indexer.getFlagged(team, BlockFlag.generator).contains(other -> {
-                if(!(other.block instanceof HydroTurbine) || other.tile() == tile) return false;
-                return Math.max(Math.abs(other.tileX() - tile.x), Math.abs(other.tileY() - tile.y)) < size + exclusionRange;
-            });
+            return !hasConflict(tile, team);
         }
         return tile != null && tile.floor().liquidDrop != null;
+    }
+
+    protected boolean hasConflict(Tile tile, Team team) {
+        for(int i = 0; i < exclusionRect.width; i++) {
+            for(int j = 0; j < exclusionRect.height; j++) {
+                Tile nearby = tile.nearby(
+                        (int) (exclusionRect.x + i - exclusionRect.width/2 + 1),
+                        (int) (exclusionRect.y + j - exclusionRect.height/2 + 1)
+                );
+                if(nearby != null && nearby.build != null && nearby.build.block instanceof HydroTurbine && nearby != tile) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -65,19 +79,31 @@ public class HydroTurbine extends PowerGenerator {
         Tile tile = world.tile(x, y);
         if(tile == null) return;
 
-        boolean hasConflict = indexer.getFlagged(player.team(), BlockFlag.generator).contains(other -> {
-            if(!(other.block instanceof HydroTurbine)) return false;
-            return Math.max(Math.abs(other.tileX() - x), Math.abs(other.tileY() - y)) < size + exclusionRange;
-        });
+        boolean hasConflict = hasConflict(tile, player.team());
 
-        indexer.getFlagged(player.team(), BlockFlag.generator).each(other -> {
-            if(!(other.block instanceof HydroTurbine)) return;
-            if(Math.max(Math.abs(other.tileX() - x), Math.abs(other.tileY() - y)) < size + exclusionRange){
-                Drawf.selected(other, Tmp.c1.set(Pal.remove).a(Mathf.absin(4f, 1f)));
+        for(int i = 0; i < exclusionRect.width; i++) {
+            for(int j = 0; j < exclusionRect.height; j++) {
+                Tile nearby = tile.nearby(
+                        (int) (exclusionRect.x + i - exclusionRect.width/2 + 1),
+                        (int) (exclusionRect.y + j - exclusionRect.height/2 + 1)
+                );
+                if(nearby != null && nearby.build != null && nearby.build.block instanceof HydroTurbine) {
+                    Drawf.selected(nearby.build, Tmp.c1.set(Pal.remove).a(Mathf.absin(4f, 1f)));
+                }
             }
-        });
+        }
 
-        Drawf.dashSquare(hasConflict ? Pal.remove : Pal.accent, x * tilesize + offset, y * tilesize + offset, (exclusionRange + size / 2f) * tilesize * 2f);
+        drawExclusionOverlay(x * tilesize + offset, y * tilesize + offset, hasConflict);
+    }
+
+    public void drawExclusionOverlay(float x, float y, boolean conflict) {
+        Drawf.dashRect(
+                conflict ? Pal.remove : Pal.accent,
+                x + (exclusionRect.x - exclusionRect.width/2f) * tilesize,
+                y + (exclusionRect.y - exclusionRect.height/2f) * tilesize,
+                exclusionRect.width * tilesize,
+                exclusionRect.height * tilesize
+        );
     }
 
     public class HydroTurbineBuild extends GeneratorBuild {

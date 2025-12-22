@@ -17,15 +17,15 @@ public class CIStorageBlocks {
             storage, coreHeart, regeneratingBlaster;
 
     public static void load() {
-        storage = new StorageBlock("storage"){{
-            requirements(Category.effect, with(CIItems.iron, 170, CIItems.hematite, 70));
+        storage = new StorageBlock("Core1"){{
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 170));
             size = 3;
             itemCapacity = 500;
             scaledHealth = 35;
         }};
 
-        coreHeart = new CoreBlock("coreHeart"){{
-            requirements(Category.effect, BuildVisibility.editorOnly, with(CIItems.iron, 800, CIItems.hematite, 1200));
+        coreHeart = new CoreBlock("Core2"){{
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 800));
             alwaysUnlocked = true;
 
             isFirstTier = true;
@@ -38,8 +38,7 @@ public class CIStorageBlocks {
         }};
 
         regeneratingBlaster = new RepairTurret("regeneratingBlaster"){{
-            requirements(Category.effect, with(
-                    Items.copper, 50));
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with(Items.copper, 50));
 
             consumePower(0.3f);
             size = 1;

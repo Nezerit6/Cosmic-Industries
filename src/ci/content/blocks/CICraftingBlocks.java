@@ -9,6 +9,7 @@ import mindustry.type.*;
 import mindustry.world.Block;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.*;
+import mindustry.world.meta.*;
 
 import static mindustry.type.ItemStack.with;
 
@@ -18,7 +19,7 @@ public class CICraftingBlocks {
 
     public static void load() {
         mechanicalPress = new GenericCrafter("mechanicalPress"){{
-            requirements(Category.crafting, with(CIItems.iron, 40));
+            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 40));
             craftEffect = CIFx.CISteam;
             squareSprite = false;
             outputItem = new ItemStack(Items.graphite, 2);
@@ -33,11 +34,11 @@ public class CICraftingBlocks {
             ambientSoundVolume = 0.15f;
 
             consumePower(0.5f);
-            consumeItems(with(CIItems.hematite, 1));
+            consumeItems(with(CIItems.cobalt, 1));
         }};
 
         siliconeThermalSmelter = new GenericCrafter("siliconeThermalSmelter"){{
-            requirements(Category.crafting, with(CIItems.iron, 40, Items.graphite, 30));
+            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 40, Items.graphite, 30));
             squareSprite = false;
             outputItem = new ItemStack(Items.silicon, 2);
             craftTime = 85;

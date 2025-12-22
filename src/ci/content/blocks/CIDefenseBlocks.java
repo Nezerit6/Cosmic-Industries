@@ -15,34 +15,35 @@ import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.draw.*;
+import mindustry.world.meta.BuildVisibility;
 
 import static mindustry.type.ItemStack.with;
 
 public class CIDefenseBlocks {
     public static Block
             // Walls
-            ironWall, ironWallLarge,
+            cobaltWall, cobaltWallLarge,
 
     // Turrets
     shoker, chire, splitter, punisher, stormBringer, squall, serpent, arcflash, trident, eradication, radiant;
 
     public static void load() {
         // ===== WALLS =====
-        ironWall = new Wall("ironWall"){{
+        cobaltWall = new Wall("cobaltWall"){{
+            requirements(Category.defense, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 6));
             size = 1;
             health = 920;
-            requirements(Category.defense, with(CIItems.iron, 6));
         }};
 
-        ironWallLarge = new Wall("ironWallLarge"){{
+        cobaltWallLarge = new Wall("cobaltWallLarge"){{
             size = 2;
             health = 1840;
-            requirements(Category.defense, with(CIItems.iron, 24));
+            requirements(Category.defense, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 24));
         }};
 
         // ===== TURRETS =====
         shoker = new PowerTurret("shoker"){{
-            requirements(Category.turret, with(CIItems.iron, 25));
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 25));
             size = 1;
             health = 80;
             range = 60f;
@@ -80,7 +81,7 @@ public class CIDefenseBlocks {
         }};
 
         chire = new ItemTurret("chire"){{
-            requirements(Category.turret, with(CIItems.iron, 24));
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 24));
             size = 1;
             health = 150;
             range = 110;
@@ -92,7 +93,7 @@ public class CIDefenseBlocks {
             coolant = consumeCoolant(0.1f);
 
             ammo(
-                    CIItems.iron, new BasicBulletType(10f, 4){{
+                    CIItems.cobalt, new BasicBulletType(10f, 4){{
                         width = 6;
                         height = 8;
                         lifetime = 60;
@@ -119,7 +120,7 @@ public class CIDefenseBlocks {
         }};
 
         splitter = new ItemTurret("splitter"){{
-            requirements(Category.turret, with(CIItems.iron, 50, Items.graphite, 10));
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 50, Items.graphite, 10));
             size = 2;
             health = 900;
             range = 210;
@@ -128,7 +129,7 @@ public class CIDefenseBlocks {
             rotateSpeed = 1.4f;
 
             ammo(
-                    CIItems.iron, new ArtilleryBulletType(3.8f, 38){{
+                    CIItems.cobalt, new ArtilleryBulletType(3.8f, 38){{
                         lifetime = 44f;
                         width = height = 12;
                         splashDamage = 16f;
@@ -208,7 +209,7 @@ public class CIDefenseBlocks {
         }};
 
         punisher = new LiquidTurret("punisher"){{
-            requirements(Category.turret, with(Items.copper, 110, Items.lead, 65, Items.titanium, 35, Items.silicon, 20));
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(Items.copper, 110, Items.lead, 65, Items.titanium, 35, Items.silicon, 20));
             size = 2;
             health = 430;
             range = 205;
@@ -265,7 +266,7 @@ public class CIDefenseBlocks {
         }};
 
         stormBringer = new PowerTurret("stormBringer"){{
-            requirements(Category.turret, with(CIItems.iron, 1));
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 1));
             size = 2;
             health = 600;
             range = 130;
@@ -309,7 +310,7 @@ public class CIDefenseBlocks {
         }};
 
         squall = new ItemTurret("squall"){{
-            requirements(Category.turret, with(Items.copper, 90, Items.lead, 55, Items.titanium, 40, Items.silicon, 30));
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(Items.copper, 90, Items.lead, 55, Items.titanium, 40, Items.silicon, 30));
             size = 2;
             health = 460;
             range = 200f;
@@ -360,7 +361,7 @@ public class CIDefenseBlocks {
         }};
 
         serpent = new PowerTurret("serpent"){{
-            requirements(Category.turret, with(Items.copper, 75, Items.lead, 90, Items.titanium, 40, Items.silicon, 55));
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(Items.copper, 75, Items.lead, 90, Items.titanium, 40, Items.silicon, 55));
             size = 2;
             health = 980;
             range = 140;
@@ -408,7 +409,7 @@ public class CIDefenseBlocks {
         }};
 
         arcflash = new PowerTurret("arcflash"){{
-            requirements(Category.turret, with(CIItems.iron, 80, CIItems.cobalt, 60));
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 80, CIItems.cobalt, 60));
             size = 2;
             health = 1000;
             range = 180f;
@@ -495,7 +496,7 @@ public class CIDefenseBlocks {
         }};
 
         trident = new ItemTurret("trident"){{
-            requirements(Category.turret, with(Items.titanium, 120, Items.plastanium, 40));
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(Items.titanium, 120, Items.plastanium, 40));
             size = 3;
             health = 1670;
             range = 240;
@@ -505,7 +506,7 @@ public class CIDefenseBlocks {
         }};
 
         eradication = new PowerTurret("eradication"){{
-            requirements(Category.turret, with(Items.titanium, 120, Items.plastanium, 40));
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(Items.titanium, 120, Items.plastanium, 40));
             size = 3;
             health = 1670;
             range = 240;

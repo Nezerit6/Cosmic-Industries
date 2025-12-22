@@ -6,10 +6,8 @@ import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
 import arc.util.noise.*;
-import ci.content.*;
 import ci.content.blocks.CIEnvironmentBlocks;
 import mindustry.ai.*;
-import mindustry.ai.Astar.*;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.maps.generators.*;
@@ -24,14 +22,12 @@ public class NoviaPlanetGenerator extends PlanetGenerator {
     String launchSchem = "bXNjaAF4nGNgYWBhZmDJS8xNZWDUY+BOSS1OLsosKMnMz2NgYGDLSUxKzSlmYIqOZWTgSc7UTc4vSvVITSwqAUoyghCQAAD77w5o";
 
     Block[][] arr = {
-            {Blocks.water, Blocks.water, CIEnvironmentBlocks.mercuryMud, CIEnvironmentBlocks.mercuryMud, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.duneSand, CIEnvironmentBlocks.duneSand},
-            {Blocks.water, Blocks.water, CIEnvironmentBlocks.mercuryMud, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.duneSand, CIEnvironmentBlocks.duneSand, Blocks.snow},
-            {Blocks.water, CIEnvironmentBlocks.mercuryMud, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.duneSand, CIEnvironmentBlocks.duneSand, Blocks.snow, Blocks.snow},
-            {CIEnvironmentBlocks.mercuryMud, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.duneSand, CIEnvironmentBlocks.duneSand, Blocks.snow, Blocks.snow, Blocks.ice},
-            {CIEnvironmentBlocks.gert, CIEnvironmentBlocks.gert, CIEnvironmentBlocks.duneSand, CIEnvironmentBlocks.duneSand, Blocks.snow, Blocks.snow, Blocks.ice, Blocks.ice}
+            {Blocks.water, Blocks.water, CIEnvironmentBlocks.hardenedClay, CIEnvironmentBlocks.drySoil, CIEnvironmentBlocks.sandstone, CIEnvironmentBlocks.crackedStone, CIEnvironmentBlocks.crackedStone, CIEnvironmentBlocks.crackedStone},
+            {Blocks.water, CIEnvironmentBlocks.hardenedClay, CIEnvironmentBlocks.hardenedClay, CIEnvironmentBlocks.drySoil, CIEnvironmentBlocks.sandstone, CIEnvironmentBlocks.sandstone, CIEnvironmentBlocks.crackedStone, CIEnvironmentBlocks.crackedStone},
+            {CIEnvironmentBlocks.hardenedClay, CIEnvironmentBlocks.hardenedClay, CIEnvironmentBlocks.drySoil, CIEnvironmentBlocks.sandstone, CIEnvironmentBlocks.sandstone, CIEnvironmentBlocks.crackedStone, CIEnvironmentBlocks.crackedStone, CIEnvironmentBlocks.slate},
+            {CIEnvironmentBlocks.hardenedClay, CIEnvironmentBlocks.drySoil, CIEnvironmentBlocks.sandstone, CIEnvironmentBlocks.sandstone, CIEnvironmentBlocks.crackedStone, CIEnvironmentBlocks.crackedStone, CIEnvironmentBlocks.slate, CIEnvironmentBlocks.slate},
+            {CIEnvironmentBlocks.drySoil, CIEnvironmentBlocks.sandstone, CIEnvironmentBlocks.sandstone, CIEnvironmentBlocks.crackedStone, CIEnvironmentBlocks.crackedStone, CIEnvironmentBlocks.slate, CIEnvironmentBlocks.slate, CIEnvironmentBlocks.slate}
     };
-
-    ObjectMap<Block, Block> dec = ObjectMap.of();
 
     float rawHeight(Vec3 position){
         position = Tmp.v33.set(position).scl(scl);
@@ -183,24 +179,21 @@ public class NoviaPlanetGenerator extends PlanetGenerator {
         }
 
         for(Room room : roomseq){
+            assert spawn != null;
             spawn.connect(room);
         }
 
         cells(1);
         distort(10f, 6f);
 
-        Seq<Block> ores = Seq.with(CIEnvironmentBlocks.ironOre, CIEnvironmentBlocks.hematiteOre);
+        Seq<Block> ores = Seq.with(CIEnvironmentBlocks.cobaltOre);
         float poles = Math.abs(sector.tile.v.y);
         float nmag = 0.5f;
         float scl = 1f;
         float addscl = 1.3f;
 
         if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.25f*addscl){
-            ores.add(CIEnvironmentBlocks.ironOre);
-        }
-
-        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.5f*addscl){
-            ores.add(CIEnvironmentBlocks.hematiteOre);
+            ores.add(CIEnvironmentBlocks.cobaltOre);
         }
 
         FloatSeq frequencies = new FloatSeq();
@@ -225,14 +218,9 @@ public class NoviaPlanetGenerator extends PlanetGenerator {
 
         trimDark();
         median(2);
+        assert spawn != null;
         inverseFloodFill(tiles.getn(spawn.x, spawn.y));
         tech();
-
-        pass((x, y) -> {
-            if(rand.chance(0.01) && floor.asFloor().hasSurface() && block == Blocks.air){
-                block = dec.get(floor, floor.asFloor().decoration);
-            }
-        });
 
         for(Tile tile : tiles){
             if(tile.overlay().needsSurface && !tile.floor().hasSurface()){

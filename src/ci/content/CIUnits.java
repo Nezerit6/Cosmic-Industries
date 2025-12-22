@@ -2,22 +2,24 @@ package ci.content;
 
 import arc.graphics.Color;
 import mindustry.ai.types.BuilderAI;
+import mindustry.ai.types.FlyingAI;
 import mindustry.content.Fx;
 import mindustry.entities.bullet.*;
 import mindustry.gen.*;
 import mindustry.type.*;
+import mindustry.world.meta.BlockFlag;
 
 public class CIUnits {
     public static UnitType
     //core units
-    falcon,
+    falcon, T1,
 
     //mech
     arrow;
 
     public static void load() {
 
-        falcon  = new UnitType("falcon") {{
+        falcon  = new UnitType("T2") {{
             aiController = BuilderAI::new;
             isEnemy = false;
             constructor = UnitEntity::create;
@@ -35,7 +37,7 @@ public class CIUnits {
             engineOffset = 7f;
             hitSize = 9f;
             alwaysUnlocked = true;
-            outlineColor = Color.darkGray;
+            outlineColor = CIPal.dustyOutline;
             outlineRadius = 3;
 
             weapons.add(new Weapon(){{
@@ -44,6 +46,7 @@ public class CIUnits {
                 mirror = false;
                 x = 0f;
                 y = 0f;
+                shootY = -0.5f;
                 rotate = false;
                 shoot.shots = 2;
                 shoot.shotDelay = 3f;

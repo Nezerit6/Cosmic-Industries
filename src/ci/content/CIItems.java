@@ -5,38 +5,29 @@ import arc.struct.Seq;
 import mindustry.type.*;
 
 public class CIItems {
-    public static Item hematite, iron, lithium, asfrit, cobalt, iridium;
+    public static Item cobalt, lithium, composite;
 
     public static final Seq<Item> noviaItems = new Seq<>();
 
     public static void load() {
-        hematite = new Item("hematite", Color.valueOf("ffc88cff")) {{
-            hardness = 1;
-        }};
 
-        iron = new Item("iron", Color.valueOf("5b5b5bff")) {{
+        cobalt = new Item("cobalt", Color.valueOf("7a8c9e")){{
             hardness = 1;
+            cost = 0.8f;
             alwaysUnlocked = true;
         }};
 
-        lithium = new Item("lithium") {{
-            explosiveness = 2;
-        }};
-
-        asfrit = new Item("asfrit", Color.yellow){{
+        lithium = new Item("lithium", Color.valueOf("a8c5e3")){{
             hardness = 2;
+            cost = 1.2f;
         }};
 
-        cobalt = new Item("cobalt", Color.valueOf("6b8ac9ff")){{
-            hardness = 1;
-        }};
-
-        iridium = new Item("iridium", Color.valueOf("d4d4d4ff")){{
-            hardness = 2;
+        composite = new Item("composite", Color.valueOf("804054")){{
+            cost = 1.5f;
         }};
 
         noviaItems.addAll(
-                iron, hematite, lithium, asfrit, cobalt, iridium
+                cobalt, lithium
         );
     }
 }

@@ -135,8 +135,8 @@ public class CIPlanets {
             minZoom = 0.6f;
             clipRadius = 2f;
 
-            Block base = CIEnvironmentBlocks.gert;
-            Block tint = CIEnvironmentBlocks.duneSand;
+            Block base = CIEnvironmentBlocks.crackedStone;
+            Block tint = CIEnvironmentBlocks.slate;
 
             generator = new AsteroidGenerator();
 

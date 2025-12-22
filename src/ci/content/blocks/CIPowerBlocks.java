@@ -8,8 +8,8 @@ import mindustry.type.Category;
 import mindustry.world.Block;
 import mindustry.world.blocks.production.SolidPump;
 import mindustry.world.draw.*;
+import mindustry.world.meta.*;
 
-import static mindustry.Vars.tilesize;
 import static mindustry.type.ItemStack.with;
 
 public class CIPowerBlocks {
@@ -18,7 +18,7 @@ public class CIPowerBlocks {
 
     public static void load() {
         mechanicalTurbine = new SolidPump("mechanicalTurbine"){{
-            requirements(Category.power, with(CIItems.iron, 1));
+            requirements(Category.power, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 1));
             squareSprite = false;
             result = Liquids.water;
             pumpAmount = 0.11f;
@@ -30,14 +30,13 @@ public class CIPowerBlocks {
         }};
 
         hydroTurbine = new HydroTurbine("hydroTurbine"){{
-            requirements(Category.power, with(CIItems.iron, 50, CIItems.hematite, 30));
+            requirements(Category.power, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 50));
 
             size = 2;
             squareSprite = false;
             powerProduction = 1.2f;
             pumpAmount = 0.1f;
             liquidCapacity = 70f;
-            exclusionRange = 2;
 
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),
