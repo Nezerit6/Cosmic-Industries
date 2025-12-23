@@ -87,7 +87,7 @@ public class CIUnits {
             health = 230f;
             buildSpeed = 0.5f;
             armor = 2f;
-            outlineColor = Color.darkGray;
+            outlineColor = CIPal.dustyOutline;
 
             weapons.add(new Weapon("ci-arrow-weapon"){{
                 reload = 6f;
