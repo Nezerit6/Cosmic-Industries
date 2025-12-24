@@ -89,7 +89,7 @@ public class EnemyCapsuleBase extends Block {
             if (hasLanded && !spawnComplete) {
                 float progress = Math.min(spawnProgress / actualConstructTime, 1f);
                 Draw.draw(Layer.blockOver, () -> {
-                    Drawf.construct(this.x, this.y, this.block.region, 0f, progress, 1f, Time.time);
+                    Drawf.construct(this.x, this.y, this.block.region, 0f, progress, 1f, Time.time + x + y);
                 });
             }
         }
