@@ -14,7 +14,7 @@ public class CIDistributionBlocks {
 
     public static void load() {
         pipeConveyor = new PipeConveyor("pipeConveyor"){{
-            requirements(Category.distribution, with(CIItems.cobalt, 1));
+            requirements(Category.distribution, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 1));
             health = 45;
             speed = 0.04f;
             displayedSpeed = 6f;

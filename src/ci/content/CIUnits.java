@@ -83,10 +83,11 @@ public class CIUnits {
             canBoost = true;
             boostMultiplier = 1.5f;
             speed = 0.40f;
-            hitSize = 10f;
+            hitSize = 9f;
             health = 230f;
             buildSpeed = 0.5f;
             armor = 2f;
+            range = 45f;
             outlineColor = CIPal.dustyOutline;
 
             weapons.add(new Weapon("ci-arrow-weapon"){{
@@ -96,7 +97,7 @@ public class CIUnits {
                 ejectEffect = Fx.casing1;
 
                 bullet = new BasicBulletType(3.4f, 8){{
-                    recoil = 0.1f;
+                    //recoil = 0.1f;
                     height = 6;
                     width = 3;
                     lifetime = 26f;

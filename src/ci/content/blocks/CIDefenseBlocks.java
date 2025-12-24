@@ -29,13 +29,13 @@ public class CIDefenseBlocks {
 
     public static void load() {
         // ===== WALLS =====
-        cobaltWall = new Wall("cobaltWall"){{
+        cobaltWall = new Wall("cobalt-wall"){{
             requirements(Category.defense, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 6));
             size = 1;
             health = 920;
         }};
 
-        cobaltWallLarge = new Wall("cobaltWallLarge"){{
+        cobaltWallLarge = new Wall("cobalt-wall-large"){{
             size = 2;
             health = 1840;
             requirements(Category.defense, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 24));

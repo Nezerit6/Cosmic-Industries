@@ -11,9 +11,9 @@ public class CIEnvironmentBlocks {
     public static Block
             crackedStone, crackedStoneWall, crackedStoneWater,
             drySoil, drySoilWall, drySoilWater,
-            hardenedClay, hardenedClayWall, hardenedClayWater,
-            slate, slateWall, slateWater,
-            sandstone, sandstoneWall, sandstoneWater,
+            hardenedClay, hardenedClayWall, hardenedClayWater, hardenedClayBoulder,
+            slate, slateWall, slateWater, slateBoulder,
+            sandstone, sandstoneWall, sandstoneWater, sandstoneBoulder,
             cobaltOre;
 
     public static void load() {
@@ -79,12 +79,22 @@ public class CIEnvironmentBlocks {
             supportsOverlay = true;
         }};
 
+        hardenedClayBoulder = new Prop("hardened-clay-boulder"){{
+            variants = 2;
+            hardenedClay.asFloor().decoration = this;
+        }};
+
         slate = new Floor("slate"){{
             variants = 3;
         }};
 
         slateWall = new StaticWall("slate-wall"){{
             variants = 2;
+        }};
+
+        slateBoulder = new Prop("slate-boulder"){{
+            variants = 1;
+            slate.asFloor().decoration = this;
         }};
 
         sandstone = new Floor("sandstone"){{
@@ -103,6 +113,11 @@ public class CIEnvironmentBlocks {
             speedMultiplier = 0.35f;
             cacheLayer = CacheLayer.water;
             supportsOverlay = true;
+        }};
+
+        sandstoneBoulder = new Prop("sandstone-boulder"){{
+            variants = 3;
+            sandstone.asFloor().decoration = this;
         }};
     }
 }

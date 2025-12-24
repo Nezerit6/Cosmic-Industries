@@ -2,6 +2,7 @@ package ci.content.blocks;
 
 import ci.content.*;
 import ci.world.blocks.defense.RepairTurret;
+import ci.world.blocks.storage.EnemyCapsuleBase;
 import mindustry.content.Items;
 import mindustry.graphics.Pal;
 import mindustry.type.Category;
@@ -14,7 +15,7 @@ import static mindustry.type.ItemStack.with;
 
 public class CIStorageBlocks {
     public static Block
-            storage, coreHeart, regeneratingBlaster;
+            storage, coreHeart, regeneratingBlaster, enemyCapsule;
 
     public static void load() {
         storage = new StorageBlock("Core1"){{
@@ -25,7 +26,7 @@ public class CIStorageBlocks {
         }};
 
         coreHeart = new CoreBlock("Core2"){{
-            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 800));
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 800, CIItems.lithium, 500, CIItems.composite, 300));
             alwaysUnlocked = true;
 
             isFirstTier = true;
@@ -53,5 +54,17 @@ public class CIStorageBlocks {
             drawer = new DrawTurret("based-");
         }};
 
+        enemyCapsule = new EnemyCapsuleBase("enemy-capsule"){{
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 800, CIItems.lithium, 500, CIItems.composite, 300));
+
+            spawnUnitType = CIUnits.arrow;
+            spawnUnits = true;
+            minSpawnUnits = 1;
+            maxSpawnUnits = 5;
+            health = 10;
+            size = 2;
+            unitCapModifier = 12;
+            squareSprite = false;
+        }};
     }
 }

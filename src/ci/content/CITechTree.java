@@ -25,6 +25,8 @@ public class CITechTree {
                     });
                 });
                 node(CIPowerBlocks.hydroTurbine, () -> {
+                    node(CIPowerBlocks.chargeNode, () -> {
+                    });
                 });
             });
 
