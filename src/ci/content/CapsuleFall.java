@@ -63,11 +63,21 @@ public class CapsuleFall {
 
                     if (tile != null && tile.block().isAir() && fallBlock != null) {
                         tile.setNet(fallBlock, data.team, 0);
-                        Fx.explosion.at(data.targetX, data.targetY, 16f);
-                        Effect.shake(3f, 3f, data.targetX, data.targetY);
+
+                        for (int i = 0; i < 16; i++) {
+                            float angle = i * 22.5f;
+                            float dist = Mathf.random(tilesize * 2f, tilesize * 3f);
+                            Tile t = world.tileWorld(data.targetX + Angles.trnsx(angle, dist), data.targetY + Angles.trnsy(angle, dist));
+                            if (t != null) {
+                                Fx.coreLandDust.at(t.worldx(), t.worldy(), angle + Mathf.range(30f), Tmp.c1.set(t.floor().mapColor).mul(1.5f + Mathf.range(0.15f)));
+                            }
+                        }
+
+                        Effect.shake(5f, 10f, data.targetX, data.targetY);
                         Sounds.boom.at(data.targetX, data.targetY);
                     } else {
-                        Fx.explosion.at(data.targetX, data.targetY, 24f);
+                        Fx.massiveExplosion.at(data.targetX, data.targetY);
+                        Fx.circleColorSpark.at(data.targetX, data.targetY, Pal.accent);
                         Effect.shake(2f, 2f, data.targetX, data.targetY);
                         Sounds.explosionbig.at(data.targetX, data.targetY);
                     }
