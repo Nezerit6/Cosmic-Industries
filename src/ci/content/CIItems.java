@@ -6,7 +6,7 @@ import mindustry.content.Items;
 import mindustry.type.*;
 
 public class CIItems {
-    public static Item cobalt, lithium, composite;
+    public static Item cobalt, lithium, cobalith;
 
     public static final Seq<Item> noviaItems = new Seq<>();
 
@@ -24,13 +24,13 @@ public class CIItems {
             alwaysUnlocked = true;
         }};
 
-        composite = new Item("composite", Color.valueOf("804054")){{
+        cobalith = new Item("сobalith", Color.valueOf("804054")){{
             cost = 1.5f;
             alwaysUnlocked = true;
         }};
 
         noviaItems.addAll(
-                cobalt, lithium, composite, Items.coal, Items.graphite
+                cobalt, lithium, cobalith, Items.coal, Items.graphite
         );
     }
 }

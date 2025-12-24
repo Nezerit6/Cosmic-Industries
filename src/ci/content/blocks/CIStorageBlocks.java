@@ -26,7 +26,7 @@ public class CIStorageBlocks {
         }};
 
         coreHeart = new CoreBlock("Core2"){{
-            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 800, CIItems.lithium, 500, CIItems.composite, 300));
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 800, CIItems.lithium, 500, CIItems.cobalith, 300));
             alwaysUnlocked = true;
 
             isFirstTier = true;
@@ -55,7 +55,7 @@ public class CIStorageBlocks {
         }};
 
         enemyCapsule = new EnemyCapsuleBase("enemy-capsule"){{
-            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 800, CIItems.lithium, 500, CIItems.composite, 300));
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 1));
 
             spawnUnitType = CIUnits.arrow;
             spawnUnits = true;

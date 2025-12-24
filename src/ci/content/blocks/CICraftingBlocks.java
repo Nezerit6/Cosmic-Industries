@@ -15,18 +15,18 @@ import static mindustry.type.ItemStack.with;
 
 public class CICraftingBlocks {
     public static Block
-            compositeForge, graphiteKiln;
+            cobalithForge, graphiteKiln;
 
     public static void load() {
 
-        compositeForge = new GenericCrafter("composite-forge"){{
+        cobalithForge = new GenericCrafter("cobalith-forge"){{
             requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 30, CIItems.lithium, 20));
 
             size = 2;
 
             craftTime = 85;
             consumeItems(with(CIItems.cobalt, 1, CIItems.lithium, 1));
-            outputItem = new ItemStack(CIItems.composite, 1);
+            outputItem = new ItemStack(CIItems.cobalith, 1);
             consumePower(0.8f);
 
             researchCostMultiplier = 0.25f;
@@ -48,7 +48,7 @@ public class CICraftingBlocks {
         }};
 
         graphiteKiln = new GenericCrafter("graphite-kiln"){{
-            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 30, CIItems.lithium, 20, CIItems.composite, 5));
+            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 30, CIItems.lithium, 20, CIItems.cobalith, 5));
 
             squareSprite = false;
             size = 2;

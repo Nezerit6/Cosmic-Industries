@@ -11,7 +11,7 @@ public class CITechTree {
         CIPlanets.novia.techTree = nodeRoot("Novia", CIStorageBlocks.coreHeart, () -> {
             nodeProduce(CIItems.cobalt, () -> {
                 node(CIItems.lithium, () -> {
-                    node(CIItems.composite, () -> {
+                    node(CIItems.cobalith, () -> {
                     });
                 });
                 node(Items.coal, () -> {
@@ -20,7 +20,7 @@ public class CITechTree {
             });
 
             nodeProduce(CIProductionBlocks.cobaltDrill, () -> {
-                node(CICraftingBlocks.compositeForge, () -> {
+                node(CICraftingBlocks.cobalithForge, () -> {
                     node(CICraftingBlocks.graphiteKiln, () -> {
                     });
                 });
