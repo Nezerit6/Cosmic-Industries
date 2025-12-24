@@ -20,6 +20,12 @@ public class CITechTree {
             });
 
             nodeProduce(CIProductionBlocks.cobaltDrill, () -> {
+                node(CICraftingBlocks.compositeForge, () -> {
+                    node(CICraftingBlocks.graphiteKiln, () -> {
+                    });
+                });
+                node(CIPowerBlocks.hydroTurbine, () -> {
+                });
             });
 
             nodeProduce(CIDistributionBlocks.pipeConveyor, () -> {

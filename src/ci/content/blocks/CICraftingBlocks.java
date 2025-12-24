@@ -15,36 +15,24 @@ import static mindustry.type.ItemStack.with;
 
 public class CICraftingBlocks {
     public static Block
-            mechanicalPress, siliconeThermalSmelter;
+            compositeForge, graphiteKiln;
 
     public static void load() {
-        mechanicalPress = new GenericCrafter("mechanicalPress"){{
-            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 40));
-            craftEffect = CIFx.CISteam;
-            squareSprite = false;
-            outputItem = new ItemStack(Items.graphite, 2);
-            craftTime = 160;
-            size = 2;
-            hasPower = true;
-            researchCostMultiplier = 0.3f;
 
-            drawer = new DrawMulti(new DrawDefault(), new DrawTemp());
+        compositeForge = new GenericCrafter("composite-forge"){{
+            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 30, CIItems.lithium, 20));
+
+            size = 2;
+
+            craftTime = 85;
+            consumeItems(with(CIItems.cobalt, 1, CIItems.lithium, 1));
+            outputItem = new ItemStack(CIItems.composite, 1);
+            consumePower(0.8f);
+
+            researchCostMultiplier = 0.25f;
 
             ambientSound = Sounds.smelter;
             ambientSoundVolume = 0.15f;
-
-            consumePower(0.5f);
-            consumeItems(with(CIItems.cobalt, 1));
-        }};
-
-        siliconeThermalSmelter = new GenericCrafter("siliconeThermalSmelter"){{
-            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 40, Items.graphite, 30));
-            squareSprite = false;
-            outputItem = new ItemStack(Items.silicon, 2);
-            craftTime = 85;
-            size = 2;
-            hasPower = true;
-            researchCostMultiplier = 1f;
 
             drawer = new DrawMulti(new DrawDefault(),
                     new SteamParticles(){{
@@ -57,12 +45,29 @@ public class CICraftingBlocks {
                         reverse = true;
                         rotateScl = 10f;
                     }});
+        }};
+
+        graphiteKiln = new GenericCrafter("graphite-kiln"){{
+            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 30, CIItems.lithium, 20, CIItems.composite, 5));
+
+            squareSprite = false;
+            size = 2;
+            craftTime = 160;
+
+            craftEffect = CIFx.CISteam;
+            consumeItems(with(Items.coal, 2));
+            outputItem = new ItemStack(Items.graphite, 1);
+            consumePower(0.5f);
+
+            researchCostMultiplier = 0.5f;
 
             ambientSound = Sounds.smelter;
             ambientSoundVolume = 0.15f;
 
-            consumePower(0.8f);
-            consumeItems(with(Items.graphite, 1, Items.sand, 2));
+            drawer = new DrawMulti(new DrawDefault(), new DrawTemp(){{
+                suffix = "-heat";
+                color = lightColor = Color.valueOf("ff6214");
+            }});
         }};
     }
 }

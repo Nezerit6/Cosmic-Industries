@@ -7,6 +7,7 @@ import arc.struct.*;
 import arc.util.Tmp;
 import ci.content.blocks.*;
 import ci.planets.*;
+import ci.world.meta.CIEnv;
 import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.game.Team;
@@ -14,6 +15,8 @@ import mindustry.graphics.g3d.*;
 import mindustry.maps.planet.*;
 import mindustry.type.Planet;
 import mindustry.world.*;
+import mindustry.world.meta.BuildVisibility;
+import mindustry.world.meta.Env;
 
 public class CIPlanets {
     public static Planet chromis, novia, vermosa, octavia;
@@ -45,6 +48,10 @@ public class CIPlanets {
         novia = new Planet("novia", chromis, 1f, 3) {{
             solarSystem = chromis;
 
+            atmosphereColor = Color.valueOf("#41384a");
+            iconColor = Color.valueOf("#947f6b");
+            landCloudColor = Color.valueOf("#6b5d4f");
+
             accessible = true;
             alwaysUnlocked = true;
             clearSectorOnLose = true;
@@ -53,14 +60,17 @@ public class CIPlanets {
             orbitRadius = 58f;
             rotateTime = 30f * 60f;
 
-            defaultCore = CIStorageBlocks.coreHeart;
-            startSector = 45;
+            unlockedOnLand.add(CIItems.cobalt);
+            itemWhitelist.addAll(CIItems.noviaItems);
+
+            startSector = 177;
             sectorSeed = 8;
 
             hasAtmosphere = true;
             atmosphereRadIn = 0f;
             atmosphereRadOut = 0.3f;
-            atmosphereColor = Color.valueOf("7EAED4");
+
+            defaultEnv = Env.terrestrial | CIEnv.sandy;
 
             generator = new NoviaPlanetGenerator();
 
@@ -70,15 +80,15 @@ public class CIPlanets {
 
             cloudMeshLoader = () -> new MultiMesh(
                     new HexSkyMesh(this, 6, -0.5f, 0.14f, 6,
-                            Color.valueOf("D8E8F8").a(0.2f), 2, 0.42f, 1f, 0.6f),
+                            Color.valueOf("9b9e88").a(0.2f), 2, 0.42f, 1f, 0.6f),
                     new HexSkyMesh(this, 4, 0.6f, 0.15f, 6,
-                            Color.valueOf("C8D8E8").a(0.25f), 2, 0.42f, 1.2f, 0.5f),
+                            Color.valueOf("9b9e88").a(0.25f), 2, 0.42f, 1.2f, 0.5f),
                     new HexSkyMesh(this, 2, 1.2f, 0.16f, 6,
-                            Color.valueOf("B8C8D8").a(0.15f), 2, 0.42f, 1.4f, 0.4f)
+                            Color.valueOf("9b9e88").a(0.15f), 2, 0.42f, 1.4f, 0.4f)
             );
 
             ruleSetter = r -> {
-                r.waveTeam = Team.blue;
+                r.waveTeam = Team.green;
                 r.placeRangeCheck = false;
                 r.showSpawns = true;
                 r.fog = false;
@@ -86,11 +96,16 @@ public class CIPlanets {
                 r.lighting = false;
                 r.coreDestroyClear = false;
                 r.onlyDepositCore = false;
-            };
 
-            itemWhitelist.addAll(CIItems.noviaItems);
-            unlockedOnLand.add(CIStorageBlocks.coreHeart);
-            hiddenItems.addAll(Vars.content.items()).removeAll(CIItems.noviaItems);
+                r.env = defaultEnv;
+
+                r.blockWhitelist = true;
+                r.hideBannedBlocks = true;
+                r.bannedBlocks.clear();
+
+                r.bannedBlocks.addAll(Vars.content.blocks().select(block -> block.minfo.mod == null ||
+                        !block.minfo.mod.name.equals("cosmic-industries")));
+            };
         }};
 
         vermosa = new Planet("vermosa", chromis, 0.9f, 2) {{

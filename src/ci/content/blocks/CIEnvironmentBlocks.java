@@ -1,6 +1,7 @@
 package ci.content.blocks;
 
 import ci.content.CIItems;
+import mindustry.content.Liquids;
 import mindustry.graphics.CacheLayer;
 import mindustry.world.Block;
 import mindustry.world.blocks.environment.*;
@@ -35,6 +36,8 @@ public class CIEnvironmentBlocks {
         crackedStoneWater = new Floor("cracked-stone-water"){{
             variants = 3;
             isLiquid = true;
+            liquidDrop = Liquids.water;
+            liquidMultiplier = 0.5f;
             speedMultiplier = 0.35f;
             cacheLayer = CacheLayer.water;
             supportsOverlay = true;
@@ -51,6 +54,8 @@ public class CIEnvironmentBlocks {
         drySoilWater = new Floor("dry-soil-water"){{
             variants = 4;
             isLiquid = true;
+            liquidDrop = Liquids.water;
+            liquidMultiplier = 0.5f;
             speedMultiplier = 0.35f;
             cacheLayer = CacheLayer.water;
             supportsOverlay = true;
@@ -67,6 +72,8 @@ public class CIEnvironmentBlocks {
         hardenedClayWater = new Floor("hardened-clay-water"){{
             variants = 3;
             isLiquid = true;
+            liquidDrop = Liquids.water;
+            liquidMultiplier = 0.5f;
             speedMultiplier = 0.35f;
             cacheLayer = CacheLayer.water;
             supportsOverlay = true;
@@ -91,6 +98,8 @@ public class CIEnvironmentBlocks {
         sandstoneWater = new Floor("sandstone-water"){{
             variants = 3;
             isLiquid = true;
+            liquidDrop = Liquids.water;
+            liquidMultiplier = 0.5f;
             speedMultiplier = 0.35f;
             cacheLayer = CacheLayer.water;
             supportsOverlay = true;

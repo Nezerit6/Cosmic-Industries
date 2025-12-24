@@ -2,6 +2,7 @@ package ci.content;
 
 import arc.graphics.*;
 import arc.struct.Seq;
+import mindustry.content.Items;
 import mindustry.type.*;
 
 public class CIItems {
@@ -20,14 +21,16 @@ public class CIItems {
         lithium = new Item("lithium", Color.valueOf("a8c5e3")){{
             hardness = 2;
             cost = 1.2f;
+            alwaysUnlocked = true;
         }};
 
         composite = new Item("composite", Color.valueOf("804054")){{
             cost = 1.5f;
+            alwaysUnlocked = true;
         }};
 
         noviaItems.addAll(
-                cobalt, lithium
+                cobalt, lithium, composite, Items.coal, Items.graphite
         );
     }
 }

@@ -11,7 +11,7 @@ public class CISectors {
 
     public static void load() {
 
-        firstWay = new SectorPreset("first-way", novia, 45){{
+        firstWay = new SectorPreset("first-way", novia, 177){{
             alwaysUnlocked = true;
             captureWave = 0;
             difficulty = 0;
