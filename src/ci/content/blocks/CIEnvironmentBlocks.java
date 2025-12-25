@@ -14,12 +14,20 @@ public class CIEnvironmentBlocks {
             hardenedClay, hardenedClayWall, hardenedClayWater, hardenedClayBoulder,
             slate, slateWall, slateWater, slateBoulder,
             sandstone, sandstoneWall, sandstoneWater, sandstoneBoulder,
-            cobaltOre;
+            cobaltOre, lithiumOre;
 
     public static void load() {
 
         cobaltOre = new OreBlock(CIItems.cobalt){{
             oreDefault = true;
+            oreThreshold = 0.9f;
+            oreScale = 20f;
+            variants = 3;
+        }};
+
+        lithiumOre = new OreBlock(CIItems.lithium){{
+            oreDefault = true;
+
             oreThreshold = 0.9f;
             oreScale = 20f;
             variants = 3;

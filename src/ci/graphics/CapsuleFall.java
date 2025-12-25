@@ -1,4 +1,4 @@
-package ci.content;
+package ci.graphics;
 
 import arc.Core;
 import arc.graphics.g2d.*;

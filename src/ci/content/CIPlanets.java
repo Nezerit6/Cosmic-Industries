@@ -99,12 +99,15 @@ public class CIPlanets {
 
                 r.env = defaultEnv;
 
-                r.blockWhitelist = true;
+                r.blockWhitelist = false;
                 r.hideBannedBlocks = true;
                 r.bannedBlocks.clear();
 
-                r.bannedBlocks.addAll(Vars.content.blocks().select(block -> block.minfo.mod == null ||
-                        !block.minfo.mod.name.equals("cosmic-industries")));
+                r.bannedBlocks.addAll(Vars.content.blocks().select(block -> {
+                    boolean onlyCosInd = block.minfo.mod != null && block.minfo.mod.name.equals("ci");
+                    boolean sandboxOnly = block.buildVisibility == BuildVisibility.sandboxOnly;
+                    return !onlyCosInd && !sandboxOnly;
+                }));
             };
         }};
 

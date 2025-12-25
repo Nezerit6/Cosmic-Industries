@@ -14,19 +14,19 @@ public class CIItems {
 
         cobalt = new Item("cobalt", Color.valueOf("7a8c9e")){{
             hardness = 1;
-            cost = 0.8f;
+            cost = 0.7f;
+            healthScaling = 0.3f;
             alwaysUnlocked = true;
         }};
 
         lithium = new Item("lithium", Color.valueOf("a8c5e3")){{
-            hardness = 2;
+            hardness = 1;
             cost = 1.2f;
-            alwaysUnlocked = true;
+            charge = 0.5f;
         }};
 
         cobalith = new Item("cobalith", Color.valueOf("804054")){{
             cost = 1.5f;
-            alwaysUnlocked = true;
         }};
 
         noviaItems.addAll(
