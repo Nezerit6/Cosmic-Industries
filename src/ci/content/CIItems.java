@@ -24,7 +24,7 @@ public class CIItems {
             alwaysUnlocked = true;
         }};
 
-        cobalith = new Item("сobalith", Color.valueOf("804054")){{
+        cobalith = new Item("cobalith", Color.valueOf("804054")){{
             cost = 1.5f;
             alwaysUnlocked = true;
         }};
