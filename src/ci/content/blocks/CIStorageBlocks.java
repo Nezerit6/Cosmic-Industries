@@ -1,7 +1,9 @@
 package ci.content.blocks;
 
+import arc.graphics.Color;
 import ci.content.*;
 import ci.world.blocks.defense.RepairTurret;
+import ci.world.blocks.defense.RepelShield;
 import ci.world.blocks.storage.EnemyCapsuleBase;
 import mindustry.content.Items;
 import mindustry.graphics.Pal;
@@ -15,7 +17,7 @@ import static mindustry.type.ItemStack.with;
 
 public class CIStorageBlocks {
     public static Block
-            storage, coreHeart, regeneratingBlaster, enemyCapsule;
+            storage, coreHeart, regeneratingBlaster, deflectionProjector, enemyCapsule;
 
     public static void load() {
         storage = new StorageBlock("Core1"){{
@@ -52,6 +54,15 @@ public class CIStorageBlocks {
             laserColor = Pal.heal;
             healColor = Pal.heal;
             drawer = new DrawTurret("based-");
+        }};
+
+        deflectionProjector = new Block("deflection-projector"){{
+            requirements(Category.effect, with(CIItems.cobalt, 1));
+
+            size = 2;
+            health = 200;
+
+            consumePower(2f);
         }};
 
         enemyCapsule = new EnemyCapsuleBase("enemy-capsule"){{
