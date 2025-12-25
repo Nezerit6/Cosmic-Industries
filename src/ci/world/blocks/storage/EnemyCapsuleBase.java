@@ -1,5 +1,6 @@
 package ci.world.blocks.storage;
 
+import arc.audio.Sound;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import arc.struct.*;
@@ -16,10 +17,24 @@ import mindustry.world.meta.BlockFlag;
 public class EnemyCapsuleBase extends Block {
 
     public UnitType spawnUnitType = CIUnits.arrow;
+
     public int minSpawnUnits = 1;
-    public int maxSpawnUnits = 2;
+    public int maxSpawnUnits = 4;
+    public float minConstructTime = 5f * 60f;
+    public float maxConstructTime = 17f * 60f;
+
     public int destroyDivisor = 2;
+
     public boolean spawnUnits = true;
+    public boolean playSpawnSound = true;
+
+    public float spawnSoundVolume = 1.0f;
+    public Sound spawnSound = Sounds.respawn;
+
+    public float spawnRadius = 2f;
+
+    public float lightRadius = 30f;
+    public float lightIntensity = 0.65f;
 
     public EnemyCapsuleBase(String name){
         super(name);
@@ -41,13 +56,13 @@ public class EnemyCapsuleBase extends Block {
         public boolean destroyed = false;
         public float spawnProgress = 0f;
         public int actualSpawnCount;
-        public float actualConstructTime;
+        public float constructTime;
 
         @Override
         public void created() {
             super.created();
-            this.actualSpawnCount = Mathf.random(1, 4);
-            this.actualConstructTime = Mathf.random(5f, 17f) * 60f;
+            this.actualSpawnCount = Mathf.random(minSpawnUnits, maxSpawnUnits);
+            this.constructTime = Mathf.random(minConstructTime, maxConstructTime);
         }
 
         @Override
@@ -64,7 +79,7 @@ public class EnemyCapsuleBase extends Block {
             if (!spawnComplete) {
                 spawnProgress += Time.delta;
 
-                if (spawnProgress >= actualConstructTime) {
+                if (spawnProgress >= constructTime) {
                     spawnUnits();
                     spawnComplete = true;
                     kill();
@@ -87,7 +102,7 @@ public class EnemyCapsuleBase extends Block {
             }
 
             if (hasLanded && !spawnComplete) {
-                float progress = Math.min(spawnProgress / actualConstructTime, 1f);
+                float progress = Math.min(spawnProgress / constructTime, 1f);
                 Draw.draw(Layer.blockOver, () -> {
                     Drawf.construct(this.x, this.y, this.block.region, 0f, progress, 1f, Time.time + x + y);
                 });
@@ -96,7 +111,7 @@ public class EnemyCapsuleBase extends Block {
 
         @Override
         public void drawLight(){
-            Drawf.light(x, y, 30f + 20f * block.size, Pal.accent, 0.65f + Mathf.absin(20f, 0.1f));
+            Drawf.light(x, y, lightRadius + 20f * block.size, Pal.accent, lightIntensity + Mathf.absin(20f, 0.1f));
         }
 
         @Override
@@ -112,8 +127,8 @@ public class EnemyCapsuleBase extends Block {
             for (int i = 0; i < count; i++) {
                 Unit unit = spawnUnitType.create(team);
 
-                float offsetX = Mathf.range(4f);
-                float offsetY = Mathf.range(4f);
+                float offsetX = Mathf.range(spawnRadius);
+                float offsetY = Mathf.range(spawnRadius);
 
                 unit.set(x + offsetX, y + offsetY);
                 unit.rotation = Mathf.random(360f);
@@ -122,8 +137,8 @@ public class EnemyCapsuleBase extends Block {
                 Fx.spawn.at(unit.x, unit.y);
             }
 
-            if (!destroyed) {
-                Sounds.respawn.at(x, y, 1.0f);
+            if (!destroyed && playSpawnSound) {
+                spawnSound.at(x, y, spawnSoundVolume);
             }
         }
 
@@ -134,8 +149,10 @@ public class EnemyCapsuleBase extends Block {
         }
 
         @Override
-        public void onDestroyed(){
-            spawnUnits();
+        public void onDestroyed() {
+            if (!spawnComplete) {
+                spawnUnits();
+            }
         }
     }
 }

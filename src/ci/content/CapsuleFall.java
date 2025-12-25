@@ -75,6 +75,7 @@ public class CapsuleFall {
 
                         Effect.shake(5f, 10f, data.targetX, data.targetY);
                         Sounds.boom.at(data.targetX, data.targetY);
+                        Fx.shockwave.at(data.targetX, data.targetY, Pal.accent);
                     } else {
                         Fx.massiveExplosion.at(data.targetX, data.targetY);
                         Fx.circleColorSpark.at(data.targetX, data.targetY, Pal.accent);
