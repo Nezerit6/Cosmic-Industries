@@ -1,10 +1,8 @@
 package ci.content.blocks;
 
-import arc.graphics.Color;
 import ci.content.*;
-import ci.world.blocks.defense.RepairTurret;
-import ci.world.blocks.defense.RepelShield;
-import ci.world.blocks.storage.EnemyCapsuleBase;
+import ci.world.blocks.defense.*;
+import ci.world.blocks.storage.*;
 import mindustry.content.Items;
 import mindustry.graphics.Pal;
 import mindustry.type.Category;
@@ -56,15 +54,24 @@ public class CIStorageBlocks {
             drawer = new DrawTurret("based-");
         }};
 
-        deflectionProjector = new Block("deflection-projector"){{
-            requirements(Category.effect, with(CIItems.cobalt, 1));
+        deflectionProjector = new DeflectorShield("deflection-projector"){{
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 1));
 
             size = 2;
             health = 200;
+            radius = 75f;
 
+            shieldHealth = 150f;
+            repelForce = 0.10f;
+            maxRepelForce = 1.5f;
+            shieldDamageMultiplier = 0.7f;
+
+            shieldColor = CIPal.darkPink;
+            cooldownNormal = 0.75f;
+            cooldownLiquid = 1.1f;
+            cooldownBrokenBase = 0.3f;
             consumePower(2f);
         }};
-
         enemyCapsule = new EnemyCapsuleBase("enemy-capsule"){{
             requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 1));
 
