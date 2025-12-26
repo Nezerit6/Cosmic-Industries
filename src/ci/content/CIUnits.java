@@ -82,25 +82,24 @@ public class CIUnits {
             constructor = MechUnit::create;
             canBoost = true;
             boostMultiplier = 1.5f;
-            speed = 0.40f;
-            hitSize = 9f;
-            health = 230f;
+            speed = 0.45f;
+            hitSize = 8f;
+            health = 160f;
             buildSpeed = 0.5f;
-            armor = 2f;
+            armor = 1f;
             range = 45f;
             outlineColor = CIPal.dustyOutline;
 
             weapons.add(new Weapon("ci-arrow-weapon"){{
-                reload = 6f;
+                reload = 11f;
                 x = -4.6f;
                 top = false;
                 ejectEffect = Fx.casing1;
 
-                bullet = new BasicBulletType(3.4f, 8){{
-                    //recoil = 0.1f;
-                    height = 6;
-                    width = 3;
-                    lifetime = 26f;
+                bullet = new BasicBulletType(3.0f, 9){{
+                    height = 7;
+                    width = 4;
+                    lifetime = 30f;
 
                     hitColor = backColor = trailColor = Color.valueOf("ffd37f");
                     trailLength = 6;
