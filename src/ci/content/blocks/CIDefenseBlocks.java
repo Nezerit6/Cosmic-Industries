@@ -1,15 +1,16 @@
 package ci.content.blocks;
 
 import arc.graphics.Color;
-import arc.math.Interp;
+import arc.graphics.g2d.Draw;
+import arc.math.Mathf;
+import arc.util.Time;
 import ci.content.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
-import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
-import mindustry.gen.Sounds;
-import mindustry.graphics.Pal;
+import mindustry.gen.*;
+import mindustry.graphics.*;
 import mindustry.type.Category;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
@@ -23,12 +24,14 @@ public class CIDefenseBlocks {
     public static Block
             // Walls
             cobaltWall, cobaltWallLarge,
-
     // Turrets
-    shoker, chire, splitter, punisher, stormBringer, squall, serpent, arcflash, trident, eradication, radiant;
+    spark,
+
+
+    stormBringer, squall, serpent, trident, eradication, radiant;
 
     public static void load() {
-        // ===== WALLS =====
+        // Walls
         cobaltWall = new Wall("cobalt-wall"){{
             requirements(Category.defense, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 6));
             size = 1;
@@ -41,230 +44,67 @@ public class CIDefenseBlocks {
             requirements(Category.defense, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 24));
         }};
 
-        // ===== TURRETS =====
-        shoker = new PowerTurret("shoker"){{
-            requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 25));
+        // Turrets
+        spark = new PowerTurret("spark"){{
+            requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalith, 1));
+
+            outlineColor = CIPal.dustyOutline;
             size = 1;
-            health = 80;
-            range = 60f;
-            reload = 12.5f;
+            health = 140;
+            range = 130f;
+            reload = 25f;
             recoil = 1f;
-            shootCone = 40f;
-            rotateSpeed = 4f;
+            rotateSpeed = 6f;
             targetAir = true;
-            heatColor = Color.red;
-            shootSound = Sounds.spark;
-            shootEffect = Fx.lightningShoot;
-            consumePower(0.4f);
+            shootY = 3f;
 
-            shootType = new LightningBulletType(){{
-                damage = 5;
-                lightningLength = 10;
-                collidesAir = true;
-                ammoMultiplier = 1f;
-                buildingDamageMultiplier = 0.25f;
-
-                lightningType = new BulletType(0.0001f, 0f){{
-                    lifetime = Fx.lightning.lifetime;
-                    hitEffect = Fx.hitLancer;
-                    despawnEffect = Fx.none;
-                    status = StatusEffects.shocked;
-                    statusDuration = 10f;
-                    hittable = false;
-                    lightColor = Color.yellow;
-                    collidesAir = true;
-                    buildingDamageMultiplier = 0.25f;
-                }};
-            }};
-
+            consumePower(1.5f);
             drawer = new DrawTurret("based-");
+
+            shootType = new BasicBulletType(4f, 9f) {
+                {
+                    hitEffect = Fx.hitLancer;
+                    despawnEffect = Fx.hitLancer;
+                    lifetime = 32.5f;
+                    shrinkX = shrinkY = 0f;
+                    width = height = 3f;
+
+                    trailWidth = 2.5f;
+                    trailLength = 3;
+
+                    lightRadius = 35f;
+                    lightOpacity = 0.7f;
+                }
+
+                @Override
+                public void draw(Bullet b){
+                    super.draw(b);
+
+                    float mult = b.fin();
+                    float sin = Mathf.absin(Time.time, 2f, 0.3f);
+
+                    float flareWidth = 3f;
+                    float flareLength = 9f * (mult + sin);
+                    float flareInnerScl = 0.5f;
+                    float flareInnerLenScl = 0.7f;
+                    float angle = Time.time * 3f + b.rotation();
+
+                    Draw.z(Layer.bullet + 0.1f);
+
+                    Draw.color(backColor);
+                    for(int i = 0; i < 4; i++){
+                        Drawf.tri(b.x, b.y, flareWidth, flareLength, i * 90 + 45 + angle);
+                    }
+
+                    Draw.color(frontColor);
+                    for(int i = 0; i < 4; i++){
+                        Drawf.tri(b.x, b.y, flareWidth * flareInnerScl, flareLength * flareInnerLenScl, i * 90 + 45 + angle);
+                    }
+                    Draw.reset();
+                }};
         }};
 
-        chire = new ItemTurret("chire"){{
-            requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 24));
-            size = 1;
-            health = 150;
-            range = 110;
-            reload = 25;
-            recoil = 1;
-            inaccuracy = 9;
-            rotateSpeed = 12;
-            researchCostMultiplier = 0.10f;
-            coolant = consumeCoolant(0.1f);
-
-            ammo(
-                    CIItems.cobalt, new BasicBulletType(10f, 4){{
-                        width = 6;
-                        height = 8;
-                        lifetime = 60;
-                        ammoPerShot = 2;
-                        collidesTeam = true;
-                        collidesGround = true;
-                    }}
-            );
-
-            drawer = new DrawTurret("based-"){{
-                parts.add(
-                        new RegionPart("-side"){{
-                            heatProgress = PartProgress.warmup;
-                            progress = PartProgress.warmup;
-                            mirror = true;
-                            moveX = 2f * 4f / 3f;
-                            moveY = -0.5f;
-                            moveRot = -40f;
-                            under = true;
-                            heatColor = Color.red.cpy();
-                        }}
-                );
-            }};
-        }};
-
-        splitter = new ItemTurret("splitter"){{
-            requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 50, Items.graphite, 10));
-            size = 2;
-            health = 900;
-            range = 210;
-            reload = 120f;
-            recoil = 0.5f;
-            rotateSpeed = 1.4f;
-
-            ammo(
-                    CIItems.cobalt, new ArtilleryBulletType(3.8f, 38){{
-                        lifetime = 44f;
-                        width = height = 12;
-                        splashDamage = 16f;
-                        splashDamageRadius = 15f;
-                        despawnShake = 0.4f;
-
-                        hitColor = backColor = trailColor = Color.valueOf("F6BB64");
-                        trailLength = 12;
-                        trailWidth = 2f;
-                        trailSinScl = 2.5f;
-                        trailSinMag = 0.5f;
-                        trailEffect = Fx.none;
-
-                        fragBullets = 5;
-                        fragVelocityMin = 0.9f;
-                        fragRandomSpread = 360;
-                        fragLifeMin = 0.9f;
-                        fragBullet = new BasicBulletType(3f, 12){{
-                            lifetime = 14f;
-                            width = 7f;
-                            height = 5f;
-                            pierceBuilding = true;
-                            pierceCap = 3;
-                            trailLength = 12;
-                            trailWidth = 0.5f;
-                            trailSinScl = 2.5f;
-                            trailSinMag = 0.5f;
-                            trailEffect = Fx.none;
-                        }};
-                    }},
-
-                    Items.graphite, new ArtilleryBulletType(5f, 34){{
-                        lifetime = 46f;
-                        width = height = 12;
-                        splashDamage = 16f;
-                        splashDamageRadius = 12f;
-                        despawnShake = 0.4f;
-
-                        hitColor = backColor = trailColor = Color.valueOf("F6BB64");
-                        trailLength = 8;
-                        trailWidth = 2f;
-                        trailSinScl = 2.5f;
-                        trailSinMag = 0.5f;
-                        trailEffect = Fx.none;
-
-                        fragBullets = 12;
-                        fragVelocityMin = 0.9f;
-                        fragRandomSpread = 360;
-                        fragLifeMin = 0.9f;
-                        fragBullet = new BasicBulletType(5f, 8){{
-                            lifetime = 12f;
-                            width = 6f;
-                            height = 4f;
-                            pierceBuilding = true;
-                            pierceCap = 2;
-                        }};
-                    }}
-            );
-
-            drawer = new DrawTurret("based-"){{
-                parts.add(
-                        new RegionPart("-barrel"){{
-                            progress = PartProgress.recoil.curve(Interp.pow2In);
-                            moveY = -1f;
-                            heatColor = Color.valueOf("f03b0e");
-                            mirror = false;
-                        }},
-                        new RegionPart("-front"){{
-                            heatProgress = PartProgress.warmup;
-                            progress = PartProgress.warmup;
-                            mirror = true;
-                            moveX = -0.5f * 4f / 3f;
-                            under = true;
-                        }}
-                );
-            }};
-        }};
-
-        punisher = new LiquidTurret("punisher"){{
-            requirements(Category.turret, BuildVisibility.sandboxOnly, with(Items.copper, 110, Items.lead, 65, Items.titanium, 35, Items.silicon, 20));
-            size = 2;
-            health = 430;
-            range = 205;
-            reload = 120f;
-            recoil = 3f;
-            shootY = 6.5f;
-            rotateSpeed = 4.2f;
-            inaccuracy = 5;
-            liquidCapacity = 60;
-            targetAir = false;
-            squareSprite = false;
-            extinguish = false;
-            moveWhileCharging = false;
-            accurateDelay = false;
-            heatColor = Color.valueOf("afeeee");
-            shootSound = CISounds.bigLaserShoot;
-            loopSound = Sounds.none;
-            shootEffect = Fx.none;
-            smokeEffect = CIFx.laserSparks;
-            shoot.firstShotDelay = 60f;
-            consumePower(3.6f);
-
-            ammo(
-                    Liquids.cryofluid, new BasicBulletType(12.6f, 36){{
-                        lifetime = 17.5f;
-                        width = 4;
-                        height = 28;
-                        hitColor = backColor = trailColor = Color.valueOf("afeeee");
-                        trailLength = 3;
-                        trailWidth = 1.9f;
-                        homingPower = 0.03f;
-                        homingDelay = 2f;
-                        homingRange = 60f;
-                        ammoMultiplier = 0.2f;
-                        collidesAir = false;
-                        hitEffect = Fx.none;
-                        chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
-                        fragBullets = 1;
-                    }}
-            );
-
-            drawer = new DrawTurret("based-"){{
-                parts.add(
-                        new RegionPart("-nozzle"){{
-                            progress = PartProgress.warmup;
-                            heatProgress = PartProgress.charge;
-                            mirror = true;
-                            moveRot = 7f;
-                            heatColor = Color.valueOf("afeeee");
-                            moves.add(new PartMove(PartProgress.recoil, 0f, 0f, -30f));
-                        }}
-                );
-            }};
-        }};
-
+        // may be deleted
         stormBringer = new PowerTurret("stormBringer"){{
             requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 1));
             size = 2;
@@ -405,93 +245,6 @@ public class CIDefenseBlocks {
                             }}
                     );
                 }
-            }};
-        }};
-
-        arcflash = new PowerTurret("arcflash"){{
-            requirements(Category.turret, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 80, CIItems.cobalt, 60));
-            size = 2;
-            health = 1000;
-            range = 180f;
-            reload = 140f;
-            shake = 3f;
-            cooldownTime = reload - 10f;
-            shootSound = Sounds.shockBlast;
-            consumePower(3f);
-
-            shootType = new BasicBulletType(){{
-                speed = 3f;
-                damage = 75f;
-                lifetime = 60f;
-                width = height = 15f;
-                sprite = "large-orb";
-                shrinkX = shrinkY = 0f;
-                hitColor = Color.valueOf("869cbe");
-                backColor = trailColor = Color.valueOf("869cbe");
-                frontColor = Color.white;
-                trailLength = 12;
-                trailWidth = 2.2f;
-                trailEffect = Fx.missileTrail;
-                trailInterval = 3f;
-                trailParam = 4f;
-                despawnSound = Sounds.spark;
-                shootEffect = new MultiEffect(
-                        Fx.shootTitan,
-                        new WaveEffect(){{
-                            colorTo = Color.valueOf("869cbe");
-                            sizeTo = 26f;
-                            lifetime = 14f;
-                            strokeFrom = 4f;
-                        }}
-                );
-                smokeEffect = Fx.shootSmokeTitan;
-                despawnEffect = hitEffect = new ExplosionEffect(){{
-                    waveColor = Color.valueOf("869cbe");
-                    smokeColor = Color.gray;
-                    sparkColor = Color.white;
-                    waveStroke = 4f;
-                    waveRad = 40f;
-                }};
-
-                bulletInterval = 4f;
-                lightningColor = Color.valueOf("869cbe");
-                lightningDamage = 17;
-                lightning = 8;
-                lightningLength = 2;
-                lightningLengthRand = 8;
-
-                intervalBullet = new LightningBulletType(){{
-                    damage = 16;
-                    collidesAir = false;
-                    ammoMultiplier = 1f;
-                    lightningColor = Color.valueOf("869cbe");
-                    lightningLength = 3;
-                    lightningLengthRand = 6;
-                    buildingDamageMultiplier = 0.25f;
-
-                    lightningType = new BulletType(0.0001f, 0f){{
-                        lifetime = Fx.lightning.lifetime;
-                        hitEffect = Fx.hitLancer;
-                        despawnEffect = Fx.none;
-                        status = StatusEffects.shocked;
-                        statusDuration = 10f;
-                        hittable = false;
-                        lightColor = Color.white;
-                        buildingDamageMultiplier = 0.25f;
-                    }};
-                }};
-            }};
-
-            drawer = new DrawTurret("based-"){{
-                parts.add(
-                        new RegionPart("-side"){{
-                            progress = PartProgress.recoil;
-                            mirror = true;
-                            moveRot = -10f;
-                            moveX = -1f;
-                            moveY = 1f;
-                        }}
-                );
             }};
         }};
 
