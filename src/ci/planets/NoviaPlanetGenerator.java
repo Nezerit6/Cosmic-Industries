@@ -43,7 +43,6 @@ public class NoviaPlanetGenerator extends PlanetGenerator {
         return Math.max(height, 2f / arr[0].length);
     }
 
-    @Override
     public Color getColor(Vec3 position){
         Block block = getBlock(position);
         return Tmp.c1.set(block.mapColor).a(1f - block.albedo);

@@ -9,10 +9,8 @@ public class CosmicIndustries extends Mod {
     public void loadContent() {
 
         CIItems.load();
-        CIUnits.load();
         CIBlocks.load();
         CIPlanets.load();
-        CISectors.load();
         CITechTree.load();
         /*
          * Initialization

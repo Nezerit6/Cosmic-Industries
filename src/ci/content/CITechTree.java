@@ -19,14 +19,8 @@ public class CITechTree {
                 });
             });
 
-            nodeProduce(CIProductionBlocks.cobaltDrill, () -> {
-                node(CICraftingBlocks.cobalithForge, () -> {
-                    node(CICraftingBlocks.graphiteKiln, () -> {
-                    });
-                });
-                node(CIPowerBlocks.hydroTurbine, () -> {
-                    node(CIPowerBlocks.chargeNode, () -> {
-                    });
+            node(CICraftingBlocks.cobalithForge, () -> {
+                node(CICraftingBlocks.graphiteKiln, () -> {
                 });
             });
 
