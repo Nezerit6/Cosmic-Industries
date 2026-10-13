@@ -17,9 +17,13 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
 
       - name: Install Android build tools
-        run: sdkmanager "build-tools;30.0.1"
+        run: |
+          sdkmanager "build-tools;30.0.1" "platforms;android-30"
+          echo "$ANDROID_HOME/build-tools/30.0.1" >> $GITHUB_PATH
 
       - name: Build mod jar
         run: ./gradlew deploy
