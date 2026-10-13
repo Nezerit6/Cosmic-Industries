@@ -2,7 +2,6 @@ package ci.content.blocks;
 
 import ci.content.*;
 import ci.world.blocks.defense.*;
-import ci.world.blocks.storage.*;
 import mindustry.content.Items;
 import mindustry.graphics.Pal;
 import mindustry.type.Category;
@@ -15,7 +14,7 @@ import static mindustry.type.ItemStack.with;
 
 public class CIStorageBlocks {
     public static Block
-            storage, coreHeart, regeneratingBlaster, deflectionProjector, enemyCapsule;
+            storage, coreHeart, regeneratingBlaster, deflectionProjector;
 
     public static void load() {
         storage = new StorageBlock("Core1"){{
@@ -71,18 +70,6 @@ public class CIStorageBlocks {
             cooldownLiquid = 1.1f;
             cooldownBrokenBase = 0.3f;
             consumePower(2f);
-        }};
-        enemyCapsule = new EnemyCapsuleBase("enemy-capsule"){{
-            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 1));
-
-            spawnUnitType = CIUnits.arrow;
-            spawnUnits = true;
-            minSpawnUnits = 1;
-            maxSpawnUnits = 5;
-            health = 10;
-            size = 2;
-            unitCapModifier = 12;
-            squareSprite = false;
         }};
     }
 }
