@@ -114,7 +114,7 @@ public class CIDefenseBlocks {
             recoil = 2f;
             inaccuracy = 14;
             rotateSpeed = 7;
-            shootSound = Sounds.lasershoot;
+            shootSound = Sounds.shootLaser;
             shootEffect = Fx.sparkShoot;
             consumePower(1.4f);
             coolant = consumeCoolant(0.2f);
@@ -163,7 +163,7 @@ public class CIDefenseBlocks {
             targetAir = false;
             ammoPerShot = 2;
             coolantMultiplier = 0.5f;
-            shootSound = Sounds.shootBig;
+            shootSound = Sounds.shoot;
             ammoUseEffect = Fx.casing4;
             shoot = new ShootAlternate(7f);
             shoot.shots = 2;
@@ -209,7 +209,7 @@ public class CIDefenseBlocks {
             recoil = 1f;
             rotateSpeed = 3;
             targetAir = false;
-            shootSound = Sounds.laser;
+            shootSound = Sounds.shootLancer;
             consumePower(1.4f);
             coolant = consumeCoolant(0.2f);
             shoot = new ShootAlternate(10);
@@ -267,7 +267,7 @@ public class CIDefenseBlocks {
             recoil = 2f;
             rotateSpeed = 2.3f;
             outlineColor = Pal.darkOutline;
-            shootSound = Sounds.release;
+            shootSound = Sounds.shoot;
             consumePower(1.4f);
             coolant = consumeCoolant(0.2f);
             shoot.shots = 3;

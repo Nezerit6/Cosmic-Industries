@@ -31,7 +31,7 @@ public class CICraftingBlocks {
 
             researchCostMultiplier = 0.25f;
 
-            ambientSound = Sounds.smelter;
+            ambientSound = Sounds.loopSmelter;
             ambientSoundVolume = 0.15f;
 
             drawer = new DrawMulti(new DrawDefault(),
@@ -61,7 +61,7 @@ public class CICraftingBlocks {
 
             researchCostMultiplier = 0.5f;
 
-            ambientSound = Sounds.smelter;
+            ambientSound = Sounds.loopSmelter;
             ambientSoundVolume = 0.15f;
 
             drawer = new DrawMulti(new DrawDefault(), new DrawTemp(){{

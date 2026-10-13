@@ -4,5 +4,5 @@ author: "CI-team"
 main: "ci.CosmicIndustries"
 description: "NOT PLAYABLE"
 version: 0.2
-minGameVersion: 146
+minGameVersion: 154
 java: true

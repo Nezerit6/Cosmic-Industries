@@ -23,8 +23,8 @@ public class CIPlanets {
 
     public static void load() {
 
-        Planets.serpulo.hiddenItems.addAll(Vars.content.items()).removeAll(Items.serpuloItems);
-        Planets.erekir.hiddenItems.addAll(Vars.content.items()).removeAll(Items.erekirItems);
+
+
 
         chromis = new Planet("chromis", null, 6, 1) {{
             accessible = false;
@@ -61,7 +61,6 @@ public class CIPlanets {
             rotateTime = 30f * 60f;
 
             unlockedOnLand.add(CIItems.cobalt);
-            itemWhitelist.addAll(CIItems.noviaItems);
 
             startSector = 177;
             sectorSeed = 8;
