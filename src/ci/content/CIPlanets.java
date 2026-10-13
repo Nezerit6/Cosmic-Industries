@@ -4,10 +4,8 @@ import arc.graphics.Color;
 import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.*;
-import arc.util.Tmp;
 import ci.content.blocks.*;
 import ci.planets.*;
-import ci.world.meta.CIEnv;
 import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.game.Team;
@@ -19,11 +17,9 @@ import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 
 public class CIPlanets {
-    public static Planet chromis, novia, vermosa, octavia;
+    public static Planet chromis, novia;
 
     public static void load() {
-
-
 
 
         chromis = new Planet("chromis", null, 6, 1) {{
@@ -69,7 +65,7 @@ public class CIPlanets {
             atmosphereRadIn = 0f;
             atmosphereRadOut = 0.3f;
 
-            defaultEnv = Env.terrestrial | CIEnv.sandy;
+            defaultEnv = Env.terrestrial;
 
             generator = new NoviaPlanetGenerator();
 
@@ -110,79 +106,5 @@ public class CIPlanets {
             };
         }};
 
-        vermosa = new Planet("vermosa", chromis, 0.9f, 2) {{
-            solarSystem = chromis;
-
-            accessible = false;
-            hasAtmosphere = true;
-
-            orbitRadius = 37f;
-            rotateTime = 40f * 60f;
-
-            atmosphereRadIn = 0.01f;
-            atmosphereRadOut = 0.25f;
-            atmosphereColor = Color.valueOf("4A5A3A");
-
-            generator = new VermosaPlanetGenerator();
-
-            meshLoader = () -> new HexMesh(this, 6);
-
-            cloudMeshLoader = () -> new MultiMesh(
-                    new HexSkyMesh(this, 3, 0.5f, 0.18f, 6,
-                            Color.valueOf("3A4A2A").a(0.75f), 2, 0.45f, 1f, 0.5f),
-                    new HexSkyMesh(this, 4, -0.8f, 0.22f, 6,
-                            Color.valueOf("2A3A1A").a(0.65f), 2, 0.45f, 1.1f, 0.48f),
-                    new HexSkyMesh(this, 5, 1.2f, 0.25f, 6,
-                            Color.valueOf("5A6A4A").a(0.55f), 2, 0.42f, 1.15f, 0.52f)
-            );
-        }};
-
-        octavia = new Planet("octavia", chromis, 0.15f, 0) {{
-            solarSystem = chromis;
-
-            accessible = false;
-            hasAtmosphere = false;
-            updateLighting = false;
-            drawOrbit = false;
-
-            orbitRadius = 21f;
-            rotateTime = 15f * 60f;
-
-            camRadius = 0.68f * 2f;
-            minZoom = 0.6f;
-            clipRadius = 2f;
-
-            Block base = CIEnvironmentBlocks.crackedStone;
-            Block tint = CIEnvironmentBlocks.slate;
-
-            generator = new AsteroidGenerator();
-
-            meshLoader = () -> {
-                Color tinted = tint.mapColor.cpy().a(1f - tint.mapColor.a);
-                Seq<GenericMesh> meshes = new Seq<>();
-                Color color = base.mapColor;
-                Rand rand = new Rand(id + 2);
-
-                meshes.add(new NoiseMesh(
-                        this, 0, 2, radius, 2, 0.55f, 0.45f, 14f,
-                        color, tinted, 3, 0.6f, 0.38f, 0.5f
-                ));
-
-                for(int j = 0; j < 8; j++) {
-                    meshes.add(new MatMesh(
-                            new NoiseMesh(this, j + 1, 1,
-                                    0.022f + rand.random(0.039f) * 2f, 2,
-                                    0.6f, 0.38f, 20f,
-                                    color, tinted, 3, 0.6f, 0.38f, 0.5f),
-                            new Mat3D().setToTranslation(
-                                    Tmp.v31.setToRandomDirection(rand)
-                                            .setLength(rand.random(0.44f, 1.4f) * 2f)
-                            )
-                    ));
-                }
-
-                return new MultiMesh(meshes.toArray(GenericMesh.class));
-            };
-        }};
     }
 }
