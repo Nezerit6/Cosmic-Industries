@@ -19,8 +19,8 @@ public class CITechTree {
                 });
             });
 
-            node(CICraftingBlocks.cobalithForge, () -> {
-                node(CICraftingBlocks.graphiteKiln, () -> {
+            node(CICraftingBlocks.graphitePress, () -> {
+                node(CICraftingBlocks.glassFurnace, () -> {
                 });
             });
 

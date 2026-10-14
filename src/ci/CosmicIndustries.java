@@ -2,6 +2,9 @@ package ci;
 
 import mindustry.mod.*;
 import ci.content.*;
+import ci.graphics.draw3d.*;
+
+import static mindustry.Vars.headless;
 
 public class CosmicIndustries extends Mod {
 
@@ -25,5 +28,13 @@ public class CosmicIndustries extends Mod {
          * - Planets(Sectors)
          * - Tech tree
          */
+    }
+
+    @Override
+    public void init() {
+        if(!headless) {
+            Perspective.init();
+            Draw3D.init();
+        }
     }
 }

@@ -6,7 +6,7 @@ import mindustry.content.Items;
 import mindustry.type.*;
 
 public class CIItems {
-    public static Item cobalt, lithium, cobalith;
+    public static Item cobalt, lithium, cobalith, hematite, lithiumGlass;
 
     public static final Seq<Item> noviaItems = new Seq<>();
 
@@ -29,8 +29,20 @@ public class CIItems {
             cost = 1.5f;
         }};
 
+        hematite = new Item("hematite", CIPal.hematite){{
+            hardness = 2;
+            cost = 1f;
+            healthScaling = 0.6f;
+            alwaysUnlocked = true;
+        }};
+
+        lithiumGlass = new Item("lithium-glass", Color.valueOf("c9c4f0")){{
+            cost = 1.4f;
+            charge = 0.2f;
+        }};
+
         noviaItems.addAll(
-                cobalt, lithium, cobalith, Items.coal, Items.graphite
+                cobalt, lithium, cobalith, hematite, lithiumGlass, Items.coal, Items.graphite
         );
     }
 }

@@ -1,73 +1,54 @@
 package ci.content.blocks;
 
-import arc.graphics.Color;
-import ci.content.*;
-import ci.world.draw.*;
+import ci.content.CIFx;
+import ci.content.CIItems;
+import ci.world.blocks.production.*;
+import ci.world.draw.DrawFurnaceFire;
 import mindustry.content.Items;
 import mindustry.gen.Sounds;
 import mindustry.type.*;
 import mindustry.world.Block;
-import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.*;
-import mindustry.world.meta.*;
 
 import static mindustry.type.ItemStack.with;
 
 public class CICraftingBlocks {
     public static Block
-            cobalithForge, graphiteKiln;
+            graphitePress, glassFurnace;
 
     public static void load() {
-
-        cobalithForge = new GenericCrafter("cobalith-forge"){{
-            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 30, CIItems.lithium, 20));
-
+        graphitePress = new ImpactCrafter("graphite-press"){{
+            requirements(Category.crafting, with(CIItems.cobalt, 60, CIItems.hematite, 25));
             size = 2;
-
-            craftTime = 85;
-            consumeItems(with(CIItems.cobalt, 1, CIItems.lithium, 1));
-            outputItem = new ItemStack(CIItems.cobalith, 1);
-            consumePower(0.8f);
-
-            researchCostMultiplier = 0.25f;
-
-            ambientSound = Sounds.loopSmelter;
-            ambientSoundVolume = 0.15f;
-
-            drawer = new DrawMulti(new DrawDefault(),
-                    new SteamParticles(){{
-                        color = Color.lightGray;
-                        alpha = 0.7f;
-                        particleSize = 2.4f;
-                        particles = 17;
-                        particleRad = 3.8f;
-                        particleLife = 115f;
-                        reverse = true;
-                        rotateScl = 10f;
-                    }});
+            health = 220;
+            craftTime = 90f;
+            craftEffect = CIFx.pressCrush;
+            updateEffect = CIFx.pressDust;
+            updateEffectChance = 0.04f;
+            ambientSound = Sounds.loopMachine;
+            ambientSoundVolume = 0.03f;
+            outputItem = new ItemStack(Items.graphite, 1);
+            consumeItem(Items.coal, 2);
         }};
 
-        graphiteKiln = new GenericCrafter("graphite-kiln"){{
-            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 30, CIItems.lithium, 20, CIItems.cobalith, 5));
-
-            squareSprite = false;
+        glassFurnace = new FurnaceCrafter("glass-furnace"){{
+            requirements(Category.crafting, with(CIItems.cobalt, 80, CIItems.hematite, 40, CIItems.lithium, 30));
             size = 2;
-            craftTime = 160;
-
-            craftEffect = CIFx.CISteam;
-            consumeItems(with(Items.coal, 2));
-            outputItem = new ItemStack(Items.graphite, 1);
-            consumePower(0.5f);
-
-            researchCostMultiplier = 0.5f;
-
+            health = 240;
+            craftTime = 60f;
+            hasPower = true;
+            craftEffect = CIFx.furnaceFlare;
+            craftSound = Sounds.shootFlame;
+            craftSoundVolume = 0.12f;
+            igniteEffect = CIFx.furnaceIgnite;
+            coolEffect = CIFx.furnaceCool;
+            spatterEffect = CIFx.meltSpatter;
+            drawer = new DrawMulti(new DrawDefault(), new DrawFurnaceFire());
             ambientSound = Sounds.loopSmelter;
-            ambientSoundVolume = 0.15f;
-
-            drawer = new DrawMulti(new DrawDefault(), new DrawTemp(){{
-                suffix = "-heat";
-                color = lightColor = Color.valueOf("ff6214");
-            }});
+            ambientSoundVolume = 0.05f;
+            outputItem = new ItemStack(CIItems.lithiumGlass, 1);
+            consumeItems(with(Items.sand, 2, CIItems.lithium, 1));
+            consumePower(0.6f);
         }};
     }
 }
