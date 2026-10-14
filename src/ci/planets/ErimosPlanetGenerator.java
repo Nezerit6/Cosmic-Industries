@@ -14,10 +14,10 @@ import mindustry.world.TileGen;
 
 import static mindustry.Vars.state;
 
-public class NoviaPlanetGenerator extends PlanetGenerator {
+public class ErimosPlanetGenerator extends PlanetGenerator {
     public Block[]
             floors = {CIEnvironmentBlocks.tektiteFloor, CIEnvironmentBlocks.sandstoneFloor, CIEnvironmentBlocks.hematiteFloor, CIEnvironmentBlocks.dolomiteFloor},
-            walls = {CIEnvironmentBlocks.tektiteWall, CIEnvironmentBlocks.sandstoneWall, CIEnvironmentBlocks.oldHematiteRock, CIEnvironmentBlocks.dolomiteWall};
+            walls = {CIEnvironmentBlocks.tektiteWall, CIEnvironmentBlocks.sandstoneWall, CIEnvironmentBlocks.hematiteRock, CIEnvironmentBlocks.dolomiteWall};
 
     public float rawHeight(Vec3 position) {
         return Simplex.noise3d(seed, 6, 0.5, 1f / 2.5f, position.x, position.y, position.z);

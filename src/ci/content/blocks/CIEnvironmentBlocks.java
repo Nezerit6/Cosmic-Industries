@@ -7,15 +7,14 @@ import mindustry.world.blocks.environment.*;
 
 public class CIEnvironmentBlocks {
     public static Block
-            sandstoneFloor, concreteFloor, dolomiteFloor, hematiteFloor, tektiteFloor,
-            sandstoneWall, concreteWall, dolomiteWall, oldHematiteRock, tektiteWall,
+            sandstoneFloor, dolomiteFloor, hematiteFloor, tektiteFloor,
+            sandstoneWall, dolomiteWall, hematiteRock, tektiteWall,
             coalOre, hematiteOre;
 
     public static void load() {
         sandstoneFloor = new Floor("sandstone-floor", 3){{
             itemDrop = Items.sand;
         }};
-        concreteFloor = new Floor("concrete-floor", 4);
         dolomiteFloor = new Floor("dolomite-floor", 4);
         hematiteFloor = new Floor("hematite-floor", 4);
         tektiteFloor = new Floor("tektite-floor", 4);
@@ -23,13 +22,10 @@ public class CIEnvironmentBlocks {
         sandstoneWall = new StaticWall("sandstone-wall"){{
             variants = 2;
         }};
-        concreteWall = new StaticWall("concrete-wall"){{
-            variants = 4;
-        }};
         dolomiteWall = new StaticWall("dolomite-wall"){{
             variants = 2;
         }};
-        oldHematiteRock = new StaticWall("old-hematite-rock"){{
+        hematiteRock = new StaticWall("hematite-rock"){{
             variants = 4;
         }};
         tektiteWall = new StaticWall("tektite-wall"){{

@@ -8,7 +8,7 @@ import mindustry.type.*;
 public class CIItems {
     public static Item cobalt, lithium, cobalith, hematite, lithiumGlass;
 
-    public static final Seq<Item> noviaItems = new Seq<>();
+    public static final Seq<Item> erimosItems = new Seq<>();
 
     public static void load() {
 
@@ -41,7 +41,7 @@ public class CIItems {
             charge = 0.2f;
         }};
 
-        noviaItems.addAll(
+        erimosItems.addAll(
                 cobalt, lithium, cobalith, hematite, lithiumGlass, Items.coal, Items.graphite
         );
     }

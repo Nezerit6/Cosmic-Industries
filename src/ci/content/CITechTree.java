@@ -8,7 +8,7 @@ import static mindustry.content.TechTree.nodeProduce;
 
 public class CITechTree {
     public static void load() {
-        CIPlanets.novia.techTree = nodeRoot("Novia", CIStorageBlocks.emergencyCapsule, () -> {
+        CIPlanets.erimos.techTree = nodeRoot("erimos", CIStorageBlocks.emergencyCapsule, () -> {
             nodeProduce(CIItems.cobalt, () -> {
                 node(CIItems.lithium, () -> {
                     node(CIItems.cobalith, () -> {
