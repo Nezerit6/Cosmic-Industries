@@ -14,6 +14,7 @@ import mindustry.graphics.*;
 import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.game.Team;
 
 import static mindustry.Vars.*;
 
@@ -26,6 +27,11 @@ public class CrashCore extends CoreBlock {
 
     public static boolean falling() {
         return renderer.getLandTime() > 0f && !renderer.isLaunching();
+    }
+
+    @Override
+    public TextureRegion[] icons() {
+        return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
     }
 
     @Override
