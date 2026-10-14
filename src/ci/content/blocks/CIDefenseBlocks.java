@@ -23,7 +23,7 @@ import static mindustry.type.ItemStack.with;
 public class CIDefenseBlocks {
     public static Block
             // Walls
-            cobaltWall, cobaltWallLarge,
+            hematiteWall, hematiteWallLarge,
     // Turrets
     spark,
 
@@ -32,16 +32,17 @@ public class CIDefenseBlocks {
 
     public static void load() {
         // Walls
-        cobaltWall = new Wall("cobalt-wall"){{
-            requirements(Category.defense, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 6));
-            size = 1;
-            health = 920;
+        int wallHealthMultiplier = 4;
+
+        hematiteWall = new Wall("hematite-wall"){{
+            requirements(Category.defense, with(CIItems.hematite, 6));
+            health = 95 * wallHealthMultiplier;
         }};
 
-        cobaltWallLarge = new Wall("cobalt-wall-large"){{
+        hematiteWallLarge = new Wall("hematite-wall-large"){{
+            requirements(Category.defense, with(CIItems.hematite, 24));
             size = 2;
-            health = 1840;
-            requirements(Category.defense, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 24));
+            health = 95 * 4 * wallHealthMultiplier;
         }};
 
         // Turrets

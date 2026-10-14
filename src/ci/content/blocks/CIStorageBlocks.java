@@ -1,36 +1,28 @@
 package ci.content.blocks;
 
-import ci.content.*;
+import ci.content.CIItems;
+import mindustry.content.UnitTypes;
 import mindustry.type.Category;
 import mindustry.world.Block;
-import mindustry.world.blocks.storage.*;
+import ci.world.blocks.storage.CrashCore;
 import mindustry.world.meta.BuildVisibility;
 
 import static mindustry.type.ItemStack.with;
 
 public class CIStorageBlocks {
     public static Block
-            storage, coreHeart;
+            emergencyCapsule;
 
     public static void load() {
-        storage = new StorageBlock("Core1"){{
-            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 170));
-            size = 3;
-            itemCapacity = 500;
-            scaledHealth = 35;
-        }};
-
-        coreHeart = new CoreBlock("Core2"){{
-            requirements(Category.effect, BuildVisibility.sandboxOnly, with(CIItems.cobalt, 800, CIItems.lithium, 500, CIItems.cobalith, 300));
+        emergencyCapsule = new CrashCore("emergency-capsule"){{
+            requirements(Category.effect, BuildVisibility.editorOnly, with(CIItems.cobalt, 600, CIItems.hematite, 300));
             alwaysUnlocked = true;
-
             isFirstTier = true;
-            health = 2000;
-            itemCapacity = 3000;
-            size = 4;
-            unitCapModifier = 8;
-            squareSprite = false;
+            size = 2;
+            health = 900;
+            itemCapacity = 2500;
+            unitCapModifier = 6;
+            unitType = UnitTypes.alpha;
         }};
-
     }
 }

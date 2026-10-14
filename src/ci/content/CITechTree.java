@@ -8,12 +8,13 @@ import static mindustry.content.TechTree.nodeProduce;
 
 public class CITechTree {
     public static void load() {
-        CIPlanets.novia.techTree = nodeRoot("Novia", CIStorageBlocks.coreHeart, () -> {
+        CIPlanets.novia.techTree = nodeRoot("Novia", CIStorageBlocks.emergencyCapsule, () -> {
             nodeProduce(CIItems.cobalt, () -> {
                 node(CIItems.lithium, () -> {
                     node(CIItems.cobalith, () -> {
                     });
                 });
+                node(CIItems.hematite);
                 node(Items.coal, () -> {
                     node(Items.graphite);
                 });
@@ -24,7 +25,12 @@ public class CITechTree {
                 });
             });
 
-            nodeProduce(CIDistributionBlocks.pipeConveyor, () -> {
+            node(CIDistributionBlocks.conveyor, () -> {
+                node(CIDistributionBlocks.router);
+            });
+
+            node(CIDefenseBlocks.hematiteWall, () -> {
+                node(CIDefenseBlocks.hematiteWallLarge);
             });
         });
     }
