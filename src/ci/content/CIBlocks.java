@@ -7,6 +7,7 @@ public class CIBlocks {
     public static void load(){
         CIEnvironmentBlocks.load();
         CIDistributionBlocks.load();
+        CIProductionBlocks.load();
         CICraftingBlocks.load();
         CIDefenseBlocks.load();
         CIStorageBlocks.load();

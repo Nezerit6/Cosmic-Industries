@@ -20,6 +20,8 @@ public class CITechTree {
                 });
             });
 
+            node(CIProductionBlocks.pileDrill);
+
             node(CICraftingBlocks.graphitePress, () -> {
                 node(CICraftingBlocks.glassFurnace, () -> {
                 });
