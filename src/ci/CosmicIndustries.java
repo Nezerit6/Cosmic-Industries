@@ -10,7 +10,7 @@ public class CosmicIndustries extends Mod {
 
     @Override
     public void loadContent() {
-
+        CISounds.load();
         CIItems.load();
         CIBlocks.load();
         CIPlanets.load();

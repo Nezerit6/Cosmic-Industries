@@ -2,6 +2,7 @@ package ci.content.blocks;
 
 import ci.content.CIFx;
 import ci.content.CIItems;
+import ci.content.CISounds;
 import ci.world.blocks.production.*;
 import ci.world.draw.DrawFurnaceFire;
 import mindustry.content.Items;
@@ -25,6 +26,7 @@ public class CICraftingBlocks {
             craftEffect = CIFx.pressCrush;
             updateEffect = CIFx.pressDust;
             updateEffectChance = 0.04f;
+            craftSound = CISounds.pressImpact;
             ambientSound = Sounds.loopMachine;
             ambientSoundVolume = 0.03f;
             outputItem = new ItemStack(Items.graphite, 1);

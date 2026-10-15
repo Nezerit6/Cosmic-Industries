@@ -1,11 +1,15 @@
 package ci.content;
 
 import arc.audio.Sound;
-import mindustry.Vars;
+
+import static mindustry.Vars.tree;
 
 public class CISounds {
-    public static Sound
+    public static Sound bigLaserShoot, smallLaserShoot, pressImpact;
 
-            bigLaserShoot = Vars.tree.loadSound("bigLaserShoot"),
-            smallLaserShoot = Vars.tree.loadSound("smallLaserShoot");
+    public static void load() {
+        bigLaserShoot = tree.loadSound("bigLaserShoot");
+        smallLaserShoot = tree.loadSound("smallLaserShoot");
+        pressImpact = tree.loadSound("pressImpact");
+    }
 }
