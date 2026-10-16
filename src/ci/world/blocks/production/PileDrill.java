@@ -5,29 +5,42 @@ import arc.audio.Sound;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
-import arc.util.*;
 import arc.util.io.*;
+import ci.content.CIFx;
 import mindustry.content.Fx;
 import mindustry.entities.Effect;
-import mindustry.game.Team;
 import mindustry.gen.Sounds;
 import mindustry.graphics.*;
+import mindustry.type.Item;
 import mindustry.world.blocks.production.Drill;
 
+import static mindustry.Vars.tilesize;
+
 public class PileDrill extends Drill {
-    public float liftTime = 90f, dropTime = 6f, grindTime = 240f, slowTime = 60f, raiseTime = 50f, coolTime = 110f;
-    public float liftScale = 0.35f, shadowOffset = 6f;
-    public float spinSpeed = 9f;
-    public float impactShake = 2.5f, grindShake = 0.35f;
-    public Color coolColor = Color.valueOf("ff7a3d");
-    public Effect impactEffect = Fx.mineImpactWave, grindEffect = Fx.mineSmall, coolEffect = Fx.steam;
-    public float grindEffectChance = 0.06f;
-    public Sound impactSound = Sounds.drillImpact, chargeSound = Sounds.drillCharge;
+    public static final int lift = 0, strike = 1, drill = 2, slow = 3, raise = 4, cool = 5;
+
+    public float[] phaseTimes = {90f, 6f, 480f, 60f, 60f, 120f};
+    public float liftScale = 0.35f, shadowOffset = 6f, spinSpeed = 9f;
+    public float impactShake = 4f, impactVolume = 1f, drillShake = 0.6f;
+    public float grindChance = 0.18f, coolEffectChance = 0.07f;
+    public float heatAlpha = 0.65f;
+    public Color heatColor = Color.valueOf("ff5512");
+    public Sound impactSound = Sounds.drillImpact, impactCrackSound = Sounds.rockBreak;
+    public Effect impactEffect = CIFx.pileStrike, grindEffect = CIFx.pileGrind, coolEffect = Fx.steam;
 
     public TextureRegion headRegion;
 
     public PileDrill(String name) {
         super(name);
+        hardnessDrillMultiplier = 0f;
+        ambientSoundVolume = 0.08f;
+    }
+
+    @Override
+    public void init() {
+        int tiles = size * size;
+        drillTime = cycleTime() * 2f * tiles / (tiles + 1);
+        super.init();
     }
 
     @Override
@@ -38,117 +51,121 @@ public class PileDrill extends Drill {
 
     @Override
     public TextureRegion[] icons() {
-        return new TextureRegion[]{region, headRegion, teamRegions[Team.sharded.id]};
+        return new TextureRegion[]{region, headRegion};
+    }
+
+    @Override
+    public float getDrillTime(Item item) {
+        return cycleTime() * 2f * returnCount / (returnCount + 1);
     }
 
     public float cycleTime() {
-        return liftTime + dropTime + grindTime + slowTime + raiseTime + coolTime;
+        float sum = 0f;
+        for(float t : phaseTimes) sum += t;
+        return sum;
     }
 
     public class PileDrillBuild extends DrillBuild {
         public int phase;
-        public float phaseTime, spin, mined;
+        public float phaseTime, mined, spin;
 
-        public float phaseLength() {
-            return phaseLength(phase);
+        public float phaseProgress() {
+            return Mathf.clamp(phaseTime / phaseTimes[phase]);
         }
 
-        public float phaseLength(int index) {
-            return switch(index) {
-                case 0 -> liftTime;
-                case 1 -> dropTime;
-                case 2 -> grindTime;
-                case 3 -> slowTime;
-                case 4 -> raiseTime;
-                default -> coolTime;
+        public float height() {
+            return phase == lift ? Interp.smooth.apply(phaseProgress()) : phase == strike ? 1f - Interp.pow3In.apply(phaseProgress()) : 0f;
+        }
+
+        public float spinFract() {
+            return phase == drill ? 1f : phase == slow ? 1f - phaseProgress() : 0f;
+        }
+
+        public float heat() {
+            return switch(phase) {
+                case drill -> Interp.pow2Out.apply(phaseProgress());
+                case slow, raise -> 1f;
+                case cool -> 1f - Interp.pow2In.apply(phaseProgress());
+                default -> 0f;
             };
         }
 
-        public float phaseProgress() {
-            return Mathf.clamp(phaseTime / phaseLength());
-        }
-
-        public float headLift() {
-            float p = phaseProgress();
-            switch(phase) {
-                case 0: return Interp.smooth.apply(p);
-                case 1: return 1f - Interp.pow3In.apply(p);
-                case 4: return Interp.smooth.apply(p);
-                case 5: return 1f;
-                default: return 0f;
-            }
-        }
-
-        public float spinSpeed() {
-            if(phase == 2) return spinSpeed;
-            if(phase == 3) return spinSpeed * (1f - phaseProgress());
-            return 0f;
+        public float headRadius() {
+            return size * tilesize * 0.3f;
         }
 
         @Override
-        public void updateTile() {
-            if(timer(timerDump, dumpTime)) {
-                dump(dominantItem != null && items.has(dominantItem) ? dominantItem : null);
+        public boolean shouldConsume() {
+            return enabled && dominantItem != null && (phase != lift || phaseTime > 0f || items.total() < itemCapacity);
+        }
+
+        @Override
+        public boolean shouldAmbientSound() {
+            return efficiency > 0.01f && spinFract() > 0f;
+        }
+
+        @Override
+        public float ambientVolume() {
+            return super.ambientVolume() * spinFract();
+        }
+
+        @Override
+        public void onProximityUpdate() {
+            super.onProximityUpdate();
+            if(dominantItem == null) {
+                phase = lift;
+                phaseTime = mined = 0f;
             }
-
-            if(dominantItem == null || dominantItems <= 0) {
-                warmup = Mathf.approachDelta(warmup, 0f, warmupSpeed);
-                return;
-            }
-
-            boolean full = items.total() >= itemCapacity;
-            boolean active = efficiency > 0 && (!full || phase != 0 || phaseTime > 0f);
-            warmup = Mathf.approachDelta(warmup, active ? 1f : 0f, warmupSpeed);
-            if(!active) return;
-
-            float delay = getDrillTime(dominantItem);
-            float dt = edelta();
-            phaseTime += dt;
-            timeDrilled += dt;
-            lastDrillSpeed = dominantItems * 60f / delay * efficiency;
-
-            if(phase == 2 || phase == 3) {
-                mined += dt * (phase == 2 ? 1f : 1f - phaseProgress()) * dominantItems * cycleTime() / delay / (grindTime + slowTime * 0.5f) / 2f;
-            }
-            spin += spinSpeed() * dt;
-
-            if(phase == 2) {
-                if(Mathf.chanceDelta(grindEffectChance)) {
-                    grindEffect.at(x + Mathf.range(size * 3f), y + Mathf.range(size * 3f), dominantItem.color);
-                }
-                Effect.shake(grindShake, 2f, this);
-            }
-
-            if(phaseTime < phaseLength()) return;
-            phaseTime = 0f;
-
-            switch(phase) {
-                case 0 -> chargeSound.at(x, y, Mathf.random(0.9f, 1.1f), 0.4f);
-                case 1 -> {
-                    impactEffect.at(x, y, dominantItem.color);
-                    impactSound.at(x, y, Mathf.random(0.8f, 1f), 0.6f);
-                    Effect.shake(impactShake, impactShake * 4f, this);
-                    mined += dominantItems * cycleTime() / delay / 2f;
-                }
-                case 4 -> {
-                    int amount = (int)mined;
-                    mined -= amount;
-                    for(int i = 0; i < amount && items.total() < itemCapacity; i++) {
-                        offload(dominantItem);
-                    }
-                    drillEffect.at(x, y, dominantItem.color);
-                }
-                case 5 -> coolEffect.at(x, y);
-            }
-
-            phase = (phase + 1) % 6;
         }
 
         @Override
         public float progress() {
             float done = phaseTime;
-            for(int i = 0; i < phase; i++) done += phaseLength(i);
+            for(int i = 0; i < phase; i++) done += phaseTimes[i];
             return Mathf.clamp(done / cycleTime());
+        }
+
+        @Override
+        public void updateTile() {
+            if(timer(timerDump, dumpTime / timeScale)) dump(dominantItem != null && items.has(dominantItem) ? dominantItem : null);
+
+            if(dominantItem == null || dominantItems <= 0 || efficiency <= 0f) {
+                lastDrillSpeed = 0f;
+                warmup = Mathf.approachDelta(warmup, 0f, warmupSpeed);
+                return;
+            }
+
+            float speed = Mathf.sqr(Mathf.lerp(1f, liquidBoostIntensity, optionalEfficiency) * efficiency), dt = delta() * speed;
+            warmup = Mathf.approachDelta(warmup, 1f, warmupSpeed);
+            lastDrillSpeed = (dominantItems + 1) / 2f / cycleTime() * speed;
+            phaseTime += dt;
+            spin += spinSpeed * spinFract() * dt;
+
+            if(wasVisible) {
+                float f = spinFract(), a = Mathf.random(360f), r = headRadius();
+                if(Mathf.chanceDelta(grindChance * f)) grindEffect.at(x + Angles.trnsx(a, r), y + Angles.trnsy(a, r), a, dominantItem.color);
+                if(f > 0f) Effect.shake(drillShake * f, 2f, this);
+                if(phase == cool && Mathf.chanceDelta(coolEffectChance * heat())) coolEffect.at(x + Mathf.range(r * 0.6f), y + Mathf.range(r * 0.6f));
+            }
+
+            if(phaseTime < phaseTimes[phase]) return;
+            phaseTime -= phaseTimes[phase];
+
+            if(phase == strike && wasVisible) {
+                impactEffect.at(x, y, headRadius(), dominantItem.color);
+                impactSound.at(x, y, Mathf.random(0.8f, 1f), impactVolume);
+                impactCrackSound.at(x, y, Mathf.random(0.7f, 0.9f), impactVolume * 0.6f);
+                Effect.shake(impactShake, impactShake * 4f, this);
+            } else if(phase == slow) {
+                mined += Mathf.random(1, dominantItems);
+                int out = 0;
+                for(; out < (int)mined && items.total() < itemCapacity; out++) offload(dominantItem);
+                mined -= out;
+                if(out > 0 && wasVisible) drillEffect.at(x, y, dominantItem.color);
+            }
+
+            phase = (phase + 1) % phaseTimes.length;
+            if(phase == lift && items.total() >= itemCapacity) phaseTime = 0f;
         }
 
         @Override
@@ -156,31 +173,35 @@ public class PileDrill extends Drill {
             Draw.rect(region, x, y);
             drawDefaultCracks();
 
-            float lift = headLift();
-            float scl = 1f + lift * liftScale;
-            float rot = spin;
+            float h = height();
+            Draw.scl(1f + h * liftScale);
 
-            Draw.z(Layer.blockOver);
-            Draw.color(Pal.shadow, Pal.shadow.a * lift);
-            Draw.rect(headRegion, x - shadowOffset * lift, y - shadowOffset * lift, headRegion.width * headRegion.scl() * scl, headRegion.height * headRegion.scl() * scl, rot);
-            Draw.color();
-
-            Draw.z(Layer.blockOver + 0.1f);
-            float w = headRegion.width * headRegion.scl() * scl, h = headRegion.height * headRegion.scl() * scl;
-            Draw.rect(headRegion, x, y, w, h, rot);
-
-            if(phase == 5) {
-                float heat = 1f - phaseProgress();
-                Draw.blend(Blending.additive);
-                Draw.color(coolColor, heat * 0.6f);
-                Draw.rect(headRegion, x, y, w, h, rot);
-                Draw.blend();
+            if(h > 0.001f) {
+                Draw.z(Layer.blockOver);
+                Draw.color(Pal.shadow, Pal.shadow.a * h);
+                Draw.rect(headRegion, x - shadowOffset * h, y - shadowOffset * h, spin);
                 Draw.color();
             }
 
-            TextureRegion team = teamRegions[this.team.id];
-            if(team == teamRegion) Draw.color(this.team.color);
-            Draw.rect(team, x, y, team.width * team.scl() * scl, team.height * team.scl() * scl, rot);
+            Draw.z(Layer.blockOver + 0.1f);
+            Drawf.spinSprite(headRegion, x, y, spin);
+            if(dominantItem != null && drawMineItem) {
+                Draw.color(dominantItem.color);
+                Drawf.spinSprite(itemRegion, x, y, spin);
+            }
+
+            float heat = heat() * heatAlpha;
+            if(heat > 0.001f) {
+                float r = Mathf.mod(spin, 90f), t = r / 90f;
+                Draw.blend(Blending.additive);
+                Draw.color(heatColor, heat * (1f - t));
+                Draw.rect(headRegion, x, y, r);
+                Draw.alpha(heat * t);
+                Draw.rect(headRegion, x, y, r - 90f);
+                Draw.blend();
+                Drawf.light(x, y, headRadius() * 3f, heatColor, heat);
+            }
+
             Draw.reset();
             Draw.z(Layer.block);
         }

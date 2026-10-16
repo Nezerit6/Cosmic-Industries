@@ -15,5 +15,8 @@ public class CIPal {
             hematiteLight = Color.valueOf("ffb39e"),
             pink = Color.valueOf("ffc3e4"),
             dustyOutline = Color.valueOf("2b2631"),
-            darkPink = Color.valueOf("bb6d9a");
+            darkPink = Color.valueOf("bb6d9a"),
+            crust = Color.valueOf("2b1d19"),
+            smokeDark = Color.valueOf("4a4950"),
+            smokeLight = Color.valueOf("a3a1a8");
 }

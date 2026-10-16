@@ -136,4 +136,78 @@ public class CIFx {
         color(Color.gray, Perspective.fade(z) * Mathf.clamp(e.fout() * 1.6f - 0.1f) * 0.8f);
         Fill.circle(p.x, p.y, (3.4f - e.fin() * 2f) * e.rotation * Perspective.depthScale(z));
     }).layer(Layer.space + 1f);
+
+    private static final Rand rand = new Rand();
+
+    public static final Effect pileStrike = new Effect(80f, 120f, e -> {
+        float r = e.rotation, k = e.fin();
+        rand.setSeed(e.id);
+        for(int i = 0; i < 8; i++) {
+            float ang = i * 45f + rand.range(15f);
+            crack(e.x + trnsx(ang, r * 0.8f), e.y + trnsy(ang, r * 0.8f), ang, r * (0.6f + rand.random(0.6f)) * Interp.pow5Out.apply(Math.min(k * 4f, 1f)), 1.2f, 3, 1f - Interp.pow2In.apply(k), 0f);
+        }
+        float ring = Math.min(k * 2.5f, 1f);
+        color(CIPal.smokeLight, CIPal.ash, ring);
+        alpha(1f - ring);
+        stroke(3f * (1f - ring));
+        Lines.circle(e.x, e.y, r + r * 1.6f * Interp.pow3Out.apply(ring));
+        for(int i = 0; i < 18; i++) {
+            float ang = i * 20f + rand.range(8f), dist = r * (0.9f + rand.random(1.2f) * Interp.pow3Out.apply(k));
+            color(CIPal.smokeLight, CIPal.smokeDark, k);
+            alpha((1f - k) * 0.5f);
+            Fill.circle(e.x + trnsx(ang, dist), e.y + trnsy(ang, dist), 1.2f + k * 3.5f * rand.random(0.6f, 1f));
+        }
+        for(int i = 0; i < 10; i++) {
+            float ang = rand.random(360f), dist = r * (0.5f + rand.random(1.5f)), life = rand.random(0.4f, 0.8f);
+            float f = Mathf.clamp(k / life);
+            if(f >= 1f) continue;
+            float d = r * 0.8f + dist * Interp.pow3Out.apply(f);
+            float px = e.x + trnsx(ang, d), py = e.y + trnsy(ang, d);
+            color(e.color, Tmp.c1.set(e.color).mul(0.5f), f);
+            stroke(1.2f * (1f - f) + 0.3f);
+            lineAngle(px, py, ang + 180f, 3f * (1f - f));
+            Fill.square(px, py, 0.6f + (1f - f) * 0.8f, 45f);
+        }
+        reset();
+    });
+    public static final Effect pileGrind = new Effect(60f, e -> {
+        e.scaled(24f, s -> {
+            float len = Interp.pow2Out.apply(s.fin()) * 9f;
+            color(e.color, Tmp.c1.set(e.color).mul(0.55f), s.fin());
+            Fill.square(e.x + trnsx(e.rotation, len), e.y + trnsy(e.rotation, len), 0.4f + s.fout() * 0.8f, 45f);
+
+            if(Mathf.randomSeed(e.id) < 0.5f) {
+                float sa = e.rotation + Mathf.randomSeedRange(e.id + 1, 20f), sl = len * 1.4f;
+                color(CIPal.melt, CIPal.heat, s.fin());
+                stroke(0.6f * s.fout() + 0.2f);
+                lineAngle(e.x + trnsx(sa, sl), e.y + trnsy(sa, sl), sa, 1f + s.fout() * 2.5f);
+            }
+        });
+
+        if(Mathf.randomSeed(e.id + 2) < 0.35f) {
+            float dist = Interp.pow2Out.apply(e.fin()) * 8f;
+            color(CIPal.smokeLight, CIPal.smokeDark, e.fin());
+            alpha(Mathf.slope(e.fin()) * 0.4f);
+            Fill.circle(e.x + trnsx(e.rotation, dist), e.y + trnsy(e.rotation, dist), 0.8f + e.fin() * 2.4f);
+        }
+        reset();
+    });
+
+    private static void crack(float x, float y, float ang, float len, float width, int segments, float fade, float glow) {
+        float px = x, py = y;
+        for(int s = 1; s <= segments; s++) {
+            float k = s / (float)segments, a = ang + rand.range(14f);
+            float nx = px + trnsx(a, len / segments), ny = py + trnsy(a, len / segments), w = width * (1.15f - k);
+            color(CIPal.crust, 0.9f * fade);
+            stroke(w + 0.6f);
+            line(px, py, nx, ny);
+            if(glow > 0f) {
+                color(Tmp.c1.set(CIPal.melt).lerp(CIPal.heat, k).lerp(CIPal.cinder, 1f - glow), glow * fade);
+                stroke(w * 0.45f);
+                line(px, py, nx, ny);
+            }
+            px = nx;
+            py = ny;
+        }
+    }
 }
