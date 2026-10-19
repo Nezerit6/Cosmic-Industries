@@ -1,6 +1,8 @@
 package ci.content.blocks;
 
 import ci.content.CIItems;
+import ci.world.blocks.environment.CICliff;
+import ci.world.blocks.environment.CIFloor;
 import mindustry.content.Items;
 import mindustry.world.Block;
 import mindustry.world.blocks.environment.*;
@@ -9,15 +11,15 @@ public class CIEnvironmentBlocks {
     public static Block
             sandstoneFloor, dolomiteFloor, hematiteFloor, tektiteFloor,
             sandstoneWall, dolomiteWall, hematiteRock, tektiteWall,
-            coalOre, hematiteOre;
+            coalOre, hematiteOre, cliff;
 
     public static void load() {
-        sandstoneFloor = new Floor("sandstone-floor", 3){{
+        sandstoneFloor = new CIFloor("sandstone-floor", 3){{
             itemDrop = Items.sand;
         }};
-        dolomiteFloor = new Floor("dolomite-floor", 4);
-        hematiteFloor = new Floor("hematite-floor", 4);
-        tektiteFloor = new Floor("tektite-floor", 4);
+        dolomiteFloor = new CIFloor("dolomite-floor", 4);
+        hematiteFloor = new CIFloor("hematite-floor", 4);
+        tektiteFloor = new CIFloor("tektite-floor", 4);
 
         sandstoneWall = new StaticWall("sandstone-wall"){{
             variants = 2;
@@ -42,5 +44,7 @@ public class CIEnvironmentBlocks {
             oreThreshold = 0.86f;
             oreScale = 22f;
         }};
+
+        cliff = new CICliff("cliff");
     }
 }
