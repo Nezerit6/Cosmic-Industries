@@ -6,6 +6,7 @@ import arc.math.geom.Mat3D;
 import arc.struct.Seq;
 import arc.util.Tmp;
 import ci.content.blocks.CIStorageBlocks;
+import ci.graphics.DustRing;
 import ci.planets.ErimosPlanetGenerator;
 import mindustry.content.Blocks;
 import mindustry.graphics.g3d.*;
@@ -33,9 +34,16 @@ public class CIPlanets {
 
         erimos = new Planet("erimos", chromis, 1f, 3){{
             generator = new ErimosPlanetGenerator();
-            meshLoader = () -> new HexMesh(this, 5);
+            meshLoader = () -> new HexMesh(this, 6);
+            cloudMeshLoader = () -> new DustRing(this, Color.valueOf("d3ae8d"),
+                    new float[]{1.65f, 1.75f, 1.84f, 2f, 2.1f},
+                    new float[]{1.74f, 1.83f, 1.96f, 2.06f, 2.15f},
+                    new float[]{0.6f, 1f, 1.2f, 0.7f, 0.35f});
+            camRadius = 0.6f;
             defaultCore = CIStorageBlocks.emergencyCapsule;
-            atmosphereColor = Color.valueOf("41384a");
+            atmosphereColor = Color.valueOf("1a2030");
+            atmosphereRadIn = 0.02f;
+            atmosphereRadOut = 0.14f;
             iconColor = Color.valueOf("947f6b");
             landCloudColor = Color.valueOf("6b5d4f");
             orbitRadius = 40f;

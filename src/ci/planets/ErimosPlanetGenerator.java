@@ -1,72 +1,99 @@
 package ci.planets;
 
-import arc.graphics.Color;
-import arc.math.Mathf;
-import arc.math.geom.Vec3;
-import arc.struct.Seq;
-import arc.util.noise.Simplex;
-import ci.content.blocks.CIEnvironmentBlocks;
-import ci.content.blocks.CIStorageBlocks;
-import mindustry.content.Blocks;
-import mindustry.maps.generators.PlanetGenerator;
-import mindustry.world.Block;
-import mindustry.world.TileGen;
+import arc.graphics.*;
+import arc.math.geom.*;
+import arc.util.noise.*;
+import mindustry.game.*;
+import mindustry.maps.generators.*;
+import mindustry.type.*;
+import mindustry.world.*;
 
-import static mindustry.Vars.state;
+import static ci.content.blocks.CIEnvironmentBlocks.*;
 
 public class ErimosPlanetGenerator extends PlanetGenerator {
-    public Block[]
-            floors = {CIEnvironmentBlocks.tektiteFloor, CIEnvironmentBlocks.sandstoneFloor, CIEnvironmentBlocks.hematiteFloor, CIEnvironmentBlocks.dolomiteFloor},
-            walls = {CIEnvironmentBlocks.tektiteWall, CIEnvironmentBlocks.sandstoneWall, CIEnvironmentBlocks.hematiteRock, CIEnvironmentBlocks.dolomiteWall};
+    public float lowland = 0.4f, plateau = 0.62f;
 
-    public float rawHeight(Vec3 position) {
-        return Simplex.noise3d(seed, 6, 0.5, 1f / 2.5f, position.x, position.y, position.z);
-    }
+    static final Color
+            glassDark = Color.valueOf("1f1917"),
+            glass = Color.valueOf("332926"),
+            dolomite = Color.valueOf("524339"),
+            sandDark = Color.valueOf("bf9a76"),
+            sand = Color.valueOf("d3ae8d"),
+            sandLight = Color.valueOf("e3c4a4"),
+            sandstoneDark = Color.valueOf("7e5a3c"),
+            sandstone = Color.valueOf("a07850"),
+            hematite = Color.valueOf("78403a"),
+            hematiteLight = Color.valueOf("965f54");
 
-    public int index(Vec3 position) {
-        return Mathf.clamp((int)(rawHeight(position) * floors.length), 0, floors.length - 1);
+    public Vec3[] craters = {new Vec3(-0.6f, 0.35f, 0.7f).nor(), new Vec3(0.55f, -0.3f, -0.75f).nor()};
+    public float[] craterRadii = {0.17f, 0.13f};
+
+    float height, base, ridge, crater;
+
+    void sample(Vec3 p){
+        base = Simplex.noise3d(seed, 5, 0.5, 0.9, p.x, p.y, p.z);
+
+        crater = 9f;
+        for(int i = 0; i < craters.length; i++) crater = Math.min(crater, p.dst(craters[i]) / craterRadii[i]);
+
+        ridge = Ridged.noise3d(seed + 1, p.x, p.y, p.z, 2, 2f);
+        if(base < lowland){
+            height = 0.02f;
+        }else if(base < plateau){
+            height = 0.05f + (base - lowland) * 0.3f;
+        }else{
+            height = 0.16f + (base - plateau) * 0.5f;
+            if(ridge > 0.36f) height += (ridge - 0.36f) * 0.8f;
+        }
+
+        if(crater < 0.85f) height = 0.02f;
+        else if(crater < 1.25f) height = Math.max(height, 0.16f);
     }
 
     @Override
-    public float getHeight(Vec3 position) {
-        return Math.max(rawHeight(position) - 0.3f, 0f) * 0.4f;
+    public float getHeight(Vec3 position){
+        sample(position);
+        return height;
     }
 
     @Override
-    public void getColor(Vec3 position, Color out) {
-        out.set(floors[index(position)].mapColor);
-    }
+    public void getColor(Vec3 position, Color out){
+        sample(position);
+        float detail = Simplex.noise3d(seed + 2, 3, 0.5, 3.0, position.x, position.y, position.z);
 
-    @Override
-    protected void genTile(Vec3 position, TileGen tile) {
-        int i = index(position);
-        tile.floor = floors[i];
-        float wall = Simplex.noise3d(seed + 1, 4, 0.5, 1f / 0.09f, position.x, position.y, position.z);
-        if(wall > 0.62f) {
-            tile.block = walls[i];
+        if(crater < 0.85f || (base < lowland && crater > 1.25f)){
+            out.set(detail > 0.58f ? dolomite : detail > 0.45f ? glass : glassDark).a(1f);
+        }else if(crater < 1.25f){
+            out.set(detail > 0.5f ? sandstone : sandstoneDark).a(1f);
+        }else if(base >= plateau && ridge > 0.36f){
+            out.set(detail > 0.5f ? hematiteLight : hematite).a(1f);
+        }else if(base >= plateau){
+            out.set(detail > 0.5f ? sandstone : sandstoneDark).a(1f);
+        }else{
+            out.set(detail > 0.62f ? sandLight : detail > 0.38f ? sand : sandDark).a(1f);
         }
     }
 
+    public static boolean debugLanding = true;
+
     @Override
-    protected void generate() {
-        int cx = width / 2, cy = height / 2;
-        int sx = width / 8, sy = height / 8;
+    public boolean allowLanding(Sector sector){
+        return debugLanding || super.allowLanding(sector);
+    }
 
-        distort(10f, 12f);
-        erase(cx, cy, 14);
-        erase(sx, sy, 8);
-        for(int i = 0; i <= 40; i++) {
-            erase((int)Mathf.lerp(cx, sx, i / 40f), (int)Mathf.lerp(cy, sy, i / 40f), 3);
-        }
+    @Override
+    public int getSectorSize(Sector sector){
+        return 60;
+    }
 
-        ores(Seq.with(CIEnvironmentBlocks.coalOre, CIEnvironmentBlocks.hematiteOre));
-        decoration(0.02f);
+    @Override
+    protected void genTile(Vec3 p, TileGen tile){
+        float n = Simplex.noise3d(seed + 3, 3, 0.5, 60.0, p.x, p.y, p.z);
+        tile.floor = n < 0.45f ? sandstoneFloor : n < 0.58f ? hematiteFloor : n < 0.68f ? dolomiteFloor : tektiteFloor;
+    }
 
-        tiles.getn(sx, sy).setOverlay(Blocks.spawn);
-        tiles.getn(cx, cy).setBlock(CIStorageBlocks.emergencyCapsule, state.rules.defaultTeam);
-
-        state.rules.waves = true;
-        state.rules.waveSpacing = 60f * 90f;
-        state.rules.env = sector.planet.defaultEnv;
+    @Override
+    protected void generate(){
+        tiles.getn(tiles.width / 2, tiles.height / 2).setBlock(sector.planet.defaultCore, Team.sharded);
     }
 }
