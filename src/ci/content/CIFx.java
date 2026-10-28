@@ -7,11 +7,16 @@ import arc.math.geom.*;
 import arc.util.*;
 import ci.graphics.draw3d.*;
 import mindustry.entities.*;
+import mindustry.content.*;
+import mindustry.core.*;
 import mindustry.graphics.*;
+import mindustry.world.*;
+import mindustry.world.blocks.environment.*;
 
 import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.*;
+import static mindustry.Vars.*;
 
 public class CIFx {
     public static final Effect
@@ -94,48 +99,7 @@ public class CIFx {
             Fill.circle(px, py, f < 0.9f ? 0.75f : 1.1f * (1f - f) * 10f);
         }
         reset();
-    }),
-
-    crashScorch = new Effect(900f, 120f, e -> {
-        color(Color.black);
-        for(int i = 0; i < 10; i++) {
-            float ang = Mathf.randomSeed(e.id + i, 360f), len = Mathf.randomSeed(e.id + i * 3, 4f, 15f);
-            alpha(0.22f * e.fout());
-            Fill.circle(e.x + trnsx(ang, len), e.y + trnsy(ang, len), Mathf.randomSeed(e.id + i * 7, 5f, 10f));
-        }
-        alpha(0.3f * e.fout());
-        Fill.circle(e.x, e.y, 13f);
-    }).layer(Layer.scorch),
-
-    crashHeat = new Effect(170f, 80f, e -> {
-        if(!(e.data instanceof TextureRegion)) return;
-        mixcol(Tmp.c2.set(CIPal.heat).lerp(CIPal.ember, e.fin()), 0.75f * e.fout());
-        alpha(e.fout());
-        rect((TextureRegion)e.data, e.x, e.y);
-        mixcol();
-    }).layer(Layer.blockOver),
-
-    crashFlash = new Effect(26f, 140f, e -> {
-        blend(Blending.additive);
-        Fill.light(e.x, e.y, 16, e.rotation * (0.6f + e.finpow() * 0.8f), Tmp.c2.set(Color.white).lerp(CIPal.heat, e.fin()).a(e.fout()), Tmp.c3.set(CIPal.heat).a(0f));
-        blend();
-    }).layer(Layer.flyingUnit + 2f),
-
-    crashFire = new Effect(32f, 1e9f, e -> {
-        float z = (Float)e.data * Perspective.cameraZ(), size = e.rotation * Perspective.depthScale(z), ang = Mathf.randomSeed(e.id, 360f), d = e.finpow() * 7f * size;
-        Vec2 p = Perspective.drawPos(e.x, e.y, z);
-        z(e.time < 8f ? Layer.space - 1f : Layer.space + 1f);
-        color(Tmp.c1.set(Color.white).lerp(CIPal.heat, Mathf.clamp(e.fin() * 2.2f)).lerp(CIPal.ash, Mathf.clamp(e.fin() * 1.8f - 0.7f)), Perspective.fade(z) * e.fout());
-        Fill.circle(p.x + trnsx(ang, d), p.y + trnsy(ang, d), (1.6f + e.fin() * 2.6f) * size);
-    }).layer(Layer.space + 1f),
-
-    crashSmoke = new Effect(220f, 1e9f, e -> {
-        float z = (Float)e.data * Perspective.cameraZ();
-        Vec2 p = Perspective.drawPos(e.x, e.y, z);
-        z(e.time < 8f ? Layer.space - 1f : Layer.space + 1f);
-        color(Color.gray, Perspective.fade(z) * Mathf.clamp(e.fout() * 1.6f - 0.1f) * 0.8f);
-        Fill.circle(p.x, p.y, (3.4f - e.fin() * 2f) * e.rotation * Perspective.depthScale(z));
-    }).layer(Layer.space + 1f);
+    });
 
     private static final Rand rand = new Rand();
 
@@ -192,6 +156,89 @@ public class CIFx {
         }
         reset();
     });
+
+    public static final Effect landFire = new Effect(32f, 1e9f, e -> {
+        if(!(e.data instanceof float[] d)) return;
+        float m = (1f - Mathf.pow(0.96f, Math.min(e.time, d.length > 5 ? d[5] : e.time))) / 0.04f, z = Math.max(d[0] + d[3] * m, 1f);
+        if(!Perspective.canDraw(z)) return;
+        Vec2 p = Perspective.drawPos(e.x + d[1] * m, e.y + d[2] * m, z);
+        float size = e.rotation * Perspective.depthScale(z), ang = Mathf.randomSeed(e.id, 360f), off = e.finpow() * 5f * size;
+        z(e.time < 14f ? Layer.space - 1f : Layer.space + 1f);
+        color(Tmp.c1.set(Color.white).lerp(CIPal.heat, Mathf.clamp(e.fin() * 2.2f)).lerp(CIPal.cinder, Mathf.clamp(e.fin() * 1.8f - 0.6f)), Perspective.fade(z) * Mathf.clamp((Perspective.cameraZ() - z - 40f) / 120f) * e.fout());
+        Fill.circle(p.x + trnsx(ang, off), p.y + trnsy(ang, off), (1.4f + e.fin() * 2.2f) * size);
+    }).layer(Layer.space + 1f);
+    public static final Effect landSmoke = new Effect(120f, 1e9f, e -> {
+        if(!(e.data instanceof float[] d)) return;
+        float m = (1f - Mathf.pow(0.96f, Math.min(e.time, d.length > 5 ? d[5] : e.time))) / 0.04f, z = Math.max(d[0] + d[3] * m, 1f);
+        if(!Perspective.canDraw(z)) return;
+        Vec2 p = Perspective.drawPos(e.x + d[1] * m, e.y + d[2] * m, z);
+        z(e.time < 10f ? Layer.space - 1f : Layer.space + 1f);
+        color(CIPal.smokeLight, CIPal.smokeDark, e.fin());
+        alpha(Perspective.fade(z) * Mathf.clamp((Perspective.cameraZ() - z - 40f) / 120f) * Mathf.clamp(e.fout() * 1.6f - 0.1f) * 0.8f * Mathf.clamp(1f - (e.time - d[5]) / 30f));
+        Fill.circle(p.x, p.y, (2.2f + e.fin() * 3.4f) * e.rotation * Perspective.depthScale(z));
+    }).layer(Layer.space + 1f);
+    public static final Effect tileUplift = new Effect(600f, 120f, e -> {
+        float r = e.rotation > 0f ? e.rotation : 20f, hold = e.data instanceof Float t ? t : 0f;
+        if(e.time > 26f + (hold > 0f ? hold : 36f)) return;
+        int tr = (int)(r / tilesize) + 1, cx = World.toTile(e.x), cy = World.toTile(e.y);
+        for(int pass = 0; pass < 2; pass++) {
+            for(int dy = tr; dy >= -tr; dy--) {
+                for(int dx = -tr; dx <= tr; dx++) {
+                    Tile tile = world.tile(cx + dx, cy + dy);
+                    if(tile == null || tile.block() != Blocks.air || Mathf.randomSeed(tile.pos() * 7L + e.id) > 0.6f) continue;
+                    float wx = tile.worldx(), wy = tile.worldy(), d = Mathf.dst(wx, wy, e.x, e.y);
+                    if(d > r) continue;
+                    float lt = e.time - d / r * 16f;
+                    if(lt <= 0f) continue;
+                    float lift = hold <= 0f ? lt < 36f ? Mathf.sin(lt / 36f * Mathf.PI) : 0f : Interp.pow2Out.apply(Mathf.clamp(lt / 10f)) * (1f - Interp.smooth.apply(Mathf.clamp((lt - 10f) / (hold * Mathf.randomSeed(tile.pos() + 3L, 0.55f, 1f)))));
+                    if(lift <= 0.001f) continue;
+
+                    Floor floor = tile.floor();
+                    if(floor.variantRegions == null || floor.variantRegions.length == 0) continue;
+                    float h = lift * (8f - d / r * 4f) * Mathf.randomSeed(tile.pos(), 0.6f, 1.3f), push = hold <= 0f ? 0f : lift * Mathf.randomSeed(tile.pos() + 5L, 1f, 3.5f) * (1f - d / r * 0.5f), away = Angles.angle(e.x, e.y, wx, wy);
+                    float sx = wx + trnsx(away, push), sy = wy + trnsy(away, push);
+                    float tilt = Mathf.randomSeedRange(tile.pos() + e.id, 12f) * lift, size = tilesize * (1f + h * 0.03f), top = sy + h * 0.6f;
+
+                    if(pass == 0) {
+                        color(Color.black, 0.6f * lift);
+                        Fill.square(wx, wy, tilesize / 2f);
+                        color(Pal.shadow, Pal.shadow.a * 1.5f * lift);
+                        Fill.square(sx - h * 0.4f, sy - h * 0.4f, size / 2f, tilt);
+                    }else{
+                        color(Tmp.c1.set(floor.mapColor).mul(0.55f));
+                        Fill.rect(sx, (sy - tilesize / 2f + top - size / 2f) / 2f, size, top - size / 2f - (sy - tilesize / 2f), 0f);
+                        color(Tmp.c1.set(Color.white).mul(1f + lift * 0.35f), 1f);
+                        rect(floor.variantRegions[floor.variant(tile.x, tile.y)], sx, top, size, size, tilt);
+                    }
+                }
+            }
+        }
+        reset();
+    }).layer(Layer.debris);
+    public static final Effect impactDust = new Effect(60f, 160f, e -> {
+        float r = e.rotation > 0f ? e.rotation : 30f, t = e.time, fade = Mathf.clamp(e.fout() * 3f);
+        Tile under = world.tileWorld(e.x, e.y);
+        Color dust = under == null ? CIPal.hematite : under.floor().mapColor;
+
+        rand.setSeed(e.id);
+        for(int i = 0; i < 20; i++) {
+            float ang = i * 18f + rand.range(9f), dist = r * rand.random(0.7f, 1.1f) * Interp.pow3Out.apply(e.fin());
+            color(Tmp.c1.set(dust).lerp(Color.white, rand.random(0.15f)).mul(rand.random(0.85f, 1.1f)), 0.8f * e.fout());
+            Fill.circle(e.x + trnsx(ang, dist), e.y + trnsy(ang, dist), (2.5f + e.fin() * 6f) * rand.random(0.8f, 1.2f));
+        }
+
+        for(int i = 0; i < 12; i++) {
+            float ang = rand.random(360f), speed = rand.random(0.3f, 0.8f), vz = rand.random(0.8f, 1.6f), sz = rand.random(0.6f, 1.2f);
+            float t1 = 2f * vz / 0.08f, vz2 = vz * 0.35f, tb = Mathf.clamp(t - t1, 0f, 2f * vz2 / 0.08f);
+            float h = t < t1 ? vz * t - 0.04f * t * t : vz2 * tb - 0.04f * tb * tb, dist = speed * (Math.min(t, t1) + tb * 0.5f);
+            float px = e.x + trnsx(ang, dist), py = e.y + trnsy(ang, dist);
+            color(Pal.shadow, Pal.shadow.a * fade);
+            Fill.circle(px - h * 0.4f, py - h * 0.4f, sz);
+            color(Tmp.c1.set(dust).mul(0.6f), fade);
+            Fill.poly(px, py + h * 0.6f, 4, sz * 1.2f, rand.random(360f) + t * 8f);
+        }
+        reset();
+    }).layer(Layer.blockOver);
 
     private static void crack(float x, float y, float ang, float len, float width, int segments, float fade, float glow) {
         float px = x, py = y;
