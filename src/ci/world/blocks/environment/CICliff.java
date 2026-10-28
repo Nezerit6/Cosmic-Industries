@@ -90,7 +90,7 @@ public class CICliff extends Block{
 
     static float color(Tile tile, int dx, int dy){
         Tile other = tile.nearby(dx, dy);
-        return Tmp.c1.set((other == null ? tile : other).floor().mapColor).mul(1.5f).toFloatBits();
+        return Tmp.c1.set((other == null ? tile : other).floor().mapColor).mul(1.15f).toFloatBits();
     }
 
     @Override
